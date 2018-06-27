@@ -1,0 +1,31 @@
+{% load staticfiles %}
+{% load static from staticfiles %}
+
+<html>
+<head>
+    <title>
+        {% block title %}GCS Visualization{% endblock %}
+    </title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+    <div class="topnav">
+        <button class="first_button" type="button" onclick="location.href='{% url 'viz_app:home' %}'">GCS</button>
+        <button class="button" type="button" onclick="location.href='{% url 'viz_app:home' %}'">Home</button>
+        <button class="button" type="button" onclick="location.href='{% url 'viz_app:about' %}'">About the Study</button>
+        <div class="dropdown">
+            <button class="button dropbtn" type="button" onclick="location.href='{% url 'viz_app:index' %}'">Data Visualization</button>
+            <div class="dropdown-content">
+                <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
+                <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
+            </div>
+        </div>
+        <button class="button" type="button" onclick="location.href='{% url 'viz_app:publications' %}'">Publications</button>
+        <button class="button" type="button" onclick="location.href='{% url 'viz_app:team' %}'">Team</button>
+        <button class="button" type="button" onclick="location.href='{% url 'viz_app:faq' %}'">FAQ</button>
+    </div>
+    {% block content %}{% endblock %}
+    {% block script %}{% endblock %}
+</body>
+</html>

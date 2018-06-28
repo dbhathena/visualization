@@ -1,17 +1,8 @@
-{% extends "viz_app/base.html" %}
+{% extends "viz_app/visualization_base.html" %}
 
 {% load staticfiles %}
 {% load static from staticfiles %}
 
 {% block content %}
     <h1 class="header">Pie Chart</h1>
-{% endblock %}
-
-{% block script %}
-<script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous">
-</script>
-<script src="{% static 'js/script.js' %}"></script>
 {% endblock %}

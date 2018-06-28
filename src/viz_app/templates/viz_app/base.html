@@ -7,25 +7,35 @@
         {% block title %}GCS Visualization{% endblock %}
     </title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 
 <body>
-    <div class="topnav">
-        <button class="first_button" type="button" onclick="location.href='{% url 'viz_app:home' %}'">GCS</button>
-        <button class="button" type="button" onclick="location.href='{% url 'viz_app:home' %}'">Home</button>
-        <button class="button" type="button" onclick="location.href='{% url 'viz_app:about' %}'">About the Study</button>
+    <nav class="topnav">
+        <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
+        <a class="button" href="{% url 'viz_app:home' %}">Home</a>
+        <a class="button" href="{% url 'viz_app:about' %}">About the Study</a>
         <div class="dropdown">
-            <button class="button dropbtn" type="button" onclick="location.href='{% url 'viz_app:index' %}'">Data Visualization</button>
+            <a class="button dropbtn">Data Visualization
+                <i class="fa fa-caret-down"></i>
+            </a>
             <div class="dropdown-content">
-                <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
                 <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
+                <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
+                <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
+                <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
+                <a href="{% url 'viz_app:word_cloud' %}">Word Cloud</a>
+                <a href="{% url 'viz_app:pie_chart' %}">Pie Chart</a>
+                <a href="{% url 'viz_app:stacked_bar_chart' %}">Stacked Bar Chart</a>
+                <hr>
+                <a href="{% url 'viz_app:index' %}">View Index</a>
             </div>
         </div>
-        <button class="button" type="button" onclick="location.href='{% url 'viz_app:publications' %}'">Publications</button>
-        <button class="button" type="button" onclick="location.href='{% url 'viz_app:team' %}'">Team</button>
-        <button class="button" type="button" onclick="location.href='{% url 'viz_app:faq' %}'">FAQ</button>
-    </div>
-    {% block content %}{% endblock %}
-    {% block script %}{% endblock %}
+        <a class="button" href="{% url 'viz_app:publications' %}">Publications</a>
+        <a class="button" href="{% url 'viz_app:team' %}">Team</a>
+        <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
+    </nav>
+        {% block content %}{% endblock %}
+        {% block script %}{% endblock %}
 </body>
 </html>

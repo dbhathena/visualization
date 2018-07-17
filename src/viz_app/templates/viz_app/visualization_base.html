@@ -3,6 +3,14 @@
 {% load staticfiles %}
 {% load static from staticfiles %}
 
+{% block content %}
+{% block header %}INSERT HEADER{% endblock %}
+<div class="options_container">
+    {% block options %} {% endblock %}
+</div>
+<div class="chart_container"></div>
+{% endblock %}
+
 {% block script %}
 <script
     src="https://code.jquery.com/jquery-3.3.1.min.js"

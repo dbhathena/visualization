@@ -5,11 +5,7 @@
 
 {% block content %}
 <h1 class="header">Select a plot:</h1>
-<select id="names_dropdown">
-    {% for name in names %}
-        <option value="{{ name }}">{{ name }}</option>
-    {% endfor %}
-</select>
+
 <div class="graph_buttons">
     <div class="button_container">
         <a href="{% url 'viz_app:study_trends' %}">
@@ -80,5 +76,6 @@
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous">
 </script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="{% static 'js/script.js' %}"></script>
 {% endblock %}

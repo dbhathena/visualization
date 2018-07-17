@@ -149,3 +149,11 @@ div.button_container img.button {
 .header {
     text-align: center;
 }
+
+
+
+.line {
+    fill: none;
+    stroke: green;
+    stroke-width: 1px;
+}

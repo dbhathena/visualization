@@ -9,14 +9,16 @@ from .models import PhysData
 # Create your views here.
 
 def index(request):
-    names = PhysData.objects.distinct("name").order_by("name").values_list("name")
-    names = [x[0] for x in names]
-    context = {"names": names}
-    return render(request, 'viz_app/index.html', context)
+    return render(request, 'viz_app/index.html')
 
 
 def study_trends(request):
-    return render(request, 'viz_app/study_trends.html')
+    names = PhysData.objects.distinct("name").order_by("name").values_list("name")
+    names = [x[0] for x in names]
+    types = PhysData.objects.distinct("category").order_by("category").values_list("category")
+    types = [x[0] for x in types]
+    context = {"names": names, "types": types}
+    return render(request, 'viz_app/study_trends.html', context)
 
 
 def daily_trends(request):
@@ -65,6 +67,8 @@ def faq(request):
 
 def get_data(request):
     name = request.GET.get("name")
-    subject_data = list(PhysData.objects.filter(name=name).order_by("date").values("date", "measurement"))
-    subject_data = [(x["date"].isoformat(), x["measurement"]) for x in subject_data]
+    type = request.GET.get("type")
+    print(type)
+    subject_data = list(PhysData.objects.filter(name=name, category=type).order_by("date").values("date", "measurement"))
+    subject_data = [{"date": x["date"].isoformat(), "measurement": x["measurement"]} for x in subject_data]
     return HttpResponse(json.dumps({"subject_data": subject_data}))

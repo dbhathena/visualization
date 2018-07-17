@@ -3,6 +3,19 @@
 {% load staticfiles %}
 {% load static from staticfiles %}
 
-{% block content %}
-    <h1 class="header">Study Trends</h1>
+{% block header %}
+<h1 class="header">Study Trends</h1>
+{% endblock %}
+
+{% block options %}
+<select id="names_dropdown">
+    {% for name in names %}
+        <option value="{{ name }}">{{ name }}</option>
+    {% endfor %}
+</select>
+<select id="type_dropdown">
+    {% for type in types %}
+        <option value="{{ type }}">{{ type }}</option>
+    {% endfor %}
+</select>
 {% endblock %}

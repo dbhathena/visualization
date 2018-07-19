@@ -2,6 +2,7 @@ body {
     font-family: "Kozuka Gothic Pro";
     display: flex;
     flex-direction: column;
+    margin: 0;
 }
 
 hr {
@@ -145,15 +146,52 @@ div.button_container img.button {
     flex-direction: column;
 }
 
-
-.header {
-    text-align: center;
+.content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 20px;
 }
 
+h1,h2,h3 {
+    text-align: center;
+    margin: 0.4em;
+    font-weight: 500;
+}
 
+p {
+    margin: 0.4em;
+}
+
+.options-container {
+    display: flex;
+    justify-content: space-around;
+}
 
 .line {
     fill: none;
-    stroke: green;
-    stroke-width: 1px;
+    stroke: #4CAf50;
+    stroke-width: 2px;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+}
+
+.chart {
+    display: flex;
+}
+
+.spacer {
+    height: 50px;
+}
+
+.text-link {
+    color: #4CAf50;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.text-link:hover {
+    color: #1E90FF;
 }

@@ -1,16 +1,16 @@
 $( document ).ready(function() {
     console.log("I'm working");
-    $("#names_dropdown").change(function() {
+    $("#names_dropdown, #type_dropdown, #frequency_dropdown").change(function() {
 //        alert("Oops!");
         $(".chart").remove();
         $.ajax({
             url: "/viz_app/test/",
-            data: { name: $("#names_dropdown").val(), type: $("#type_dropdown").val() },
+            data: { name: $("#names_dropdown").val(), type: $("#type_dropdown").val(), frequency: $("#frequency_dropdown").val() },
             dataType: "json"
         }).done(function(data) {
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
-                width = 960 - margin.left - margin.right,
-                height = 500 - margin.top - margin.bottom;
+                width = 1400 - margin.left - margin.right,
+                height = 700 - margin.top - margin.bottom;
 
             var x = d3.scaleTime().range([0, width]);
             var y = d3.scaleLinear().range([height, 0]);
@@ -19,11 +19,11 @@ $( document ).ready(function() {
                 .x(function(d) { return x(d.date); })
                 .y(function(d) { return y(d.measurement); });
 
-            var svg = d3.select("body").append("svg")
+            var svg = d3.select(".chart-container").append("svg")
                 .attr("class", "chart")
                 .attr("width", width + margin.left + margin.right)
                 .attr("height", height + margin.top + margin.bottom)
-                .append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+                .append("g");
 
             var subject_data = data.subject_data;
 

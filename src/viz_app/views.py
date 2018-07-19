@@ -17,7 +17,10 @@ def study_trends(request):
     names = [x[0] for x in names]
     types = PhysData.objects.distinct("category").order_by("category").values_list("category")
     types = [x[0] for x in types]
-    context = {"names": names, "types": types}
+    frequencies = PhysData.objects.distinct("interval").order_by("interval").values_list("interval")
+    frequencies = [x[0] for x in frequencies]
+    print(frequencies)
+    context = {"names": names, "types": types, "frequencies": frequencies}
     return render(request, 'viz_app/study_trends.html', context)
 
 
@@ -68,7 +71,7 @@ def faq(request):
 def get_data(request):
     name = request.GET.get("name")
     type = request.GET.get("type")
-    print(type)
-    subject_data = list(PhysData.objects.filter(name=name, category=type).order_by("date").values("date", "measurement"))
-    subject_data = [{"date": x["date"].isoformat(), "measurement": x["measurement"]} for x in subject_data]
+    frequency = request.GET.get("frequency")
+    subject_data = list(PhysData.objects.filter(name=name, category=type, interval=frequency).order_by("date").values("date", "measurement"))
+    subject_data = [{"date": x["date"].isoformat(), "measurement": x["measurement"]} for x in subject_data if x["measurement"] is not None]
     return HttpResponse(json.dumps({"subject_data": subject_data}))

@@ -9,13 +9,21 @@
 
 {% block options %}
 <select id="names_dropdown">
+    <option value="" selected disabled hidden>Select participant...</option>
     {% for name in names %}
         <option value="{{ name }}">{{ name }}</option>
     {% endfor %}
 </select>
 <select id="type_dropdown">
+    <option value="" selected disabled hidden>Select data type...</option>
     {% for type in types %}
         <option value="{{ type }}">{{ type }}</option>
+    {% endfor %}
+</select>
+<select id="frequency_dropdown">
+    <option value="" selected disabled hidden>Select frequency...</option>
+    {% for frequency in frequencies %}
+        <option value="{{ frequency }}">{{ frequency }}</option>
     {% endfor %}
 </select>
 {% endblock %}

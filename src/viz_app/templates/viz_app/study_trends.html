@@ -8,22 +8,29 @@
 {% endblock %}
 
 {% block options %}
-<select id="names_dropdown">
-    <option value="" selected disabled hidden>Select participant...</option>
-    {% for name in names %}
-        <option value="{{ name }}">{{ name }}</option>
-    {% endfor %}
-</select>
 <select id="type_dropdown">
-    <option value="" selected disabled hidden>Select data type...</option>
     {% for type in types %}
         <option value="{{ type }}">{{ type }}</option>
     {% endfor %}
 </select>
-<select id="frequency_dropdown">
-    <option value="" selected disabled hidden>Select frequency...</option>
-    {% for frequency in frequencies %}
-        <option value="{{ frequency }}">{{ frequency }}</option>
+<select id="aggregation_dropdown">
+    <option value="Mean" selected>Mean</option>
+    <option value="Median">Median</option>
+    <option value="Max">Max</option>
+    <option value="Min">Min</option>
+    <option value="Std Dev">Standard Deviation</option>
+    <option value="None">None (Individual)</option>
+</select>
+<select id="group_dropdown">
+    <option value="All" selected>All</option>
+    <option value="HC vs MDD">HC vs MDD</option>
+    <option value="Anxious vs Non-anxious">Anxious vs Non-anxious</option>
+    <option value="High vs Low activity">High vs Low activity</option>
+</select>
+<select id="names_dropdown">
+    {% for name in names %}
+        <option value="{{ name }}">{{ name }}</option>
     {% endfor %}
 </select>
+
 {% endblock %}

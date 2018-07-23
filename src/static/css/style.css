@@ -177,6 +177,9 @@ p {
 .chart-container {
     display: flex;
     justify-content: center;
+    margin: 20px 40px;
+    height: 60%;
+    min-height: 400px;
 }
 
 .chart {

@@ -1,32 +1,17 @@
 $( document ).ready(function() {
-    // drawStudyTrendsGroup();
-    drawStudyTrendsGroupNew();
+    drawStudyTrendsGroup();
     $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
-        $(".chart").remove();
         if ($("#aggregation_dropdown").val() == "None") {
             $("#group_dropdown").hide();
             $("#names_dropdown").show();
-            // drawStudyTrendsIndividual();
+            drawStudyTrendsIndividual();
         } else {
             $("#names_dropdown").hide();
             $("#group_dropdown").show();
-            // drawStudyTrendsGroup();
+            drawStudyTrendsGroup();
         }
     });
 });
-
-function drawStudyTrendsGroupNew() {
-    var chart = c3.generate({
-        bindto: d3.select('.chart-container'),
-        data: {
-            columns: [
-                ['data1', 10, 20, 30, 20, 10, 15],
-                ['data2', 52, 23, 27, 74, 14, 73]
-            ]
-        }
-    });
-}
-
 
 function drawStudyTrendsIndividual() {
     $.ajax({
@@ -39,50 +24,47 @@ function drawStudyTrendsIndividual() {
         },
         dataType: "json"
     }).done(function(data) {
-        const margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = window.innerWidth*0.9 - margin.left - margin.right,
-            height = window.innerHeight*0.7 - margin.top - margin.bottom;
+        const type = $('#type_dropdown').val();
 
         const subject_data = data.subject_data;
 
-        subject_data.forEach(function(d) {
-            d.date = new Date(d.date);
-            d.measurement = +d.measurement;
+        const dates = ['x'];
+        const measurements = [$("#names_dropdown").val()]
+        subject_data["dates"].forEach(function(d) {
+            dates.push(new Date(d));
+        });
+        subject_data["measurements"].forEach(function(d) {
+            measurements.push(+d);
         });
 
-        const x = d3.scaleTime().range([0, width]);
-        const y = d3.scaleLinear().range([height, 0]);
-
-        const valueline = d3.line()
-            .x(function(d) { return x(d.date); })
-            .y(function(d) { return y(d.measurement); });
-
-        const svg = d3.select(".chart-container").append("svg")
-            .attr("class", "chart")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-        subject_data.sort(function(a, b) {
-            return a["date"]-b["date"];
+        var chart = c3.generate({
+            bindto: '.chart-container',
+            data: {
+                x: 'x',
+                columns: [
+                    dates,
+                    measurements
+                ]
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: "Date",
+                        position: 'outer-middle'
+                    },
+                    type: 'timeseries',
+                    tick: {
+                        format: '%Y-%m-%d'
+                    }
+                },
+                y: {
+                    label: {
+                        text: getUnits(type),
+                        position: 'outer-middle'
+                    }
+                }
+            }
         });
-
-        x.domain(d3.extent(subject_data, function(d) {return d.date; }));
-        y.domain([0, d3.max(subject_data, function(d) { return d.measurement; })])
-
-        svg.append("path")
-            .data([subject_data])
-            .attr("class", "line")
-            .attr("d", valueline);
-
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
-
-        svg.append("g")
-            .call(d3.axisLeft(y));
     });
 }
 
@@ -97,61 +79,66 @@ function drawStudyTrendsGroup() {
         },
         dataType: "json"
     }).done(function(data) {
-        const margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = window.innerWidth*0.9 - margin.left - margin.right,
-            height = window.innerHeight*0.7 - margin.top - margin.bottom;
+        const type = $("#type_dropdown").val();
 
         const group_data = data.aggregate_data;
 
-        const x = d3.scaleLinear().range([0, width]);
-        const y = d3.scaleLinear().range([height, 0]);
-
-        const svg = d3.select(".chart-container").append("svg")
-            .attr("class", "chart")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        var maxY=0;
+        const columns = [];
         for (var subgroup in group_data) {
             const subgroup_data = group_data[subgroup];
-            console.log(subgroup);
-            console.log(subgroup_data);
+            const filtered_data = [subgroup];
             subgroup_data.forEach(function(d) {
-                d.date = +d.date;
-                d.measurement = +d.measurement
+                filtered_data.push(+d);
             });
-            const valueline = d3.line()
-                .x(function(d) { return x(d.date); })
-                .y(function(d) {
-                    console.log(d.measurement);
-                    return y(d.measurement);
-                 });
-
-            subgroup_data.sort(function(a, b) {
-                return a["date"]-b["date"];
-            });
-
-            svg.append("path")
-                .data([subgroup_data])
-                .attr("class", "line")
-                .attr("d", valueline);
-
-            const currentMax = d3.max(subgroup_data, function(d) { return d.measurement});
-            if (currentMax > maxY) {
-                maxY = currentMax;
-            }
+            columns.push(filtered_data);
         }
-        console.log(maxY);
-        x.domain([0, 55]);
-        y.domain([0, maxY]);
 
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
-
-        svg.append("g")
-            .call(d3.axisLeft(y));
+        var chart = c3.generate({
+            bindto: '.chart-container',
+            data: {
+                columns: columns
+            },
+            axis: {
+                x: {
+                    label: {
+                        text: "Day in Study",
+                        position: 'outer-middle'
+                    }
+                },
+                y: {
+                    label: {
+                        text: getUnits(type),
+                        position: 'outer-top'
+                    }
+                }
+            },
+            title: {
+                text: getTitle(type)
+            }
+        });
     });
+}
+
+function getUnits(dataType) {
+    if (dataType == "Accelerometer") {
+        return "";
+    } else if (dataType == "Heart Rate") {
+        return "BPM";
+    } else if (dataType == "Motion") {
+        return "";
+    } else if (dataType == "Temperature") {
+        return "°Celsius";
+    }
+}
+
+function getTitle(dataType) {
+    if (dataType == "Accelerometer") {
+        return "Vector Magnitude of Motion";
+    } else if (dataType == "Heart Rate") {
+        return "Heart Rate";
+    } else if (dataType == "Motion") {
+        return "Fraction of Time in Motion";
+    } else if (dataType == "Temperature") {
+        return "Temperature";
+    }
 }

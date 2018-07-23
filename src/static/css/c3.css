@@ -1,6 +1,7 @@
 /*-- Chart --*/
 .c3 svg {
-  font: 10px sans-serif;
+  font: inherit;
+  font-size: 13px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
 .c3 path, .c3 line {
@@ -31,6 +32,11 @@
   font-size: 13px; }
 
 /*-- Axis --*/
+text.c3-axis-x-label,
+text.c3-axis-y-label {
+    font-size: 15px;
+    font-weight: bold; }
+
 /*-- Grid --*/
 .c3-grid line {
   stroke: #aaa; }
@@ -89,7 +95,7 @@
 /*-- Select - Drag --*/
 /*-- Legend --*/
 .c3-legend-item {
-  font-size: 12px; }
+  font-size: 14px; }
 
 .c3-legend-item-hidden {
   opacity: 0.15; }
@@ -102,7 +108,8 @@
 
 /*-- Title --*/
 .c3-title {
-  font: 14px sans-serif; }
+  font-size: 24px;
+  font-weight: bold; }
 
 /*-- Tooltip --*/
 .c3-tooltip-container {

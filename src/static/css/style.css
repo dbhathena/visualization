@@ -228,3 +228,7 @@ p {
 p,span,li{
     line-height: 1.8em;
 }
+
+#names_dropdown {
+    display: none;
+}

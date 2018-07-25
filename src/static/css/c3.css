@@ -34,7 +34,7 @@
 /*-- Axis --*/
 text.c3-axis-x-label,
 text.c3-axis-y-label {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold; }
 
 /*-- Grid --*/
@@ -95,7 +95,7 @@ text.c3-axis-y-label {
 /*-- Select - Drag --*/
 /*-- Legend --*/
 .c3-legend-item {
-  font-size: 14px; }
+  font-size: 15px; }
 
 .c3-legend-item-hidden {
   opacity: 0.15; }

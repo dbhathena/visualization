@@ -9,9 +9,8 @@
     {% block options %} {% endblock %}
 </div>
 <div class="spacer"></div>
-<div class="chart-container"></div>
-{% endblock %}
-
-{% block script %}
-<script src="{% static 'js/script.js' %}"></script>
+<div class="chart-container">
+    <div class="chart" id="chart1"></div>
+    <div class="chart" id="chart2" style="display: none;"></div>
+</div>
 {% endblock %}

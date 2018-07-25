@@ -176,14 +176,17 @@ p {
 
 .chart-container {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: stretch;
+    align-items: center;
     margin: 20px 40px;
-    height: 60%;
-    min-height: 400px;
+    height: 70%;
 }
 
-.chart {
-    display: flex;
+.chart-container .chart {
+    max-height: none !important;
+    height: 100%;
+    width: 100%;
 }
 
 .spacer {
@@ -232,6 +235,12 @@ p,span,li{
     line-height: 1.8em;
 }
 
-#names_dropdown {
+#names_container {
     display: none;
+}
+
+.dropdown-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

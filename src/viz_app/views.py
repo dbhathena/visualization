@@ -1,9 +1,7 @@
 from django.shortcuts import render
-from django.views import generic
 from django.http import HttpResponse
 
 import json
-import statistics
 
 from .models import PhysData
 from .value_mappings import *
@@ -68,75 +66,93 @@ def faq(request):
 
 def get_study_trends_data(request):
     type = request.GET.get("type")
-    aggregation = request.GET.get("aggregation")
-    if aggregation == "None":
+    group = request.GET.get("group")
+    if group == "None":
         name = request.GET.get("name")
-        raw_data = list(PhysData.objects.filter(name=name, category=type, interval="24hrs").order_by("date").values("date", "measurement"))
-        dates = [x["date"].isoformat() for x in raw_data if x["measurement"] is not None]
-        measurements = [x["measurement"] for x in raw_data if x["measurement"] is not None]
-        subject_data = {"dates": dates, "measurements": measurements}
+        subject_data = {"left": {"dates": [], "measurements": []},
+                        "right": {"dates": [], "measurements": []},
+                        None: {"dates": [], "measurements": []}
+                        }
+        raw_data = list(PhysData.objects
+                        .filter(name=name, category=type, interval="24hrs")
+                        .order_by("date")
+                        .values("date", "measurement", "hand"))
+        for x in raw_data:
+            subject_data[x["hand"]]["dates"].append(x["date"].isoformat())
+            subject_data[x["hand"]]["measurements"].append(x["measurement"])
         return HttpResponse(json.dumps({"subject_data": subject_data}))
     else :
-        group = request.GET.get("group")
+        aggregation = request.GET.get("aggregation")
+        aggregation_method = AGGREGATION_METHODS[aggregation]
+        group_dictionary = GROUPINGS[group]
+        if type in SEPARATE_HANDS:
+            raw_data_left = {}
+            raw_data_right = {}
+            for participant in PARTICIPANTS:
+                raw_data_left[participant] = list(PhysData.objects
+                                                  .filter(name=participant, category=type, interval="24hrs", hand="left")
+                                                  .order_by("date")
+                                                  .values_list("measurement", flat=True))
+                raw_data_right[participant] = list(PhysData.objects
+                                                   .filter(name=participant, category=type, interval="24hrs", hand="right")
+                                                   .order_by("date")
+                                                   .values_list("measurement", flat=True))
 
-        raw_data = {}
-        for participant in PARTICIPANTS:
-            participant_data = list(PhysData.objects.filter(name=participant, category=type, interval="24hrs").order_by("date").values_list("measurement", flat=True))
-            raw_data[participant] = participant_data
+            aggregate_data = {"left": {},
+                              "right": {} }
+            for subgroup in group_dictionary:
+                subgroup_data_left = []
+                subgroup_data_right = []
+                for day in range(0, 56):
+                    day_data_left = []
+                    day_data_right = []
+                    for participant in group_dictionary[subgroup]:
+                        if (participant in raw_data_left
+                                and day < len(raw_data_left[participant])
+                                and raw_data_left[participant][day] is not None):
+                            day_data_left.append(raw_data_left[participant][day])
+                        if (participant in raw_data_right
+                                and day < len(raw_data_right[participant])
+                                and raw_data_right[participant][day] is not None):
+                            day_data_right.append(raw_data_right[participant][day])
+                    if not day_data_left:
+                        subgroup_data_left.append(None)
+                    else:
+                        subgroup_data_left.append(aggregation_method(day_data_left))
+                    if not day_data_right:
+                        subgroup_data_right.append(None)
+                    else:
+                        subgroup_data_right.append(aggregation_method(day_data_right))
+                aggregate_data["left"][subgroup] = subgroup_data_left
+                aggregate_data["right"][subgroup] = subgroup_data_right
 
-        if aggregation == "Mean":
-            aggregation_method = statistics.mean
-        elif aggregation == "Median":
-            aggregation_method = statistics.median
-        elif aggregation == "Max":
-            aggregation_method = max
-        elif aggregation == "Min":
-            aggregation_method = min
-        elif aggregation == "Std Dev":
-            aggregation_method = statistics.pstdev
+            print(aggregate_data)
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
         else:
-            raise ValueError('Unknown aggregation method')
+            raw_data = {}
+            for participant in PARTICIPANTS:
+                participant_data = list(PhysData.objects
+                                        .filter(name=participant, category=type, interval="24hrs")
+                                        .order_by("date")
+                                        .values_list("measurement", flat=True))
+                raw_data[participant] = participant_data
 
-        if group == "All":
-            group_dictionary = Groupings.ALL
-        elif group == "Depression":
-            group_dictionary = Groupings.DEPRESSION
-        elif group == "Gender":
-            group_dictionary = Groupings.GENDER
-        elif group == "Marital":
-            group_dictionary = Groupings.MARITAL
-        elif group == "Employment":
-            group_dictionary = Groupings.EMPLOYMENT
-        elif group == "Age":
-            group_dictionary = Groupings.AGE
-        elif group == "Psychotherapy":
-            group_dictionary = Groupings.PSYCHOTHERAPY
-        elif group == "Episode Length":
-            group_dictionary = Groupings.EPISODE_LENGTH
-        elif group == "Episode Type":
-            group_dictionary = Groupings.EPISODE_TYPE
-        elif group == "Phobia":
-            group_dictionary = Groupings.PHOBIA
-        elif group == "Anxiety":
-            group_dictionary = Groupings.ANXIETY
-        elif group == "Current Medication":
-            group_dictionary = Groupings.CURRENT_MEDICATION
-        elif group == "New Medication":
-            group_dictionary = Groupings.NEW_MEDICATION
-        else:
-            raise ValueError('Unknown group')
 
-        aggregate_data = {}         # dictionary mapping subgroup to list of daily data dictionaries
-        for subgroup in group_dictionary:
-            subgroup_data = []
-            for day in range(0, 56):
-                day_data = []
-                for participant in group_dictionary[subgroup]:
-                    if participant in raw_data and day < len(raw_data[participant]) and raw_data[participant][day] is not None:
-                        day_data.append(raw_data[participant][day])
-                if not day_data:
-                    day_data = [0]
-                subgroup_data.append(aggregation_method(day_data))
-            aggregate_data[subgroup] = subgroup_data
+            aggregate_data = {}         # dictionary mapping subgroup to list of daily data dictionaries
+            for subgroup in group_dictionary:
+                subgroup_data = []
+                for day in range(0, 56):
+                    day_data = []
+                    for participant in group_dictionary[subgroup]:
+                        if (participant in raw_data
+                                and day < len(raw_data[participant])
+                                and raw_data[participant][day] is not None):
+                            day_data.append(raw_data[participant][day])
+                    if not day_data:
+                        subgroup_data.append(None)
+                    else:
+                        subgroup_data.append(aggregation_method(day_data))
+                aggregate_data[subgroup] = subgroup_data
 
-        return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+            print("Done")
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))

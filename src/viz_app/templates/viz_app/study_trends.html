@@ -8,38 +8,54 @@
 {% endblock %}
 
 {% block options %}
-<select id="type_dropdown">
-    {% for type in types %}
-        <option value="{{ type }}">{{ type }}</option>
-    {% endfor %}
-</select>
-<select id="aggregation_dropdown">
-    <option value="Mean" selected>Mean</option>
-    <option value="Median">Median</option>
-    <option value="Max">Max</option>
-    <option value="Min">Min</option>
-    <option value="Std Dev">Standard Deviation</option>
-    <option value="None">None (Individual)</option>
-</select>
-<select id="group_dropdown">
-    <option value="All" selected>All</option>
-    <option value="Depression">Depression Status</option>
-    <option value="Gender">Gender</option>
-    <option value="Marital">Marital Status</option>
-    <option value="Employment">Employment Status</option>
-    <option value="Age">Age</option>
-    <option value="Psychotherapy">Psychotherapy</option>
-    <option value="Episode Length">Episode Length</option>
-    <option value="Episode Type">Episode Type</option>
-    <option value="Phobia">Social Phobia</option>
-    <option value="Anxiety">Generalized Anxiety Disorder</option>
-    <option value="Current Medication">Current Medication Status</option>
-    <option value="New Medication">Additional Medication Status</option>
-</select>
-<select id="names_dropdown">
-    {% for name in names %}
-        <option value="{{ name }}">{{ name }}</option>
-    {% endfor %}
-</select>
+<div class="dropdown-container">
+    <h3>Select a data type:</h3>
+    <select id="type_dropdown">
+        {% for type in types %}
+            <option value="{{ type }}">{{ type }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="dropdown-container">
+    <h3>Select a group (or none):</h3>
+    <select id="group_dropdown">
+        <option value="All" selected>All</option>
+        <option value="Depression">Depression Status</option>
+        <option value="Gender">Gender</option>
+        <option value="Marital">Marital Status</option>
+        <option value="Employment">Employment Status</option>
+        <option value="Age">Age</option>
+        <option value="Psychotherapy">Psychotherapy</option>
+        <option value="Episode Length">Episode Length</option>
+        <option value="Episode Type">Episode Type</option>
+        <option value="Phobia">Social Phobia</option>
+        <option value="Anxiety">Generalized Anxiety Disorder</option>
+        <option value="Current Medication">Current Medication Status</option>
+        <option value="New Medication">Additional Medication Status</option>
+        <option value="None">None (Individual)</option>
+    </select>
+</div>
+<div class="dropdown-container" id="aggregation_container">
+    <h3>Select an aggregation method:</h3>
+    <select id="aggregation_dropdown">
+        <option value="Mean" selected>Mean</option>
+        <option value="Median">Median</option>
+        <option value="Max">Max</option>
+        <option value="Min">Min</option>
+        <option value="Std Dev">Standard Deviation</option>
+    </select>
+</div>
+<div class="dropdown-container" id="names_container">
+    <h3>Select an individual:</h3>
+    <select id="names_dropdown">
+        {% for name in names %}
+            <option value="{{ name }}">{{ name }}</option>
+        {% endfor %}
+    </select>
+</div>
 
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'js/study_trends.js' %}"></script>
 {% endblock %}

@@ -98,3 +98,9 @@ AGGREGATION_METHODS = {
 
 SEPARATE_HANDS = {"Temperature"}
 
+
+MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
+                          "Heart Rate": (0, 160),
+                          "Motion": (0, 1),
+                          "Temperature": (20, 40),
+                          }

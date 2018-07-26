@@ -21,7 +21,8 @@ def study_trends(request):
 
 
 def daily_trends(request):
-    return render(request, 'viz_app/daily_trends.html')
+    context = {"names": PARTICIPANTS, "types": TYPES}
+    return render(request, 'viz_app/daily_trends.html', context)
 
 
 def scatter_plot(request):
@@ -67,6 +68,7 @@ def faq(request):
 def get_study_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
+    bounds = MEASUREMENT_THRESHOLDS[type]
     if group == "None":
         name = request.GET.get("name")
         subject_data = {"left": {"dates": [], "measurements": []},
@@ -74,7 +76,11 @@ def get_study_trends_data(request):
                         None: {"dates": [], "measurements": []}
                         }
         raw_data = list(PhysData.objects
-                        .filter(name=name, category=type, interval="24hrs")
+                        .filter(name=name,
+                                category=type,
+                                interval="24hrs",
+                                measurement__gte=bounds[0],
+                                measurement__lte=bounds[1])
                         .order_by("date")
                         .values("date", "measurement", "hand"))
         for x in raw_data:
@@ -90,11 +96,21 @@ def get_study_trends_data(request):
             raw_data_right = {}
             for participant in PARTICIPANTS:
                 raw_data_left[participant] = list(PhysData.objects
-                                                  .filter(name=participant, category=type, interval="24hrs", hand="left")
+                                                  .filter(name=participant,
+                                                          category=type,
+                                                          interval="24hrs",
+                                                          hand="left",
+                                                          measurement__gte=bounds[0],
+                                                          measurement__lte=bounds[1])
                                                   .order_by("date")
                                                   .values_list("measurement", flat=True))
                 raw_data_right[participant] = list(PhysData.objects
-                                                   .filter(name=participant, category=type, interval="24hrs", hand="right")
+                                                   .filter(name=participant,
+                                                           category=type,
+                                                           interval="24hrs",
+                                                           hand="right",
+                                                           measurement__gte=bounds[0],
+                                                           measurement__lte=bounds[1])
                                                    .order_by("date")
                                                    .values_list("measurement", flat=True))
 
@@ -126,19 +142,22 @@ def get_study_trends_data(request):
                 aggregate_data["left"][subgroup] = subgroup_data_left
                 aggregate_data["right"][subgroup] = subgroup_data_right
 
-            print(aggregate_data)
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
         else:
             raw_data = {}
             for participant in PARTICIPANTS:
                 participant_data = list(PhysData.objects
-                                        .filter(name=participant, category=type, interval="24hrs")
+                                        .filter(name=participant,
+                                                category=type,
+                                                interval="24hrs",
+                                                measurement__gte=bounds[0],
+                                                measurement__lte=bounds[1])
                                         .order_by("date")
                                         .values_list("measurement", flat=True))
                 raw_data[participant] = participant_data
 
 
-            aggregate_data = {}         # dictionary mapping subgroup to list of daily data dictionaries
+            aggregate_data = {}
             for subgroup in group_dictionary:
                 subgroup_data = []
                 for day in range(0, 56):
@@ -154,5 +173,130 @@ def get_study_trends_data(request):
                         subgroup_data.append(aggregation_method(day_data))
                 aggregate_data[subgroup] = subgroup_data
 
-            print("Done")
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+
+
+def get_daily_trends_data(request):
+    type = request.GET.get("type")
+    group = request.GET.get("group")
+    bounds = MEASUREMENT_THRESHOLDS[type]
+    if group == "None":
+        name = request.GET.get("name")
+        if type in SEPARATE_HANDS:
+            subject_data = {"left": [], "right": []}
+            for hour in range(0, 24):
+                for hand in subject_data:
+                    hour_data = list(PhysData.objects
+                                     .filter(name=name,
+                                             category=type,
+                                             interval="1hr",
+                                             hand=hand,
+                                             date__hour=hour,
+                                             measurement__isnull=False,
+                                             measurement__gte=bounds[0],
+                                             measurement__lte=bounds[1])
+                                     .order_by("date")
+                                     .values_list("measurement", flat=True))
+                    if hour_data:
+                        subject_data[hand].append(statistics.mean(hour_data))
+                    else:
+                        subject_data[hand].append(None)
+        else:
+            subject_data = {"both": []}
+            for hour in range(0, 24):
+                hour_data = list(PhysData.objects
+                                 .filter(name=name,
+                                         category=type,
+                                         interval="1hr",
+                                         date__hour=hour,
+                                         measurement__isnull=False,
+                                         measurement__gte=bounds[0],
+                                         measurement__lte=bounds[1])
+                                 .order_by("date")
+                                 .values_list("measurement", flat=True))
+                if hour_data:
+                    subject_data["both"].append(statistics.mean(hour_data))
+                else:
+                    subject_data["both"].append(None)
+
+        return HttpResponse(json.dumps({"subject_data": subject_data}))
+
+    else:
+        aggregation = request.GET.get("aggregation")
+        aggregation_method = AGGREGATION_METHODS[aggregation]
+        group_dictionary = GROUPINGS[group]
+
+        if type in SEPARATE_HANDS:
+            aggregate_data = {}
+            for hand in {"left", "right"}:
+                hand_aggregate_data = {}
+                for subgroup in group_dictionary:
+                    subgroup_data = []
+                    for hour in range(0, 24):
+                        hour_data = list(PhysData.objects
+                                         .filter(name__in=group_dictionary[subgroup],
+                                                 category=type,
+                                                 interval="1hr",
+                                                 hand=hand,
+                                                 date__hour=hour,
+                                                 measurement__isnull=False,
+                                                 measurement__gte=bounds[0],
+                                                 measurement__lte=bounds[1])
+                                         .values_list("measurement", flat=True))
+                        if hour_data:
+                            subgroup_data.append(aggregation_method(hour_data))
+                        else:
+                            subgroup_data.append(None)
+                    hand_aggregate_data[subgroup] = subgroup_data
+                aggregate_data[hand] = hand_aggregate_data
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+        else:
+            aggregate_data = {}
+            for subgroup in group_dictionary:
+                subgroup_data = []
+                for hour in range(0, 24):
+                    hour_data = list(PhysData.objects
+                                     .filter(name__in=group_dictionary[subgroup],
+                                             category=type,
+                                             interval="1hr",
+                                             date__hour=hour,
+                                             measurement__isnull=False,
+                                             measurement__gte=bounds[0],
+                                             measurement__lte=bounds[1])
+                                     .values_list("measurement", flat=True))
+                    if hour_data:
+                        subgroup_data.append(aggregation_method(hour_data))
+                    else:
+                        subgroup_data.append(None)
+                aggregate_data[subgroup] = subgroup_data
+
+            # raw_data={}
+            # for name in PARTICIPANTS:
+            #     subject_data = []
+            #     for hour in range(0, 24):
+            #         hour_data = list(PhysData.objects
+            #                          .filter(name=name, category=type, interval="1hr", date__hour=hour, measurement__isnull=False)
+            #                          .order_by("date")
+            #                          .values_list("measurement", flat=True))
+            #         print(hour_data)
+            #         if hour_data:
+            #             subject_data.append(statistics.mean(hour_data))
+            #         else:
+            #             subject_data.append(None)
+            #     raw_data[name] = subject_data
+            #
+            # aggregate_data = {}
+            # for subgroup in group_dictionary:
+            #     subgroup_data = []
+            #     for hour in range(0, 24):
+            #         hour_data = []
+            #         for participant in group_dictionary[subgroup]:
+            #             if (participant in raw_data
+            #                     and hour < len(raw_data[participant])):
+            #                 hour_data.append(raw_data[participant][hour])
+            #         if not hour_data:
+            #             subgroup_data.append(None)
+            #         else:
+            #             subgroup_data.append(aggregation_method(hour_data))
+            #     aggregate_data[subgroup] = subgroup_data
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))

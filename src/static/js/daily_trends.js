@@ -1,21 +1,23 @@
 $( document ).ready(function() {
-    drawStudyTrendsGroup();
-    $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
-        if ($("#group_dropdown").val() == "None") {
-            $("#aggregation_container").css("display", "none");
-            $("#names_container").css("display", "flex");
-            drawStudyTrendsIndividual();
-        } else {
-            $("#names_container").css("display", "none");
-            $("#aggregation_container").css("display", "flex");
-            drawStudyTrendsGroup();
-        }
-    });
+    $("#loading").css('display','flex');
+    drawDailyTrendsGroup();
+        $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
+            $("#loading").css('display','flex');
+            if ($("#group_dropdown").val() == "None") {
+                $("#aggregation_container").css("display", "none");
+                $("#names_container").css("display", "flex");
+                drawDailyTrendsIndividual();
+            } else {
+                $("#names_container").css("display", "none");
+                $("#aggregation_container").css("display", "flex");
+                drawDailyTrendsGroup();
+            }
+        });
 });
 
-function drawStudyTrendsIndividual() {
+function drawDailyTrendsIndividual() {
     $.ajax({
-        url: "/viz_app/get-study-trends-data/",
+        url: "/viz_app/get-daily-trends-data/",
         data: {
             type: $("#type_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),
@@ -25,54 +27,33 @@ function drawStudyTrendsIndividual() {
         dataType: "json"
     }).done(function(data) {
         const type = $('#type_dropdown').val();
-        const name = $("#names_dropdown").val();
-        var subject_data;
+        const name = $('#names_dropdown').val();
         if (type == "Temperature") {
             $("#chart2").show();
 
-            subject_data_left = data.subject_data["left"];
-            subject_data_right = data.subject_data["right"];
-
-            const dates_left = ['x'];
-            const dates_right = ['x'];
-            subject_data_left["dates"].forEach(function(d) {
-                dates_left.push(new Date(d));
-            });
-            subject_data_right["dates"].forEach(function(d) {
-                dates_right.push(new Date(d));
-            });
-
-            const measurements_left = [name].concat(subject_data_left["measurements"]);
-            const measurements_right = [name].concat(subject_data_right["measurements"]);
+            const subject_data_left = [name].concat(data.subject_data["left"]);
+            const subject_data_right = [name].concat(data.subject_data["right"]);
 
             var chart_left = c3.generate({
                 bindto: '.chart-container #chart1',
                 data: {
-                    x: 'x',
                     columns: [
-                        dates_left,
-                        measurements_left
+                        subject_data_left
                     ]
                 },
                 axis: {
                     x: {
                         label: {
-                            text: "Date",
-                            position: 'outer-center'
-                        },
-                        type: 'timeseries',
-                        tick: {
-                            count: 6,
-                            format: '%Y-%m-%d'
+                            text: "Hour of Day",
+                            position: "outer-center"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
-                            count: 8,
                             format: d3.format('.3r')
                         }
                     }
@@ -97,31 +78,23 @@ function drawStudyTrendsIndividual() {
             var chart_right = c3.generate({
                 bindto: '.chart-container #chart2',
                 data: {
-                    x: 'x',
                     columns: [
-                        dates_right,
-                        measurements_right
+                        subject_data_right
                     ]
                 },
                 axis: {
                     x: {
                         label: {
-                            text: "Date",
-                            position: 'outer-center'
-                        },
-                        type: 'timeseries',
-                        tick: {
-                            count: 6,
-                            format: '%Y-%m-%d'
+                            text: "Hour of Day",
+                            position: "outer-center"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
-                            count: 8,
                             format: d3.format('.3r')
                         }
                     }
@@ -145,32 +118,20 @@ function drawStudyTrendsIndividual() {
         } else {
             $("#chart2").hide();
 
-            subject_data = data.subject_data[null];
-            const dates = ['x'];
-            const measurements = [$("#names_dropdown").val()].concat(subject_data["measurements"]);
-            subject_data["dates"].forEach(function(d) {
-                dates.push(new Date(d));
-            });
+            const subject_data = [name].concat(data.subject_data["both"]);
 
             var chart = c3.generate({
                 bindto: '.chart-container #chart1',
                 data: {
-                    x: 'x',
                     columns: [
-                        dates,
-                        measurements
+                        subject_data
                     ]
                 },
                 axis: {
                     x: {
                         label: {
-                            text: "Date",
+                            text: "Hour of Day",
                             position: 'outer-center'
-                        },
-                        type: 'timeseries',
-                        tick: {
-                            count: 6,
-                            format: '%Y-%m-%d'
                         }
                     },
                     y: {
@@ -197,12 +158,13 @@ function drawStudyTrendsIndividual() {
                 }
             });
         }
+        $("#loading").css('display','none');
     });
 }
 
-function drawStudyTrendsGroup() {
+function drawDailyTrendsGroup() {
     $.ajax({
-        url: "/viz_app/get-study-trends-data/",
+        url: "/viz_app/get-daily-trends-data/",
         data: {
             type: $("#type_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),
@@ -225,7 +187,7 @@ function drawStudyTrendsGroup() {
                 const subgroup_data_left = group_data_left[subgroup];
                 const subgroup_data_right = group_data_right[subgroup];
                 columns_left.push([subgroup].concat(subgroup_data_left));
-                columns_right.push([subgroup].concat(subgroup_data_right));
+                columns_right.push([subgroup].concat(subgroup_data_right))
             }
 
             var chart_left = c3.generate({
@@ -236,7 +198,7 @@ function drawStudyTrendsGroup() {
                 axis: {
                     x: {
                         label: {
-                            text: "Day in Study",
+                            text: "Hour of Day",
                             position: "outer-center"
                         }
                     },
@@ -273,8 +235,8 @@ function drawStudyTrendsGroup() {
                 axis: {
                     x: {
                         label: {
-                            text: "Day in Study",
-                            position: 'outer-center'
+                            text: "Hour of Day",
+                            position: "outer-center"
                         }
                     },
                     y: {
@@ -292,7 +254,7 @@ function drawStudyTrendsGroup() {
                     text: getTitle(type) + " - Right Hand"
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -301,6 +263,7 @@ function drawStudyTrendsGroup() {
                     enabled: true
                 }
             });
+
         } else {
             $("#chart2").hide();
             const group_data = data.aggregate_data;
@@ -319,7 +282,7 @@ function drawStudyTrendsGroup() {
                 axis: {
                     x: {
                         label: {
-                            text: "Day in Study",
+                            text: "Hour of Day",
                             position: 'outer-center'
                         }
                     },
@@ -347,6 +310,7 @@ function drawStudyTrendsGroup() {
                 }
             });
         }
+        $("#loading").css('display','none');
     });
 }
 

@@ -270,33 +270,8 @@ def get_daily_trends_data(request):
                         subgroup_data.append(None)
                 aggregate_data[subgroup] = subgroup_data
 
-            # raw_data={}
-            # for name in PARTICIPANTS:
-            #     subject_data = []
-            #     for hour in range(0, 24):
-            #         hour_data = list(PhysData.objects
-            #                          .filter(name=name, category=type, interval="1hr", date__hour=hour, measurement__isnull=False)
-            #                          .order_by("date")
-            #                          .values_list("measurement", flat=True))
-            #         print(hour_data)
-            #         if hour_data:
-            #             subject_data.append(statistics.mean(hour_data))
-            #         else:
-            #             subject_data.append(None)
-            #     raw_data[name] = subject_data
-            #
-            # aggregate_data = {}
-            # for subgroup in group_dictionary:
-            #     subgroup_data = []
-            #     for hour in range(0, 24):
-            #         hour_data = []
-            #         for participant in group_dictionary[subgroup]:
-            #             if (participant in raw_data
-            #                     and hour < len(raw_data[participant])):
-            #                 hour_data.append(raw_data[participant][hour])
-            #         if not hour_data:
-            #             subgroup_data.append(None)
-            #         else:
-            #             subgroup_data.append(aggregation_method(hour_data))
-            #     aggregate_data[subgroup] = subgroup_data
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+
+
+def get_scatter_plot_data(request):
+    return HttpResponse(json.dumps({"data": "hello"}))

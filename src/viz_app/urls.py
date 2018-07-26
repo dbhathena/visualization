@@ -18,5 +18,6 @@ urlpatterns = [
     path('team/', views.team, name='team'),
     path('faq/', views.faq, name='faq'),
     path('get-study-trends-data/', views.get_study_trends_data, name='get_study_trends_data'),
-    path('get-daily-trends-data/', views.get_daily_trends_data, name='get_daily_trends_data')
+    path('get-daily-trends-data/', views.get_daily_trends_data, name='get_daily_trends_data'),
+    path('get-scatter-plot-data/', views.get_scatter_plot_data, name='get_scatter_plot_data')
 ]

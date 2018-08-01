@@ -1,5 +1,4 @@
 $( document ).ready(function() {
-    $("#loading").css('display', 'flex');
     drawStudyTrendsGroup();
     $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
         $("#loading").css('display','flex');
@@ -28,7 +27,6 @@ function drawStudyTrendsIndividual() {
     }).done(function(data) {
         const type = $('#type_dropdown').val();
         const name = $("#names_dropdown").val();
-        var subject_data;
         if (type == "Temperature") {
             $("#chart2").show();
 
@@ -147,7 +145,7 @@ function drawStudyTrendsIndividual() {
         } else {
             $("#chart2").hide();
 
-            subject_data = data.subject_data[null];
+            var subject_data = data.subject_data[null];
             const dates = ['x'];
             const measurements = [$("#names_dropdown").val()].concat(subject_data["measurements"]);
             subject_data["dates"].forEach(function(d) {

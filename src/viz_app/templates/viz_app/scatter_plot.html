@@ -8,7 +8,41 @@
 {% endblock %}
 
 {% block options %}
-
+<div class="dropdown-container">
+    <h3>Select X axis data type:</h3>
+    <select id="x_axis_dropdown">
+        {% for type in types %}
+            <option value="{{ type }}">{{ type }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="dropdown-container">
+    <h3>Select Y axis data type:</h3>
+    <select id="y_axis_dropdown">
+        {% for type in types %}
+            <option value="{{ type }}">{{ type }}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="dropdown-container">
+    <h3>Select a group:</h3>
+    <select id="group_dropdown">
+        <option value="All" selected>All</option>
+        <option value="Depression">Depression Status</option>
+        <option value="Gender">Gender</option>
+        <option value="Marital">Marital Status</option>
+        <option value="Employment">Employment Status</option>
+        <option value="Age">Age</option>
+        <option value="Psychotherapy">Psychotherapy</option>
+        <option value="Episode Length">Episode Length</option>
+        <option value="Episode Type">Episode Type</option>
+        <option value="Phobia">Social Phobia</option>
+        <option value="Anxiety">Generalized Anxiety Disorder</option>
+        <option value="Current Medication">Current Medication Status</option>
+        <option value="New Medication">Additional Medication Status</option>
+        <option value="None">None (Individual)</option>
+    </select>
+</div>
 {% endblock %}
 
 

@@ -1,5 +1,4 @@
 $( document ).ready(function() {
-    $("#loading").css('display','flex');
     drawDailyTrendsGroup();
         $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
             $("#loading").css('display','flex');

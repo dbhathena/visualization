@@ -26,7 +26,8 @@ def daily_trends(request):
 
 
 def scatter_plot(request):
-    return render(request, 'viz_app/scatter_plot.html')
+    context = {"types": TYPES}
+    return render(request, 'viz_app/scatter_plot.html', context)
 
 
 def radar_chart(request):
@@ -269,9 +270,32 @@ def get_daily_trends_data(request):
                     else:
                         subgroup_data.append(None)
                 aggregate_data[subgroup] = subgroup_data
-
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
 
 
 def get_scatter_plot_data(request):
-    return HttpResponse(json.dumps({"data": "hello"}))
+    x_axis = request.GET.get("x_axis")
+    y_axis = request.GET.get("y_axis")
+    group = request.GET.get("group")
+    group_dictionary = GROUPINGS[group]
+    x_bounds = MEASUREMENT_THRESHOLDS[x_axis]
+    y_bounds = MEASUREMENT_THRESHOLDS[y_axis]
+    if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
+        raise NotImplementedError("Not implemented yet!")
+    else:
+        data = {}
+        for subgroup in group_dictionary:
+            x_data = list(PhysData.objects
+                          .filter(name__in=group_dictionary[subgroup],
+                                  category=x_axis,
+                                  interval="24hrs")
+                          .order_by("date", "name")
+                          .values_list("measurement", flat=True))
+            y_data = list(PhysData.objects
+                          .filter(name__in=group_dictionary[subgroup],
+                                  category=y_axis,
+                                  interval="24hrs")
+                          .order_by("date", "name")
+                          .values_list("measurement", flat=True))
+            data[subgroup] = {"x": x_data, "y": y_data}
+        return HttpResponse(json.dumps({"scatter_data": data}))

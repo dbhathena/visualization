@@ -69,7 +69,6 @@ def faq(request):
 def get_study_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
-    bounds = MEASUREMENT_THRESHOLDS[type]
     if group == "None":
         name = request.GET.get("name")
         subject_data = {"left": {"dates": [], "measurements": []},
@@ -79,9 +78,7 @@ def get_study_trends_data(request):
         raw_data = list(PhysData.objects
                         .filter(name=name,
                                 category=type,
-                                interval="24hrs",
-                                measurement__gte=bounds[0],
-                                measurement__lte=bounds[1])
+                                interval="24hrs")
                         .order_by("date")
                         .values("date", "measurement", "hand"))
         for x in raw_data:
@@ -100,18 +97,14 @@ def get_study_trends_data(request):
                                                   .filter(name=participant,
                                                           category=type,
                                                           interval="24hrs",
-                                                          hand="left",
-                                                          measurement__gte=bounds[0],
-                                                          measurement__lte=bounds[1])
+                                                          hand="left")
                                                   .order_by("date")
                                                   .values_list("measurement", flat=True))
                 raw_data_right[participant] = list(PhysData.objects
                                                    .filter(name=participant,
                                                            category=type,
                                                            interval="24hrs",
-                                                           hand="right",
-                                                           measurement__gte=bounds[0],
-                                                           measurement__lte=bounds[1])
+                                                           hand="right")
                                                    .order_by("date")
                                                    .values_list("measurement", flat=True))
 
@@ -150,9 +143,7 @@ def get_study_trends_data(request):
                 participant_data = list(PhysData.objects
                                         .filter(name=participant,
                                                 category=type,
-                                                interval="24hrs",
-                                                measurement__gte=bounds[0],
-                                                measurement__lte=bounds[1])
+                                                interval="24hrs")
                                         .order_by("date")
                                         .values_list("measurement", flat=True))
                 raw_data[participant] = participant_data
@@ -180,7 +171,6 @@ def get_study_trends_data(request):
 def get_daily_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
-    bounds = MEASUREMENT_THRESHOLDS[type]
     if group == "None":
         name = request.GET.get("name")
         if type in SEPARATE_HANDS:
@@ -193,9 +183,7 @@ def get_daily_trends_data(request):
                                              interval="1hr",
                                              hand=hand,
                                              date__hour=hour,
-                                             measurement__isnull=False,
-                                             measurement__gte=bounds[0],
-                                             measurement__lte=bounds[1])
+                                             measurement__isnull=False)
                                      .order_by("date")
                                      .values_list("measurement", flat=True))
                     if hour_data:
@@ -210,9 +198,7 @@ def get_daily_trends_data(request):
                                          category=type,
                                          interval="1hr",
                                          date__hour=hour,
-                                         measurement__isnull=False,
-                                         measurement__gte=bounds[0],
-                                         measurement__lte=bounds[1])
+                                         measurement__isnull=False)
                                  .order_by("date")
                                  .values_list("measurement", flat=True))
                 if hour_data:
@@ -240,9 +226,7 @@ def get_daily_trends_data(request):
                                                  interval="1hr",
                                                  hand=hand,
                                                  date__hour=hour,
-                                                 measurement__isnull=False,
-                                                 measurement__gte=bounds[0],
-                                                 measurement__lte=bounds[1])
+                                                 measurement__isnull=False)
                                          .values_list("measurement", flat=True))
                         if hour_data:
                             subgroup_data.append(aggregation_method(hour_data))
@@ -261,9 +245,7 @@ def get_daily_trends_data(request):
                                              category=type,
                                              interval="1hr",
                                              date__hour=hour,
-                                             measurement__isnull=False,
-                                             measurement__gte=bounds[0],
-                                             measurement__lte=bounds[1])
+                                             measurement__isnull=False)
                                      .values_list("measurement", flat=True))
                     if hour_data:
                         subgroup_data.append(aggregation_method(hour_data))
@@ -278,8 +260,6 @@ def get_scatter_plot_data(request):
     y_axis = request.GET.get("y_axis")
     group = request.GET.get("group")
     group_dictionary = GROUPINGS[group]
-    x_bounds = MEASUREMENT_THRESHOLDS[x_axis]
-    y_bounds = MEASUREMENT_THRESHOLDS[y_axis]
     if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
         raise NotImplementedError("Not implemented yet!")
     else:

@@ -261,7 +261,58 @@ def get_scatter_plot_data(request):
     group = request.GET.get("group")
     group_dictionary = GROUPINGS[group]
     if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
-        raise NotImplementedError("Not implemented yet!")
+        data = {}
+        for subgroup in group_dictionary:
+            if (x_axis in SEPARATE_HANDS):
+                x_data_left = list(PhysData.objects
+                                   .filter(name__in=group_dictionary[subgroup],
+                                           category=x_axis,
+                                           interval="24hrs",
+                                           hand="left")
+                                   .order_by("date", "name")
+                                   .values_list("measurement", flat=True))
+                x_data_right = list(PhysData.objects
+                                   .filter(name__in=group_dictionary[subgroup],
+                                           category=x_axis,
+                                           interval="24hrs",
+                                           hand="right")
+                                   .order_by("date", "name")
+                                   .values_list("measurement", flat=True))
+                x_data = {"left": x_data_left, "right": x_data_right}
+            else:
+                x_data_both = list(PhysData.objects
+                              .filter(name__in=group_dictionary[subgroup],
+                                      category=x_axis,
+                                      interval="24hrs")
+                              .order_by("date", "name")
+                              .values_list("measurement", flat=True))
+                x_data = {"left": x_data_both, "right": x_data_both}
+            if (y_axis in SEPARATE_HANDS):
+                y_data_left = list(PhysData.objects
+                                   .filter(name__in=group_dictionary[subgroup],
+                                           category=y_axis,
+                                           interval="24hrs",
+                                           hand="left")
+                                   .order_by("date", "name")
+                                   .values_list("measurement", flat=True))
+                y_data_right = list(PhysData.objects
+                                   .filter(name__in=group_dictionary[subgroup],
+                                           category=y_axis,
+                                           interval="24hrs",
+                                           hand="right")
+                                   .order_by("date", "name")
+                                   .values_list("measurement", flat=True))
+                y_data = {"left": y_data_left, "right": y_data_right}
+            else:
+                y_data_both = list(PhysData.objects
+                              .filter(name__in=group_dictionary[subgroup],
+                                      category=y_axis,
+                                      interval="24hrs")
+                              .order_by("date", "name")
+                              .values_list("measurement", flat=True))
+                y_data = {"left": y_data_both, "right": y_data_both}
+            data[subgroup] = {"x": x_data, "y": y_data}
+        return HttpResponse(json.dumps({"scatter_data": data}))
     else:
         data = {}
         for subgroup in group_dictionary:

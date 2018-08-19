@@ -184,7 +184,6 @@ def get_daily_trends_data(request):
                                              hand=hand,
                                              date__hour=hour,
                                              measurement__isnull=False)
-                                     .order_by("date")
                                      .values_list("measurement", flat=True))
                     if hour_data:
                         subject_data[hand].append(statistics.mean(hour_data))
@@ -199,7 +198,6 @@ def get_daily_trends_data(request):
                                          interval="1hr",
                                          date__hour=hour,
                                          measurement__isnull=False)
-                                 .order_by("date")
                                  .values_list("measurement", flat=True))
                 if hour_data:
                     subject_data["both"].append(statistics.mean(hour_data))

@@ -29,8 +29,7 @@ def populate_acc_data(apps, schema_editor):
         data = json.load(open(directory + '/' + accFile, 'r'))
         for dateString in data["empatica_motion_vector"]:
             naive_date = datetime.datetime.fromtimestamp(int(dateString) / 1000)
-            utc_date = timezone.make_aware(naive_date, tz.gettz('UTC'))
-            date = timezone.localtime(utc_date, tz.gettz('EST'))
+            date = timezone.make_aware(naive_date, tz.gettz('America/New_York'))
             acc = data["empatica_motion_vector"][dateString]
             if acc is not None and (acc < bounds[0] or acc > bounds[1]):
                 acc = None

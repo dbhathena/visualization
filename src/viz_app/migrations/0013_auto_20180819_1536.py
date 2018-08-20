@@ -29,8 +29,7 @@ def populate_hr_data(apps, schema_editor):
         data = json.load(open(directory + '/' + hrFile, 'r'))
         for dateString in data:
             naive_date = datetime.datetime.fromtimestamp(int(dateString)/1000)
-            utc_date = timezone.make_aware(naive_date, tz.gettz('UTC'))
-            date = timezone.localtime(utc_date, tz.gettz('EST'))
+            date = timezone.make_aware(naive_date, tz.gettz('America/New_York'))
             hr = data[dateString]
             if hr is not None and (hr < bounds[0] or hr > bounds[1]):
                 hr = None

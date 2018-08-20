@@ -6,7 +6,7 @@ $( document ).ready(function() {
     $("#x_axis_dropdown, #y_axis_dropdown, #group_dropdown").change(function() {
         $("#loading").css('display', 'flex');
         drawScatterPlot();
-    })
+    });
 });
 
 function drawScatterPlot() {

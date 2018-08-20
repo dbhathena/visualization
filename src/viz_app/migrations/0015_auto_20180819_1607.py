@@ -29,8 +29,7 @@ def populate_motion_data(apps, schema_editor):
         data = json.load(open(directory + '/' + motionFile, 'r'))
         for dateString in data["fraction_of_time_in_motion"]:
             naive_date = datetime.datetime.fromtimestamp(int(dateString) / 1000)
-            utc_date = timezone.make_aware(naive_date, tz.gettz('UTC'))
-            date = timezone.localtime(utc_date, tz.gettz('EST'))
+            date = timezone.make_aware(naive_date, tz.gettz('America/New_York'))
             motionFrac = data["fraction_of_time_in_motion"][dateString]
             if motionFrac is not None and (motionFrac < bounds[0] or motionFrac > bounds[1]):
                 motionFrac = None

@@ -1,5 +1,5 @@
 body {
-    font-family: "Kozuka Gothic Pro";
+    font-family: "News Gothic MT", sans-serif;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -155,7 +155,7 @@ div.button_container img.button {
 
 h1,h2,h3 {
     text-align: center;
-    margin: 0.4em;
+    margin: 0.6em;
     font-weight: 500;
 }
 
@@ -273,4 +273,32 @@ p,span,li{
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+.search-categories {
+    padding: 6px 4px 6px 4px;
+    font-size: 14px;
+    background: #e5f3e6;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    position: relative;
+}
+
+.search-categories .select {
+    width: 100%;
+}
+
+.search-categories .select select {
+    font-family: inherit;
+    background: transparent;
+    line-height: 1;
+    border: 0;
+    padding: 5px;
+    border-radius: 0;
+    height: 20px;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+    font-size: 1em;
+    outline: none;
 }

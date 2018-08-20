@@ -1,17 +1,17 @@
 $( document ).ready(function() {
     drawDailyTrendsGroup();
-        $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
-            $("#loading").css('display','flex');
-            if ($("#group_dropdown").val() == "None") {
-                $("#aggregation_container").css("display", "none");
-                $("#names_container").css("display", "flex");
-                drawDailyTrendsIndividual();
-            } else {
-                $("#names_container").css("display", "none");
-                $("#aggregation_container").css("display", "flex");
-                drawDailyTrendsGroup();
-            }
-        });
+    $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
+        $("#loading").css('display','flex');
+        if ($("#group_dropdown").val() == "None") {
+            $("#aggregation_container").css("display", "none");
+            $("#names_container").css("display", "flex");
+            drawDailyTrendsIndividual();
+        } else {
+            $("#names_container").css("display", "none");
+            $("#aggregation_container").css("display", "flex");
+            drawDailyTrendsGroup();
+        }
+    });
 });
 
 function drawDailyTrendsIndividual() {

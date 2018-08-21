@@ -30,7 +30,7 @@ hr {
     text-align: center;
     cursor: pointer;
     border: none;
-    padding: 4px 20px;
+    padding: 15px 20px;
     text-decoration: none;
 }
 
@@ -43,7 +43,7 @@ hr {
     cursor: pointer;
     border: none;
     margin-left: 5px;
-    padding: 0px 6px;
+    padding: 0 6px;
     height: inherit;
     display: flex;
     align-items: center;
@@ -220,6 +220,8 @@ p {
     border-radius: 5px;
     margin-left: auto;
     margin-right: auto;
+    padding-top: 8px;
+    padding-bottom: 8px;
 }
 
 #learn-more:hover {

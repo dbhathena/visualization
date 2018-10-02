@@ -38,7 +38,7 @@ def deploy():
         run("git clean -f -d")
         run("git pull")
 
-        sudo('pip install -r requirements.txt')
+        sudo('pip3 install -r requirements.txt')
 
         run('cp /opt/passwords.py src')
 
@@ -56,13 +56,6 @@ def deploy_passwords_file():
     put( os.path.join(FILE_DIRECTORY, '../../src/passwords.py'), '/opt/passwords.py')
     sudo('crontab < /tmp/crontab')
 
-def setup_mongo():
-    sudo("apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10")
-    run('echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.0.list')
-    sudo("apt-get update")
-    sudo("apt-get install -y mongodb-org")
-    sudo("service mongod start")
-
 def setup_server():
 
     sudo('apt-get update')
@@ -74,12 +67,8 @@ def setup_server():
     sudo('apt-get -y install python-setuptools git nginx uwsgi uwsgi-plugin-python mysql-server python-mysqldb')
     sudo('apt-get -y install python-pip python-dev build-essential')
     sudo('apt-get -y install yui-compressor')
-    sudo('apt-get -y build-dep python-imaging') # required for Pillow
-    sudo('apt-get -y install libjpeg62 libjpeg62-dev') # required for Pillow
     sudo('apt-get -y install node-less')
-
-    # install and start mongo
-    setup_mongo()
+    sudo('apt-get -y install python3.5')
 
     # get code
     sudo('mkdir -p ' + SETUP_DIRECTORY)
@@ -96,15 +85,14 @@ def setup_server():
         _put_key_file('github_rsa')
         _put_key_file('github_rsa.pub')
 
-        # this one takes a while!
-        if not exists('/opt/dhparams.pem'):
-            run('openssl dhparam -out /opt/dhparams.pem 4096')
 
         for command in _get_configure_db_commands(MYSQL_ROOT_PASSWORD):
             run(command)
+        sudo('chmod 777 .')
 
-        run('find "github.mit.edu" ~/.ssh/config 1>nul || echo -e "Host github.mit.edu\n    User git\n    IdentityFile ~/.ssh/github_rsa" > ~/.ssh/config')
+        run('find "github.com" ~/.ssh/config 1>nul || echo -e "Host github.com\n    User git\n    IdentityFile ~/.ssh/github_rsa" > ~/.ssh/config')
         run('[ -d {0} ] || git clone '.format(GIT_PROJECT_NAME) + GITHUB_SSH_URL)
+        run('ln -s {0} django'.format(GIT_PROJECT_NAME))
 
         put('{0}/nginx-default-conf'.format(os.path.dirname(FILE_DIRECTORY)), '/etc/nginx/sites-enabled/default', use_sudo=True)
         put('{0}/nginx-conf'.format(os.path.dirname(FILE_DIRECTORY)), '/etc/nginx/nginx.conf', use_sudo=True)
@@ -121,8 +109,6 @@ def setup_server():
     sudo('chown www-data:www-data /var/log/django/django.log')
     sudo('chmod 777 /var/log/django/')
     sudo('service nginx restart')
-
-    deploy_crontab()
 
     deploy()
 

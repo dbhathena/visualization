@@ -18,7 +18,7 @@ def get_files(directory):
 
 
 def populate_acc_data(apps, schema_editor):
-    directory = '../data/E4/ACC'
+    directory = '../../data/E4/ACC'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     bounds = MEASUREMENT_THRESHOLDS['Accelerometer']

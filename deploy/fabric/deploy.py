@@ -64,12 +64,13 @@ def setup_server():
     sudo("debconf-set-selections <<< 'mysql-server-5.5 mysql-server/root_password_again password {0}'".format(MYSQL_ROOT_PASSWORD))
 
     # get the programs we'll need
-    sudo('apt-get -y install python-setuptools git nginx uwsgi uwsgi-plugin-python mysql-server python-mysqldb')
-    sudo('apt-get -y install python-pip python-dev build-essential')
+    sudo('apt-get -y install libmysqlclient-dev python-setuptools git nginx uwsgi uwsgi-plugin-python mysql-server python3-mysqldb')
+    sudo('apt-get -y install python-pip python3-dev build-essential')
     sudo('apt-get -y install yui-compressor')
     sudo('apt-get -y install node-less')
     sudo('apt-get -y install python3.5')
     sudo('apt-get -y install python3-pip libffi-dev')
+    sudo('pip3 install mysqlclient')
 
     # get code
     sudo('mkdir -p ' + SETUP_DIRECTORY)

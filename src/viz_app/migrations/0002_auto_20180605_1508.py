@@ -12,7 +12,7 @@ def get_files(directory):
     return [x for x in files if not (x.startswith('x'))]
 
 def populate_temp_data(apps, schema_editor):
-    directory = '../data/E4/TEMP'
+    directory = '../../data/E4/TEMP'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for tempFile in files:

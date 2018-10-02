@@ -14,7 +14,7 @@ def get_files(directory):
 
 
 def populate_motion_data(apps, schema_editor):
-    directory = '../data/E4/MOTION'
+    directory = '../../data/E4/MOTION'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for motionFile in files:

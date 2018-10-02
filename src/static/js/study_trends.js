@@ -1,6 +1,6 @@
 $( document ).ready(function() {
     drawStudyTrendsGroup();
-    $("#names_dropdown, #type_dropdown, #aggregation_dropdown, #group_dropdown").change(function() {
+    $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css('display','flex');
         if ($("#group_dropdown").val() == "None") {
             $("#aggregation_container").css("display", "none");
@@ -12,20 +12,24 @@ $( document ).ready(function() {
             drawStudyTrendsGroup();
         }
     });
+    $("#category_dropdown").change(function() {
+        $(".data-dropdown-container").css("display", "none");
+        $("#" + $("#category_dropdown").val() + "_dropdown_container").css("display", "flex");
+    });
 });
 
 function drawStudyTrendsIndividual() {
     $.ajax({
         url: "/viz_app/get-study-trends-data/",
         data: {
-            type: $("#type_dropdown").val(),
+            type: $("#" + $("#category_dropdown").val() + "_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),
             group: $("#group_dropdown").val(),
             name: $("#names_dropdown").val(),
         },
         dataType: "json"
     }).done(function(data) {
-        const type = $('#type_dropdown').val();
+        const type = $("#" + $("#category_dropdown").val() + "_dropdown").val();
         const name = $("#names_dropdown").val();
         if (type == "Temperature") {
             $("#chart2").show();
@@ -205,14 +209,14 @@ function drawStudyTrendsGroup() {
     $.ajax({
         url: "/viz_app/get-study-trends-data/",
         data: {
-            type: $("#type_dropdown").val(),
+            type: $("#" + $("#category_dropdown").val() + "_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),
             group: $("#group_dropdown").val(),
             name: $("#names_dropdown").val(),
         },
         dataType: "json"
     }).done(function(data) {
-        const type = $("#type_dropdown").val();
+        const type = $("#" + $("#category_dropdown").val() + "_dropdown").val();
 
         if (type == "Temperature") {
             $("#chart2").show();

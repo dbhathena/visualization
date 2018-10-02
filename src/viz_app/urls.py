@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from django.contrib.auth import views as auth_views
 
 app_name = 'viz_app'
 urlpatterns = [
@@ -19,5 +20,7 @@ urlpatterns = [
     path('faq/', views.faq, name='faq'),
     path('get-study-trends-data/', views.get_study_trends_data, name='get_study_trends_data'),
     path('get-daily-trends-data/', views.get_daily_trends_data, name='get_daily_trends_data'),
-    path('get-scatter-plot-data/', views.get_scatter_plot_data, name='get_scatter_plot_data')
+    path('get-scatter-plot-data/', views.get_scatter_plot_data, name='get_scatter_plot_data'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout')
 ]

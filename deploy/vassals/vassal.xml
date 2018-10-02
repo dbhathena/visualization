@@ -1,0 +1,13 @@
+<uwsgi>
+    <plugins>python</plugins>
+    <master>true</master>
+    <processes>1</processes>
+    <vaccum>true</vaccum>
+    <chmod-socket>666</chmod-socket>
+    <socket>/tmp/uwsgi.django.socket</socket>
+    <uid>www-data</uid>
+    <gid>www-data</gid>
+    <umask>0002</umask>
+    <pythonpath>/opt/django/src/</pythonpath>
+    <module>snapshotsite.wsgi</module>
+</uwsgi>

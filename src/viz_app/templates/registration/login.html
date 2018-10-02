@@ -1,0 +1,30 @@
+{% extends "viz_app/base.html" %}
+
+{% block content %}
+    <h1 class="header">Login</h1>
+
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if was_redirected %}
+        <span>Please log in to view this page</span>
+    {% endif %}
+
+    <form method="post" action="{% url 'viz_app:login' %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td>{{ form.username.label_tag }}</td>
+                <td>{{ form.username }}</td>
+            </tr>
+            <tr>
+                <td>{{ form.password.label_tag }}</td>
+                <td>{{ form.password }}</td>
+            </tr>
+        </table>
+
+        <input type="submit" value="login">
+    </form>
+
+{% endblock %}

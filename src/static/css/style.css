@@ -132,10 +132,14 @@ div.button_container img.button {
 }
 
 .dropdown-content a {
-    color: black;
-    padding: 8px 12px;
+    padding: 10px 12px;
     text-decoration: none;
     display: flex;
+    color: #4CAf50;
+}
+
+.dropdown-content a:hover {
+    color: white;
 }
 
 .dropdown-content a:hover {
@@ -233,11 +237,15 @@ p {
     margin-right: 80px;
 }
 
-p,span,li{
+p,span,li {
     line-height: 1.8em;
 }
 
 #names_container {
+    display: none;
+}
+
+.data-dropdown-container:not(#Activity_dropdown_container) {
     display: none;
 }
 

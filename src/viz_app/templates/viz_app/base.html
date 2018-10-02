@@ -26,25 +26,33 @@
         <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
         <a class="button" href="{% url 'viz_app:home' %}">Home</a>
         <a class="button" href="{% url 'viz_app:about' %}">About the Study</a>
-        <div class="dropdown">
-            <a class="button dropbtn">Data Visualization
-                <i class="fa fa-caret-down"></i>
-            </a>
-            <div class="dropdown-content">
-                <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
-                <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
-                <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
-                <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
-                <a href="{% url 'viz_app:word_cloud' %}">Word Cloud</a>
-                <a href="{% url 'viz_app:pie_chart' %}">Pie Chart</a>
-                <a href="{% url 'viz_app:stacked_bar_chart' %}">Stacked Bar Chart</a>
-                <hr>
-                <a href="{% url 'viz_app:index' %}">Visualization Index</a>
+        {% if request.user.is_authenticated %}
+            <div class="dropdown">
+                <a class="button dropbtn">Data Visualization
+                    <i class="fa fa-caret-down"></i>
+                </a>
+                <div class="dropdown-content">
+                    <a href="{% url 'viz_app:index' %}">Visualization Index</a>
+                    <hr>
+                    <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
+                    <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
+                    <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
+                    <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
+                    <a href="{% url 'viz_app:word_cloud' %}">Word Cloud</a>
+                    <a href="{% url 'viz_app:pie_chart' %}">Pie Chart</a>
+                    <a href="{% url 'viz_app:stacked_bar_chart' %}">Stacked Bar Chart</a>
+                </div>
             </div>
-        </div>
+        {% endif %}
         <a class="button" href="{% url 'viz_app:publications' %}">Publications</a>
         <a class="button" href="{% url 'viz_app:team' %}">Team</a>
         <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
+        {% if request.user.is_authenticated %}
+            <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
+            <span>Hello, {{ request.user.first_name }}</span>
+        {% else %}
+            <a class="button" href="{% url 'viz_app:login' %}">Log In</a>
+        {% endif %}
     </nav>
         {% block content %}{% endblock %}
         {% block script %}{% endblock %}

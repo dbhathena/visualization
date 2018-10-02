@@ -104,3 +104,7 @@ MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Motion": (0, 1),
                           "Temperature": (20, 40),
                           }
+
+CATEGORY_MAPPING = {'Activity': {'Motion', 'Accelerometer'},
+              'Physiology': {'Temperature', 'Heart Rate'}
+              }

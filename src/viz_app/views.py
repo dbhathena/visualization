@@ -1,5 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.urls import reverse
+from django import forms
+from django.contrib.auth.decorators import login_required
 
 import json
 
@@ -11,37 +15,45 @@ from .value_mappings import *
 PARTICIPANTS = [x[0] for x in PhysData.objects.distinct("name").order_by("name").values_list("name")]
 TYPES = [x[0] for x in PhysData.objects.distinct("category").order_by("category").values_list("category")]
 
+@login_required
 def index(request):
     return render(request, 'viz_app/index.html')
 
 
+@login_required
 def study_trends(request):
-    context = {"names": PARTICIPANTS, "types": TYPES}
+    context = {"names": PARTICIPANTS, "category_mapping": CATEGORY_MAPPING}
     return render(request, 'viz_app/study_trends.html', context)
 
 
+@login_required
 def daily_trends(request):
     context = {"names": PARTICIPANTS, "types": TYPES}
     return render(request, 'viz_app/daily_trends.html', context)
 
 
+@login_required
 def scatter_plot(request):
     context = {"types": TYPES}
     return render(request, 'viz_app/scatter_plot.html', context)
 
 
+@login_required
 def radar_chart(request):
     return render(request, 'viz_app/radar_chart.html')
 
 
+@login_required
 def word_cloud(request):
     return render(request, 'viz_app/word_cloud.html')
 
 
+@login_required
 def pie_chart(request):
     return render(request, 'viz_app/pie_chart.html')
 
 
+@login_required
 def stacked_bar(request):
     return render(request, 'viz_app/stacked_bar.html')
 
@@ -66,6 +78,38 @@ def faq(request):
     return render(request, 'viz_app/faq.html')
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(label='Username')
+    password = forms.CharField(widget=forms.PasswordInput, label='Password')
+
+
+def login(request):
+    if request.user.is_authenticated:
+        print("User is authenticated")
+        return HttpResponseRedirect(reverse('viz_app:home'))
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return HttpResponseRedirect(reverse('viz_app:home'))
+            else:
+                form.add_error('username', 'invalid auth')
+    else:
+        form = LoginForm()
+    context = {'form': form, 'was_redirected': request.GET.get('next') != None}
+    return render(request, 'registration/login.html', context)
+
+
+def logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect(reverse('viz_app:home'))
+
+
+@login_required
 def get_study_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
@@ -168,6 +212,7 @@ def get_study_trends_data(request):
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
 
 
+@login_required
 def get_daily_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
@@ -253,6 +298,7 @@ def get_daily_trends_data(request):
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
 
 
+@login_required
 def get_scatter_plot_data(request):
     x_axis = request.GET.get("x_axis")
     y_axis = request.GET.get("y_axis")

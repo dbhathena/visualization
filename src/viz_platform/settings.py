@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+from .. import passwords
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +21,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%22$v9ii^y$*hi9yky*9lq%wz33y^le2$engk9qqe^h5d=6@ga'
+SECRET_KEY = passwords.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = passwords.ALLOWED_HOSTS
 
 
 # Application definition
@@ -77,9 +78,9 @@ WSGI_APPLICATION = 'viz_platform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'viz-db',
-        'USER': 'deploy',
-        'PASSWORD': 'mghmit1',
+        'NAME': passwords.MYSQL_DB,
+        'USER': passwords.MYSQL_USER,
+        'PASSWORD': passwords.MYSQL_PASSWORD,
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

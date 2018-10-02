@@ -3,7 +3,7 @@ from fabric.api import run, cd, sudo, get, put, env, local
 import os
 FILE_DIRECTORY = os.path.dirname(os.path.realpath(__file__))
 
-from .deploy import USERNAME, USER_PASSWORD
+from deploy import USERNAME, USER_PASSWORD
 
 env.user = None
 env.password = None

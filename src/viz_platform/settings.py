@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'viz_platform.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': passwords.MYSQL_DB,
         'USER': passwords.MYSQL_USER,
         'PASSWORD': passwords.MYSQL_PASSWORD,

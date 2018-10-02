@@ -114,6 +114,8 @@ def setup_server():
 
     put_passwords_file()
 
+    put_data_file()
+
     deploy()
 
 def create_superuser():
@@ -167,3 +169,7 @@ def configure_local_db():
 def put_passwords_file():
     passwords_path = os.path.join(FILE_DIRECTORY, '..', '..', 'src', 'passwords.py')
     put(passwords_path, "/opt")
+
+def put_data_file():
+    data_path = os.path.join(FILE_DIRECTORY, '..', '..', '..', 'data')
+    put(data_path, "/opt")

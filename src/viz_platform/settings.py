@@ -81,8 +81,8 @@ DATABASES = {
         'NAME': passwords.MYSQL_DB,
         'USER': passwords.MYSQL_USER,
         'PASSWORD': passwords.MYSQL_PASSWORD,
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'HOST': '',
+        'PORT': '',
     }
 }
 

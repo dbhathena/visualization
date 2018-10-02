@@ -42,9 +42,9 @@ def deploy():
 
         run('cp /opt/passwords.py src')
 
-        sudo("python src/manage.py collectstatic --noinput", user="www-data")
+        sudo("python3 src/manage.py collectstatic --noinput", user="www-data")
 
-        sudo("python src/manage.py migrate", user="www-data")
+        sudo("python3 src/manage.py migrate", user="www-data")
 
     sudo('service uwsgi restart')
 
@@ -69,6 +69,7 @@ def setup_server():
     sudo('apt-get -y install yui-compressor')
     sudo('apt-get -y install node-less')
     sudo('apt-get -y install python3.5')
+    sudo('apt-get -y install python3-pip libffi-dev')
 
     # get code
     sudo('mkdir -p ' + SETUP_DIRECTORY)
@@ -109,6 +110,8 @@ def setup_server():
     sudo('chown www-data:www-data /var/log/django/django.log')
     sudo('chmod 777 /var/log/django/')
     sudo('service nginx restart')
+
+    put_passwords_file()
 
     deploy()
 
@@ -159,3 +162,7 @@ def configure_local_db():
         local(command)
 
     print("MySQL configured successfully!")
+
+def put_passwords_file():
+    passwords_path = os.path.join(FILE_DIRECTORY, '..', '..', 'src', 'passwords.py')
+    put(passwords_path, "/opt")

@@ -37,7 +37,7 @@ hr {
 .topnav .button {
     background-color: inherit;
     font-family: inherit;
-    color: #cfe2cf;
+    color: #d3e4d3;
     font-size: 16px;
     text-align: center;
     cursor: pointer;
@@ -56,6 +56,13 @@ hr {
 
 .topnav .first_button:hover {
     background-color: #20603b;
+}
+
+#login_logout_button {
+    display: flex;
+    flex-grow: 2;
+    justify-content: flex-end;
+    padding: 15px 20px;
 }
 
 
@@ -170,6 +177,7 @@ p {
 .options-container {
     display: flex;
     justify-content: space-around;
+    align-items: stretch;
 }
 
 .line {
@@ -245,7 +253,7 @@ p,span,li {
     display: none;
 }
 
-.data-dropdown-container:not(#Activity_dropdown_container) {
+.data-dropdown-container:not(#Activity_dropdown_container):not(#x_axis_Activity_container):not(#y_axis_Activity_container) {
     display: none;
 }
 
@@ -253,6 +261,7 @@ p,span,li {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 
@@ -311,4 +320,9 @@ p,span,li {
     z-index: 10;
     font-size: 1em;
     outline: none;
+}
+
+.axis-selections {
+    display: flex;
+    flex-direction: column;
 }

@@ -28,9 +28,7 @@
         <a class="button" href="{% url 'viz_app:about' %}">About the Study</a>
         {% if request.user.is_authenticated %}
             <div class="dropdown">
-                <a class="button dropbtn">Data Visualization
-                    <i class="fa fa-caret-down"></i>
-                </a>
+                <a class="button dropbtn">Data Visualization</a>
                 <div class="dropdown-content">
                     <a href="{% url 'viz_app:index' %}">Visualization Index</a>
                     <hr>
@@ -47,12 +45,13 @@
         <a class="button" href="{% url 'viz_app:publications' %}">Publications</a>
         <a class="button" href="{% url 'viz_app:team' %}">Team</a>
         <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
-        {% if request.user.is_authenticated %}
-            <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
-            <span>Hello, {{ request.user.first_name }}</span>
-        {% else %}
-            <a class="button" href="{% url 'viz_app:login' %}">Log In</a>
-        {% endif %}
+        <div id="login_logout_button">
+            {% if request.user.is_authenticated %}
+                <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
+            {% else %}
+                <a class="button" href="{% url 'viz_app:login' %}">Log In</a>
+            {% endif %}
+        </div>
     </nav>
         {% block content %}{% endblock %}
         {% block script %}{% endblock %}

@@ -28,13 +28,13 @@ def study_trends(request):
 
 @login_required
 def daily_trends(request):
-    context = {"names": PARTICIPANTS, "types": TYPES}
+    context = {"names": PARTICIPANTS, "category_mapping": CATEGORY_MAPPING}
     return render(request, 'viz_app/daily_trends.html', context)
 
 
 @login_required
 def scatter_plot(request):
-    context = {"types": TYPES}
+    context = {"category_mapping": CATEGORY_MAPPING}
     return render(request, 'viz_app/scatter_plot.html', context)
 
 

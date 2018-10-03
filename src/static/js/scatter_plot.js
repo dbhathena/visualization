@@ -3,9 +3,17 @@ $( document ).ready(function() {
     $(".chart-container").css('justify-content', 'center');
     $(".chart-container").css('align-items', 'stretch');
     drawScatterPlot();
-    $("#x_axis_dropdown, #y_axis_dropdown, #group_dropdown").change(function() {
+    $("#x_axis_category, #y_axis_category, .x_axis_dropdown, .y_axis_dropdown, #group_dropdown").change(function() {
         $("#loading").css('display', 'flex');
         drawScatterPlot();
+    });
+    $("#x_axis_category").change(function() {
+        $(".data-dropdown-container.x_axis").css("display", "none");
+        $("#x_axis_" + $("#x_axis_category").val() + "_container").css("display", "flex");
+    });
+    $("#y_axis_category").change(function() {
+        $(".data-dropdown-container.y_axis").css("display", "none");
+        $("#y_axis_" + $("#y_axis_category").val() + "_container").css("display", "flex");
     });
 });
 
@@ -13,14 +21,14 @@ function drawScatterPlot() {
     $.ajax({
         url: "/viz_app/get-scatter-plot-data/",
         data: {
-            x_axis: $("#x_axis_dropdown").val(),
-            y_axis: $("#y_axis_dropdown").val(),
+            x_axis: $("#x_axis_" + $("#x_axis_category").val() + "_dropdown").val(),
+            y_axis: $("#y_axis_" + $("#y_axis_category").val() + "_dropdown").val(),
             group: $("#group_dropdown").val()
         },
         dataType: "json"
     }).done(function(data) {
-        const x_type = $('#x_axis_dropdown').val();
-        const y_type = $('#y_axis_dropdown').val();
+        const x_type = $("#x_axis_" + $("#x_axis_category").val() + "_dropdown").val();
+        const y_type = $("#y_axis_" + $("#y_axis_category").val() + "_dropdown").val();
         const group_data = data.scatter_data;
         if (x_type == "Temperature" || y_type == "Temperature") {
             $("#chart2").show();

@@ -8,18 +8,33 @@
 {% endblock %}
 
 {% block options %}
+
     <div class="dropdown-container">
-        <h3>Select a data type:</h3>
+        <h3>Select a data category:</h3>
         <div class="search-categories">
             <div class="select">
-                <select id="type_dropdown">
-                    {% for type in types %}
-                        <option value="{{ type }}">{{ type }}</option>
+                <select id="category_dropdown">
+                    {%  for category in category_mapping %}
+                        <option value="{{ category }}">{{ category }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
     </div>
+    {% for category, types in category_mapping.items %}
+        <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
+            <h3>Select a data type:</h3>
+            <div class="search-categories">
+                <div class="select">
+                    <select class="type_dropdown" id="{{ category }}_dropdown">
+                        {% for type in types %}
+                            <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
     <div class="dropdown-container">
         <h3>Select a group (or none):</h3>
         <div class="search-categories">

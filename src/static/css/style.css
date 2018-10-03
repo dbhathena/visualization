@@ -245,6 +245,14 @@ p {
     margin-right: 80px;
 }
 
+.row li {
+    padding: 5px 0px;
+}
+
+.row ol li {
+    padding: 0;
+}
+
 p,span,li {
     line-height: 1.8em;
 }

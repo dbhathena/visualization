@@ -4,68 +4,70 @@
 {% load static from staticfiles %}
 
 {% block content %}
-<h1 class="header">Select a plot:</h1>
+<div class="content">
+    <h1>Select a plot:</h1>
 
-<div class="graph_buttons">
-    <div class="button_container">
-        <a href="{% url 'viz_app:study_trends' %}">
-            <img class="button" src="{% static 'img/study_trends.png' %}">
-            <div class="middle">
-                <div class="text">Study Trends</div>
-            </div>
-        </a>
+    <div class="graph_buttons">
+        <div class="button_container">
+            <a href="{% url 'viz_app:study_trends' %}">
+                <img class="button" src="{% static 'img/study_trends.png' %}">
+                <div class="middle">
+                    <div class="text">Study Trends</div>
+                </div>
+            </a>
+        </div>
+        <div class="button_container">
+            <a href="{% url 'viz_app:daily_trends' %}">
+                <img class="button" src="{% static 'img/daily_trends.png' %}">
+                <div class="middle">
+                    <div class="text">Daily Trends</div>
+                </div>
+            </a>
+        </div>
+        <div class="button_container">
+            <a href="{% url 'viz_app:scatter_plot' %}">
+                <img class="button" src="{% static 'img/scatter_plot.png' %}">
+                <div class="middle">
+                    <div class="text">Scatter Plot</div>
+                </div>
+            </a>
+        </div>
     </div>
-    <div class="button_container">
-        <a href="{% url 'viz_app:daily_trends' %}">
-            <img class="button" src="{% static 'img/daily_trends.png' %}">
-            <div class="middle">
-                <div class="text">Daily Trends</div>
-            </div>
-        </a>
+    <div class="graph_buttons">
+        <div class="button_container">
+            <a href="{% url 'viz_app:radar_chart' %}">
+                <img class="button" src="{% static 'img/graph2.png' %}">
+                <div class="middle">
+                    <div class="text">Radar Chart</div>
+                </div>
+            </a>
+        </div>
+        <div class="button_container">
+            <a href="{% url 'viz_app:word_cloud' %}">
+                <img class="button" src="{% static 'img/graph2.png' %}">
+                <div class="middle">
+                    <div class="text">Word Cloud</div>
+                </div>
+            </a>
+        </div>
+        <div class="button_container">
+            <a href="{% url 'viz_app:pie_chart' %}">
+                <img class="button" src="{% static 'img/graph2.png' %}">
+                <div class="middle">
+                    <div class="text">Pie Chart</div>
+                </div>
+            </a>
+        </div>
     </div>
-    <div class="button_container">
-        <a href="{% url 'viz_app:scatter_plot' %}">
-            <img class="button" src="{% static 'img/scatter_plot.png' %}">
-            <div class="middle">
-                <div class="text">Scatter Plot</div>
-            </div>
-        </a>
-    </div>
-</div>
-<div class="graph_buttons">
-    <div class="button_container">
-        <a href="{% url 'viz_app:radar_chart' %}">
-            <img class="button" src="{% static 'img/graph2.png' %}">
-            <div class="middle">
-                <div class="text">Radar Chart</div>
-            </div>
-        </a>
-    </div>
-    <div class="button_container">
-        <a href="{% url 'viz_app:word_cloud' %}">
-            <img class="button" src="{% static 'img/graph2.png' %}">
-            <div class="middle">
-                <div class="text">Word Cloud</div>
-            </div>
-        </a>
-    </div>
-    <div class="button_container">
-        <a href="{% url 'viz_app:pie_chart' %}">
-            <img class="button" src="{% static 'img/graph2.png' %}">
-            <div class="middle">
-                <div class="text">Pie Chart</div>
-            </div>
-        </a>
-    </div>
-</div>
-<div class="graph_buttons">
-    <div class="button_container">
-        <a href="{% url 'viz_app:stacked_bar_chart' %}">
-            <img class="button" src="{% static 'img/graph2.png' %}">
-            <div class="middle">
-                <div class="text">Stacked Bar Chart</div>
-            </div>
-        </a>
+    <div class="graph_buttons">
+        <div class="button_container">
+            <a href="{% url 'viz_app:stacked_bar_chart' %}">
+                <img class="button" src="{% static 'img/graph2.png' %}">
+                <div class="middle">
+                    <div class="text">Stacked Bar Chart</div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -9,5 +9,5 @@
     <gid>www-data</gid>
     <umask>0002</umask>
     <pythonpath>/opt/django/src/</pythonpath>
-    <module>snapshotsite.wsgi</module>
+    <module>viz_platform.wsgi</module>
 </uwsgi>

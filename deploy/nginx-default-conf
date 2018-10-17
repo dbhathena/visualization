@@ -1,5 +1,5 @@
 upstream django {
-     server unix:///tmp/uwsgi.django.socket; # for a web port socket (we'll use this first)
+     server 127.0.0.1:8001;
 }
 
 

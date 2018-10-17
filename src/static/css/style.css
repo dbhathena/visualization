@@ -334,3 +334,13 @@ p,span,li {
     display: flex;
     flex-direction: column;
 }
+
+.login-form {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.login-alert {
+    color: red;
+}

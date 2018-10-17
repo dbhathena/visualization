@@ -20,7 +20,7 @@ $( document ).ready(function() {
 
 function drawStudyTrendsIndividual() {
     $.ajax({
-        url: "/viz_app/get-study-trends-data/",
+        url: "/get-study-trends-data/",
         data: {
             type: $("#" + $("#category_dropdown").val() + "_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),
@@ -207,7 +207,7 @@ function drawStudyTrendsIndividual() {
 
 function drawStudyTrendsGroup() {
     $.ajax({
-        url: "/viz_app/get-study-trends-data/",
+        url: "/get-study-trends-data/",
         data: {
             type: $("#" + $("#category_dropdown").val() + "_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),

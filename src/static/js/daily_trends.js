@@ -20,7 +20,7 @@ $( document ).ready(function() {
 
 function drawDailyTrendsIndividual() {
     $.ajax({
-        url: "/viz_app/get-daily-trends-data/",
+        url: "/get-daily-trends-data/",
         data: {
             type: $("#" + $("#category_dropdown").val() + "_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),
@@ -167,7 +167,7 @@ function drawDailyTrendsIndividual() {
 
 function drawDailyTrendsGroup() {
     $.ajax({
-        url: "/viz_app/get-daily-trends-data/",
+        url: "/get-daily-trends-data/",
         data: {
             type: $("#" + $("#category_dropdown").val() + "_dropdown").val(),
             aggregation: $("#aggregation_dropdown").val(),

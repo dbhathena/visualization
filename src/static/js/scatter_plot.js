@@ -19,7 +19,7 @@ $( document ).ready(function() {
 
 function drawScatterPlot() {
     $.ajax({
-        url: "/viz_app/get-scatter-plot-data/",
+        url: "/get-scatter-plot-data/",
         data: {
             x_axis: $("#x_axis_" + $("#x_axis_category").val() + "_dropdown").val(),
             y_axis: $("#y_axis_" + $("#y_axis_category").val() + "_dropdown").val(),

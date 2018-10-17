@@ -18,7 +18,7 @@ def get_files(directory):
 
 
 def populate_temp_data(apps, schema_editor):
-    print('****',os.path.dirname(os.path.abspath('../../../../')))
+    print('****',os.path.dirname(os.path.abspath('../../../')))
     directory = '../../../../data/E4/TEMP'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')

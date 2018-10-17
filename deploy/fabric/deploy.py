@@ -71,6 +71,8 @@ def setup_server():
     sudo('apt-get -y install python3.5')
     sudo('apt-get -y install python3-pip libffi-dev')
     sudo('pip3 install mysqlclient')
+    sudo('pip uninstall uwsgi')
+    sudo('pip3 install uwsgi')
 
     # get code
     sudo('mkdir -p ' + SETUP_DIRECTORY)

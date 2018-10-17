@@ -1,5 +1,6 @@
 <uwsgi>
-    <plugins>python</plugins>
+    <venv>/opt/env</venv>
+    <plugins>python35</plugins>
     <master>true</master>
     <processes>1</processes>
     <vaccum>true</vaccum>

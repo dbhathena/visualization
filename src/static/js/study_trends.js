@@ -358,11 +358,11 @@ function drawStudyTrendsGroup() {
 
 function getUnits(dataType) {
     if (dataType == "Accelerometer") {
-        return "";
+        return "Vector Magnitude of Motion";
     } else if (dataType == "Heart Rate") {
         return "BPM";
     } else if (dataType == "Motion") {
-        return "";
+        return "Fraction of Time in Motion";
     } else if (dataType == "Temperature") {
         return "°Celsius";
     }
@@ -370,11 +370,11 @@ function getUnits(dataType) {
 
 function getTitle(dataType) {
     if (dataType == "Accelerometer") {
-        return "Vector Magnitude of Motion";
+        return "Acceleration";
     } else if (dataType == "Heart Rate") {
         return "Heart Rate";
     } else if (dataType == "Motion") {
-        return "Fraction of Time in Motion";
+        return "Motion";
     } else if (dataType == "Temperature") {
         return "Temperature";
     }

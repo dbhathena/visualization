@@ -47,6 +47,7 @@
         <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
         <div id="login_logout_button">
             {% if request.user.is_authenticated %}
+                <span id="greeting">Hello, {{ user.first_name }}</span>
                 <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
             {% else %}
                 <a class="button" href="{% url 'viz_app:login' %}">Log In</a>

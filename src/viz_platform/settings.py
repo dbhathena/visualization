@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = passwords.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = passwords.ALLOWED_HOSTS
 
@@ -75,16 +75,6 @@ WSGI_APPLICATION = 'viz_platform.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'viz_db',
-#         'USER': 'deploy',
-#         'PASSWORD': 'mghmit1',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
-#     }
-# }
 
 DATABASES = {
     'default': {

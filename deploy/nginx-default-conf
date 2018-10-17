@@ -25,10 +25,6 @@ server {
         expires 365d;
         alias /opt/staticfiles/favicon.ico;
     }
-     location /robots.txt {
-        expires 365d;
-        alias /opt/staticfiles/robots.txt;
-    }
 
     location / {
          include uwsgi_params;

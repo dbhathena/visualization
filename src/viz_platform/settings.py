@@ -89,9 +89,9 @@ WSGI_APPLICATION = 'viz_platform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'viz_db',
-        'USER': 'deploy',
-        'PASSWORD': 'mghmit1',
+        'NAME': passwords.PSQL_DB,
+        'USER': passwords.PSQL_USER,
+        'PASSWORD': passwords.PSQL_PASSWORD,
         'HOST': '',
         'PORT': '',
     }

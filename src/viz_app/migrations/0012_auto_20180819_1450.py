@@ -18,7 +18,7 @@ def get_files(directory):
 
 
 def populate_temp_data(apps, schema_editor):
-    directory = '../../data/E4/TEMP'
+    directory = 'opt/data/E4/TEMP'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     bounds = MEASUREMENT_THRESHOLDS['Temperature']

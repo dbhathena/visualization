@@ -23,7 +23,7 @@ server {
 
     location /favicon.ico {
         expires 365d;
-        alias /opt/staticfiles/favicon.ico;
+        alias /opt/staticfiles/img/favicon.ico;
     }
 
     location / {

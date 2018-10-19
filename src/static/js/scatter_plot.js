@@ -203,6 +203,22 @@ function getUnits(dataType) {
         return "Fraction of Time in Motion";
     } else if (dataType == "Temperature") {
         return "Temperature (°C)";
+    } else if (dataType == "Incoming Call Count") {
+        return "Number of Calls"
+    } else if (dataType == "Outgoing Call Count") {
+        return "Number of Calls"
+    } else if (dataType == "Incoming Call Mean Duration") {
+        return "Seconds"
+    } else if (dataType == "Outgoing Call Mean Duration") {
+        return "Seconds"
+    } else if (dataType == "Incoming Call Median Duration") {
+        return "Seconds"
+    } else if (dataType == "Outgoing Call Median Duration") {
+        return "Seconds"
+    } else if (dataType == "Incoming Call Std Duration") {
+        return "Seconds"
+    } else if (dataType == "Outgoing Call Std Duration") {
+        return "Seconds"
     }
 }
 

@@ -96,7 +96,10 @@ AGGREGATION_METHODS = {
     "Std Dev": statistics.pstdev
 }
 
-SEPARATE_HANDS = {"Temperature"}
+SEPARATE_HANDS = {"Temperature",
+                  'EDA Mean Difference',
+                  'EDA Mean',
+                  'Skin Conductance Response'}
 
 
 MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
@@ -105,6 +108,19 @@ MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Temperature": (20, 40),
                           }
 
-CATEGORY_MAPPING = {'Activity': ['Accelerometer', 'Motion'],
-              'Physiology': ['Heart Rate', 'Temperature']
+CATEGORY_MAPPING = {'Activity': ['Accelerometer',
+                                 'Motion'],
+                    'Physiology': ['Heart Rate',
+                                   'Temperature',
+                                   'EDA Mean Difference',
+                                   'EDA Mean',
+                                   'Skin Conductance Response'],
+                    'Phone_Usage': ['Incoming Call Count',
+                                    'Outgoing Call Count',
+                                    'Incoming Call Mean Duration',
+                                    'Outgoing Call Mean Duration',
+                                    'Incoming Call Median Duration',
+                                    'Outgoing Call Median Duration',
+                                    'Incoming Call Std Duration',
+                                    'Outgoing Call Std Duration']
               }

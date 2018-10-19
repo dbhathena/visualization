@@ -365,6 +365,22 @@ function getUnits(dataType) {
         return "Fraction of Time in Motion";
     } else if (dataType == "Temperature") {
         return "°Celsius";
+    } else if (dataType == "Incoming Call Count") {
+        return "Number of Calls"
+    } else if (dataType == "Outgoing Call Count") {
+        return "Number of Calls"
+    } else if (dataType == "Incoming Call Mean Duration") {
+        return "Seconds"
+    } else if (dataType == "Outgoing Call Mean Duration") {
+        return "Seconds"
+    } else if (dataType == "Incoming Call Median Duration") {
+        return "Seconds"
+    } else if (dataType == "Outgoing Call Median Duration") {
+        return "Seconds"
+    } else if (dataType == "Incoming Call Std Duration") {
+        return "Seconds"
+    } else if (dataType == "Outgoing Call Std Duration") {
+        return "Seconds"
     }
 }
 
@@ -377,5 +393,21 @@ function getTitle(dataType) {
         return "Motion";
     } else if (dataType == "Temperature") {
         return "Temperature";
+    } else if (dataType == "Incoming Call Count") {
+        return "Number of Incoming Calls"
+    } else if (dataType == "Outgoing Call Count") {
+        return "Number of Outgoing Calls"
+    } else if (dataType == "Incoming Call Mean Duration") {
+        return "Mean Duration of Incoming Calls"
+    } else if (dataType == "Outgoing Call Mean Duration") {
+        return "Mean Duration of Outgoing Calls"
+    } else if (dataType == "Incoming Call Median Duration") {
+        return "Median Duration of Incoming Calls"
+    } else if (dataType == "Outgoing Call Median Duration") {
+        return "Median Duration of Outgoing Calls"
+    } else if (dataType == "Incoming Call Std Duration") {
+        return "Std Dev of Duration of Incoming Calls"
+    } else if (dataType == "Outgoing Call Std Duration") {
+        return "Std Dev of Duration of Outgoing Calls"
     }
 }

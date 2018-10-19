@@ -14,7 +14,7 @@
             <div class="search-categories">
                 <div class="select">
                     <select id="x_axis_category">
-                        {% for category in category_mapping %}
+                        {% for category in categories %}
                             <option value="{{ category }}">{{ category }}</option>
                         {% endfor %}
                     </select>
@@ -43,7 +43,7 @@
             <div class="search-categories">
                 <div class="select">
                     <select id="y_axis_category">
-                        {% for category in category_mapping %}
+                        {% for category in categories %}
                             <option value="{{ category }}">{{ category }}</option>
                         {% endfor %}
                     </select>

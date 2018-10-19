@@ -1,4 +1,6 @@
 $( document ).ready(function() {
+    $(".data-dropdown-container").css("display", "none");
+    $("#" + $("#category_dropdown").val() + "_dropdown_container").css("display", "flex");
     drawStudyTrendsGroup();
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css('display','flex');

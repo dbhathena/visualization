@@ -8,8 +8,14 @@ body {
 
 hr {
     width: 90%;
-    color: gray;
+    color: #686868;
     border-style: solid;
+}
+
+hr.description-bar {
+    width: 100%;
+    margin: 20px 0;
+    color: #686868;
 }
 
 .topnav {

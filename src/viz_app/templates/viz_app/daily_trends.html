@@ -7,6 +7,17 @@
     <h1>Daily Trends</h1>
 {% endblock %}
 
+{% block description%}
+    <b>
+        A time series showing the trend of a measured or reported variable over the course of the 24 hours in a day.
+        One data point per hour was calculated for each participant by taking the arithmetic mean of all raw data
+        collected in that hour.
+    </b>
+    <br>
+    Select options from the drop-down menus to see different data. Hover, click, and scroll on the graph/legend to
+    see the data in more detail.
+{% endblock %}
+
 {% block options %}
 
     <div class="dropdown-container">

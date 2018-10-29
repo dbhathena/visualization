@@ -97,7 +97,6 @@ AGGREGATION_METHODS = {
 }
 
 SEPARATE_HANDS = {"Temperature",
-                  'EDA Mean Difference',
                   'EDA Mean',
                   'Skin Conductance Response'}
 

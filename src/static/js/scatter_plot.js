@@ -30,7 +30,7 @@ function drawScatterPlot() {
         const x_type = $("#x_axis_" + $("#x_axis_category").val() + "_dropdown").val();
         const y_type = $("#y_axis_" + $("#y_axis_category").val() + "_dropdown").val();
         const group_data = data.scatter_data;
-        if (x_type == "Temperature" || y_type == "Temperature") {
+        if (isTwoHands(x_type) || isTwoHands(y_type)) {
             $("#chart2").show();
 
             const columns_left = [];
@@ -203,6 +203,12 @@ function getUnits(dataType) {
         return "Fraction of Time in Motion";
     } else if (dataType == "Temperature") {
         return "Temperature (°C)";
+    } else if (dataType == "EDA Mean Difference") {
+        return "INSERT UNITS";
+    } else if (dataType == "EDA Mean") {
+        return "INSERT UNITS";
+    } else if (dataType == "Skin Conductance Response") {
+        return "# of SCRs";
     } else if (dataType == "Incoming Call Count") {
         return "Number of Calls"
     } else if (dataType == "Outgoing Call Count") {
@@ -224,4 +230,8 @@ function getUnits(dataType) {
 
 function getTitle(x_type, y_type) {
     return x_type + " vs " + y_type;
+}
+
+function isTwoHands(type) {
+    return type == "Temperature" || type == "EDA Mean" || type == "Skin Conductance Response";
 }

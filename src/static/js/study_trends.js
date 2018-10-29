@@ -33,7 +33,7 @@ function drawStudyTrendsIndividual() {
     }).done(function(data) {
         const type = $("#" + $("#category_dropdown").val() + "_dropdown").val();
         const name = $("#names_dropdown").val();
-        if (type == "Temperature") {
+        if (isTwoHands(type)) {
             $("#chart2").show();
 
             subject_data_left = data.subject_data["left"];
@@ -220,7 +220,7 @@ function drawStudyTrendsGroup() {
     }).done(function(data) {
         const type = $("#" + $("#category_dropdown").val() + "_dropdown").val();
 
-        if (type == "Temperature") {
+        if (isTwoHands(type)) {
             $("#chart2").show();
 
             const group_data_left = data.aggregate_data["left"];
@@ -367,6 +367,12 @@ function getUnits(dataType) {
         return "Fraction of Time in Motion";
     } else if (dataType == "Temperature") {
         return "°Celsius";
+    } else if (dataType == "EDA Mean Difference") {
+        return "INSERT UNITS";
+    } else if (dataType == "EDA Mean") {
+        return "INSERT UNITS";
+    } else if (dataType == "Skin Conductance Response") {
+        return "# of SCRs";
     } else if (dataType == "Incoming Call Count") {
         return "Number of Calls"
     } else if (dataType == "Outgoing Call Count") {
@@ -395,6 +401,12 @@ function getTitle(dataType) {
         return "Motion";
     } else if (dataType == "Temperature") {
         return "Temperature";
+    } else if (dataType == "EDA Mean Difference") {
+        return "EDA: Mean Difference";
+    } else if (dataType == "EDA Mean") {
+        return "EDA: Mean";
+    } else if (dataType == "Skin Conductance Response") {
+        return "Skin Conductance Responses per Day in Study";
     } else if (dataType == "Incoming Call Count") {
         return "Number of Incoming Calls"
     } else if (dataType == "Outgoing Call Count") {
@@ -412,4 +424,8 @@ function getTitle(dataType) {
     } else if (dataType == "Outgoing Call Std Duration") {
         return "Std Dev of Duration of Outgoing Calls"
     }
+}
+
+function isTwoHands(type) {
+    return type == "Temperature" || type == "EDA Mean" || type == "Skin Conductance Response";
 }

@@ -14,8 +14,8 @@
         <div class="search-categories">
             <div class="select">
                 <select id="category_dropdown">
-                    {%  for category in categories %}
-                        <option value="{{ category }}">{{ category }}</option>
+                    {%  for category_value, category_label in categories.items %}
+                        <option value="{{ category_value }}">{{ category_label }}</option>
                     {% endfor %}
                 </select>
             </div>

@@ -124,6 +124,6 @@ CATEGORY_MAPPING = {'Activity': ['Accelerometer',
                                     'Outgoing Call Std Duration']
               }
 
-CATEGORIES = ['Activity',
-              'Physiology',
-              'Phone_Usage']
+CATEGORIES = {'Activity': 'Activity',
+              'Physiology': 'Physiology',
+              'Phone_Usage': 'Phone Usage'}

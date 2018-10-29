@@ -14,14 +14,14 @@
         <div class="search-categories">
             <div class="select">
                 <select id="category_dropdown">
-                    {%  for category_value, category_label in categories.items %}
+                    {%  for category_value, category_label in categories %}
                         <option value="{{ category_value }}">{{ category_label }}</option>
                     {% endfor %}
                 </select>
             </div>
         </div>
     </div>
-    {% for category, types in category_mapping.items %}
+    {% for category, types in category_mapping %}
         <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
             <h3>Select a data type:</h3>
             <div class="search-categories">

@@ -22,19 +22,19 @@ def index(request):
 
 @login_required
 def study_trends(request):
-    context = {"names": PARTICIPANTS, "category_mapping": CATEGORY_MAPPING, "categories": CATEGORIES}
+    context = {"names": sorted(PARTICIPANTS), "category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
     return render(request, 'viz_app/study_trends.html', context)
 
 
 @login_required
 def daily_trends(request):
-    context = {"names": PARTICIPANTS, "category_mapping": CATEGORY_MAPPING, "categories": CATEGORIES}
+    context = {"names": sorted(PARTICIPANTS), "category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
     return render(request, 'viz_app/daily_trends.html', context)
 
 
 @login_required
 def scatter_plot(request):
-    context = {"category_mapping": CATEGORY_MAPPING, "categories": CATEGORIES}
+    context = {"category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
     return render(request, 'viz_app/scatter_plot.html', context)
 
 

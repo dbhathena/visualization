@@ -14,14 +14,14 @@
             <div class="search-categories">
                 <div class="select">
                     <select id="x_axis_category">
-                        {% for category_value, category_label in categories.items %}
+                        {% for category_value, category_label in categories %}
                             <option value="{{ category_value }}">{{ category_label }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
         </div>
-        {% for category, types in category_mapping.items %}
+        {% for category, types in category_mapping %}
             <div class="dropdown-container data-dropdown-container x_axis" id="x_axis_{{ category }}_container">
                 <h3>Select X axis data type:</h3>
                 <div class="search-categories">
@@ -43,14 +43,14 @@
             <div class="search-categories">
                 <div class="select">
                     <select id="y_axis_category">
-                        {% for category_value, category_label in categories.items %}
+                        {% for category_value, category_label in categories %}
                             <option value="{{ category_value }}">{{ category_label }}</option>
                         {% endfor %}
                     </select>
                 </div>
             </div>
         </div>
-        {% for category, types in category_mapping.items %}
+        {% for category, types in category_mapping %}
             <div class="dropdown-container data-dropdown-container y_axis" id="y_axis_{{ category }}_container">
                 <h3>Select Y axis data type:</h3>
                 <div class="search-categories">

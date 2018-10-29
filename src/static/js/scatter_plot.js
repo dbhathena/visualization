@@ -204,9 +204,9 @@ function getUnits(dataType) {
     } else if (dataType == "Temperature") {
         return "Temperature (°C)";
     } else if (dataType == "EDA Mean Difference") {
-        return "INSERT UNITS";
+        return "Microsiemens (µS)";
     } else if (dataType == "EDA Mean") {
-        return "INSERT UNITS";
+        return "Microsiemens (µS)";
     } else if (dataType == "Skin Conductance Response") {
         return "# of SCRs";
     } else if (dataType == "Incoming Call Count") {

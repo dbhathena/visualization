@@ -1,5 +1,5 @@
 body {
-    font-family: "News Gothic MT", sans-serif;
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -162,6 +162,7 @@ form {
     color: #fff;
     background-color: #4CAF50;
     border-color: #2C8C59;
+    border-style: solid;
     margin-left: 30px;
     text-align: center;
     vertical-align: middle;
@@ -228,7 +229,7 @@ form {
 h1,h2,h3 {
     text-align: center;
     margin: 0.6em;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 p {
@@ -383,7 +384,7 @@ p,span,li {
     border: 0;
     padding: 5px;
     border-radius: 0;
-    height: 20px;
+    min-height: 20px;
     width: 100%;
     position: relative;
     z-index: 10;

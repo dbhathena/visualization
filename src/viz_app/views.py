@@ -129,7 +129,7 @@ def get_study_trends_data(request):
             subject_data[x["hand"]]["dates"].append(x["date"].isoformat())
             subject_data[x["hand"]]["measurements"].append(x["measurement"])
         return HttpResponse(json.dumps({"subject_data": subject_data}))
-    else :
+    else:
         aggregation = request.GET.get("aggregation")
         aggregation_method = AGGREGATION_METHODS[aggregation]
         group_dictionary = GROUPINGS[group]
@@ -154,7 +154,9 @@ def get_study_trends_data(request):
 
             aggregate_data = {"left": {},
                               "right": {} }
+            group_sizes = {}
             for subgroup in group_dictionary:
+                group_sizes[subgroup] = len(group_dictionary[subgroup])
                 subgroup_data_left = []
                 subgroup_data_right = []
                 for day in range(0, 56):
@@ -180,7 +182,7 @@ def get_study_trends_data(request):
                 aggregate_data["left"][subgroup] = subgroup_data_left
                 aggregate_data["right"][subgroup] = subgroup_data_right
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
         else:
             raw_data = {}
             for participant in PARTICIPANTS:
@@ -194,7 +196,9 @@ def get_study_trends_data(request):
 
 
             aggregate_data = {}
+            group_sizes = {}
             for subgroup in group_dictionary:
+                group_sizes[subgroup] = len(group_dictionary[subgroup])
                 subgroup_data = []
                 for day in range(0, 56):
                     day_data = []
@@ -209,7 +213,7 @@ def get_study_trends_data(request):
                         subgroup_data.append(aggregation_method(day_data))
                 aggregate_data[subgroup] = subgroup_data
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
 
 
 @login_required
@@ -258,9 +262,11 @@ def get_daily_trends_data(request):
 
         if type in SEPARATE_HANDS:
             aggregate_data = {}
+            group_sizes = {}
             for hand in {"left", "right"}:
                 hand_aggregate_data = {}
                 for subgroup in group_dictionary:
+                    group_sizes[subgroup] = len(group_dictionary[subgroup])
                     subgroup_data = []
                     for hour in range(0, 24):
                         hour_data = list(PhysData.objects
@@ -277,10 +283,12 @@ def get_daily_trends_data(request):
                             subgroup_data.append(None)
                     hand_aggregate_data[subgroup] = subgroup_data
                 aggregate_data[hand] = hand_aggregate_data
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
         else:
             aggregate_data = {}
+            group_sizes = {}
             for subgroup in group_dictionary:
+                group_sizes[subgroup] = len(group_dictionary[subgroup])
                 subgroup_data = []
                 for hour in range(0, 24):
                     hour_data = list(PhysData.objects
@@ -295,7 +303,7 @@ def get_daily_trends_data(request):
                     else:
                         subgroup_data.append(None)
                 aggregate_data[subgroup] = subgroup_data
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data}))
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
 
 
 @login_required
@@ -306,7 +314,9 @@ def get_scatter_plot_data(request):
     group_dictionary = GROUPINGS[group]
     if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
         data = {}
+        group_sizes = {}
         for subgroup in group_dictionary:
+            group_sizes[subgroup] = len(group_dictionary[subgroup])
             if (x_axis in SEPARATE_HANDS):
                 x_data_left = list(PhysData.objects
                                    .filter(name__in=group_dictionary[subgroup],
@@ -356,10 +366,12 @@ def get_scatter_plot_data(request):
                               .values_list("measurement", flat=True))
                 y_data = {"left": y_data_both, "right": y_data_both}
             data[subgroup] = {"x": x_data, "y": y_data}
-        return HttpResponse(json.dumps({"scatter_data": data}))
+        return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
     else:
         data = {}
+        group_sizes = {}
         for subgroup in group_dictionary:
+            group_sizes[subgroup] = len(group_dictionary[subgroup])
             x_data = list(PhysData.objects
                           .filter(name__in=group_dictionary[subgroup],
                                   category=x_axis,
@@ -373,4 +385,4 @@ def get_scatter_plot_data(request):
                           .order_by("date", "name")
                           .values_list("measurement", flat=True))
             data[subgroup] = {"x": x_data, "y": y_data}
-        return HttpResponse(json.dumps({"scatter_data": data}))
+        return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))

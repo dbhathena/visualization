@@ -30,6 +30,7 @@ function drawScatterPlot() {
         const x_type = $("#x_axis_" + $("#x_axis_category").val() + "_dropdown").val();
         const y_type = $("#y_axis_" + $("#y_axis_category").val() + "_dropdown").val();
         const group_data = data.scatter_data;
+        const group_sizes = data.group_sizes;
         if (isTwoHands(x_type) || isTwoHands(y_type)) {
             $("#chart2").show();
 
@@ -43,10 +44,10 @@ function drawScatterPlot() {
                 const y_data_left  = subgroup_data['y']['left'];
                 const y_data_right = subgroup_data['y']['right'];
                 columns_left.push([subgroup + '_x'].concat(x_data_left));
-                columns_left.push([subgroup].concat(y_data_left));
+                columns_left.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(y_data_left));
                 columns_right.push([subgroup + '_x'].concat(x_data_right));
-                columns_right.push([subgroup].concat(y_data_right));
-                xs[subgroup] = subgroup + '_x';
+                columns_right.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(y_data_right));
+                xs[subgroup + " (n = " + group_sizes[subgroup] + ")"] = subgroup + '_x';
             }
 
             var chart_left = c3.generate({
@@ -143,8 +144,8 @@ function drawScatterPlot() {
                 const x_data = subgroup_data['x'];
                 const y_data = subgroup_data['y'];
                 columns.push([subgroup + '_x'].concat(x_data));
-                columns.push([subgroup].concat(y_data));
-                xs[subgroup] = subgroup + '_x';
+                columns.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(y_data));
+                xs[subgroup + " (n = " + group_sizes[subgroup] + ")"] = subgroup + '_x';
             }
 
             var chart = c3.generate({

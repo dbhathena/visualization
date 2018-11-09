@@ -177,6 +177,7 @@ function drawDailyTrendsGroup() {
         dataType: "json"
     }).done(function(data) {
         const type = $("#" + $("#category_dropdown").val() + "_dropdown").val();
+        const group_sizes = data.group_sizes;
 
         if (isTwoHands(type)) {
             $("#chart2").show();
@@ -189,8 +190,8 @@ function drawDailyTrendsGroup() {
             for (var subgroup in group_data_left) {
                 const subgroup_data_left = group_data_left[subgroup];
                 const subgroup_data_right = group_data_right[subgroup];
-                columns_left.push([subgroup].concat(subgroup_data_left));
-                columns_right.push([subgroup].concat(subgroup_data_right))
+                columns_left.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data_left));
+                columns_right.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data_right))
             }
 
             var chart_left = c3.generate({
@@ -274,7 +275,7 @@ function drawDailyTrendsGroup() {
             const columns = [];
             for (var subgroup in group_data) {
                 const subgroup_data = group_data[subgroup];
-                columns.push([subgroup].concat(subgroup_data));
+                columns.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data));
             }
 
             var chart = c3.generate({

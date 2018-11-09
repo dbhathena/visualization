@@ -196,36 +196,36 @@ function drawScatterPlot() {
 }
 
 function getUnits(dataType) {
-    if (dataType == "Accelerometer") {
+    if (dataType === "Accelerometer") {
         return "Vector Magnitude of Motion";
-    } else if (dataType == "Heart Rate") {
+    } else if (dataType === "Heart Rate") {
         return "Heart Rate (BPM)";
-    } else if (dataType == "Motion") {
+    } else if (dataType === "Motion") {
         return "Fraction of Time in Motion";
-    } else if (dataType == "Temperature") {
+    } else if (dataType === "Temperature") {
         return "Temperature (°C)";
-    } else if (dataType == "EDA Mean Difference") {
+    } else if (dataType === "EDA Mean Difference") {
         return "Microsiemens (µS)";
-    } else if (dataType == "EDA Mean") {
+    } else if (dataType === "EDA Mean") {
         return "Microsiemens (µS)";
-    } else if (dataType == "Skin Conductance Response") {
+    } else if (dataType === "Skin Conductance Response") {
         return "# of SCRs";
-    } else if (dataType == "Incoming Call Count") {
-        return "Number of Calls"
-    } else if (dataType == "Outgoing Call Count") {
-        return "Number of Calls"
-    } else if (dataType == "Incoming Call Mean Duration") {
-        return "Seconds"
-    } else if (dataType == "Outgoing Call Mean Duration") {
-        return "Seconds"
-    } else if (dataType == "Incoming Call Median Duration") {
-        return "Seconds"
-    } else if (dataType == "Outgoing Call Median Duration") {
-        return "Seconds"
-    } else if (dataType == "Incoming Call Std Duration") {
-        return "Seconds"
-    } else if (dataType == "Outgoing Call Std Duration") {
-        return "Seconds"
+    } else if (dataType === "Incoming Call Count") {
+        return "Number of Calls";
+    } else if (dataType === "Outgoing Call Count") {
+        return "Number of Calls";
+    } else if (dataType === "Incoming Call Mean Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Mean Duration") {
+        return "Seconds";
+    } else if (dataType === "Incoming Call Median Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Median Duration") {
+        return "Seconds";
+    } else if (dataType === "Incoming Call Std Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Std Duration") {
+        return "Seconds";
     }
 }
 
@@ -234,5 +234,5 @@ function getTitle(x_type, y_type) {
 }
 
 function isTwoHands(type) {
-    return type == "Temperature" || type == "EDA Mean" || type == "Skin Conductance Response";
+    return type === "Temperature" || type === "EDA Mean" || type === "Skin Conductance Response";
 }

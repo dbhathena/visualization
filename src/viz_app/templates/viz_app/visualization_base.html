@@ -13,7 +13,10 @@
     <div class="options-container">
         {% block options %} {% endblock %}
     </div>
-    <div class="spacer"></div>
+    <div class="selection-descriptions-container">
+        {% block selection_descriptions %}INSERT DESCRIPTIONS{% endblock %}
+    </div>
+    <hr class="description-bar">
     <div style="position: relative;">
         <div class="chart-container">
             <div class="chart" id="chart1"></div>

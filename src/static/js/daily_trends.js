@@ -2,7 +2,7 @@ $( document ).ready(function() {
     drawDailyTrendsGroup();
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css('display','flex');
-        if ($("#group_dropdown").val() == "None") {
+        if ($("#group_dropdown").val() === "None") {
             $("#aggregation_container").css("display", "none");
             $("#names_container").css("display", "flex");
             drawDailyTrendsIndividual();
@@ -319,74 +319,74 @@ function drawDailyTrendsGroup() {
 }
 
 function getUnits(dataType) {
-    if (dataType == "Accelerometer") {
+    if (dataType === "Accelerometer") {
         return "Vector Magnitude of Motion";
-    } else if (dataType == "Heart Rate") {
+    } else if (dataType === "Heart Rate") {
         return "BPM";
-    } else if (dataType == "Motion") {
+    } else if (dataType === "Motion") {
         return "Fraction of Time in Motion";
-    } else if (dataType == "Temperature") {
+    } else if (dataType === "Temperature") {
         return "°Celsius";
-    } else if (dataType == "EDA Mean Difference") {
+    } else if (dataType === "EDA Mean Difference") {
         return "Microsiemens (µS)";
-    } else if (dataType == "EDA Mean") {
+    } else if (dataType === "EDA Mean") {
         return "Microsiemens (µS)";
-    } else if (dataType == "Skin Conductance Response") {
+    } else if (dataType === "Skin Conductance Response") {
         return "# of SCRs";
-    } else if (dataType == "Incoming Call Count") {
-        return "Number of Calls"
-    } else if (dataType == "Outgoing Call Count") {
-        return "Number of Calls"
-    } else if (dataType == "Incoming Call Mean Duration") {
-        return "Seconds"
-    } else if (dataType == "Outgoing Call Mean Duration") {
-        return "Seconds"
-    } else if (dataType == "Incoming Call Median Duration") {
-        return "Seconds"
-    } else if (dataType == "Outgoing Call Median Duration") {
-        return "Seconds"
-    } else if (dataType == "Incoming Call Std Duration") {
-        return "Seconds"
-    } else if (dataType == "Outgoing Call Std Duration") {
-        return "Seconds"
+    } else if (dataType === "Incoming Call Count") {
+        return "Number of Calls";
+    } else if (dataType === "Outgoing Call Count") {
+        return "Number of Calls";
+    } else if (dataType === "Incoming Call Mean Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Mean Duration") {
+        return "Seconds";
+    } else if (dataType === "Incoming Call Median Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Median Duration") {
+        return "Seconds";
+    } else if (dataType === "Incoming Call Std Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Std Duration") {
+        return "Seconds";
     }
 }
 
 function getTitle(dataType) {
-    if (dataType == "Accelerometer") {
+    if (dataType === "Accelerometer") {
         return "Acceleration";
-    } else if (dataType == "Heart Rate") {
+    } else if (dataType === "Heart Rate") {
         return "Heart Rate";
-    } else if (dataType == "Motion") {
+    } else if (dataType === "Motion") {
         return "Motion";
-    } else if (dataType == "Temperature") {
+    } else if (dataType === "Temperature") {
         return "Temperature";
-    } else if (dataType == "EDA Mean Difference") {
+    } else if (dataType === "EDA Mean Difference") {
         return "EDA: Mean Difference";
-    } else if (dataType == "EDA Mean") {
+    } else if (dataType === "EDA Mean") {
         return "EDA: Mean";
-    } else if (dataType == "Skin Conductance Response") {
+    } else if (dataType === "Skin Conductance Response") {
         return "Skin Conductance Responses per Hour of Day";
-    } else if (dataType == "Incoming Call Count") {
-        return "Number of Incoming Calls"
-    } else if (dataType == "Outgoing Call Count") {
-        return "Number of Outgoing Calls"
-    } else if (dataType == "Incoming Call Mean Duration") {
-        return "Mean Duration of Incoming Calls"
-    } else if (dataType == "Outgoing Call Mean Duration") {
-        return "Mean Duration of Outgoing Calls"
-    } else if (dataType == "Incoming Call Median Duration") {
-        return "Median Duration of Incoming Calls"
-    } else if (dataType == "Outgoing Call Median Duration") {
-        return "Median Duration of Outgoing Calls"
-    } else if (dataType == "Incoming Call Std Duration") {
-        return "Std Dev of Duration of Incoming Calls"
-    } else if (dataType == "Outgoing Call Std Duration") {
-        return "Std Dev of Duration of Outgoing Calls"
+    } else if (dataType === "Incoming Call Count") {
+        return "Number of Incoming Calls";
+    } else if (dataType === "Outgoing Call Count") {
+        return "Number of Outgoing Calls";
+    } else if (dataType === "Incoming Call Mean Duration") {
+        return "Mean Duration of Incoming Calls";
+    } else if (dataType === "Outgoing Call Mean Duration") {
+        return "Mean Duration of Outgoing Calls";
+    } else if (dataType === "Incoming Call Median Duration") {
+        return "Median Duration of Incoming Calls";
+    } else if (dataType === "Outgoing Call Median Duration") {
+        return "Median Duration of Outgoing Calls";
+    } else if (dataType === "Incoming Call Std Duration") {
+        return "Std Dev of Duration of Incoming Calls";
+    } else if (dataType === "Outgoing Call Std Duration") {
+        return "Std Dev of Duration of Outgoing Calls";
     }
 }
 
 
 function isTwoHands(type) {
-    return type == "Temperature" || type == "EDA Mean" || type == "Skin Conductance Response";
+    return type === "Temperature" || type === "EDA Mean" || type === "Skin Conductance Response";
 }

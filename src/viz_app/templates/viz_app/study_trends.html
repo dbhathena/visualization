@@ -11,7 +11,8 @@
     <b>
         A time series showing the trend of a measured or reported variable over the course of the 56 days in the study.
         One data point per day was calculated for each participant by taking the arithmetic mean of all raw data
-        collected in that day.
+        collected in that day. If no data was collected on any particular day for a participant, no data point is
+        generated for that day.
     </b>
     <br>
     Select options from the drop-down menus to see different data. Hover, click, and scroll on the graph/legend to
@@ -83,7 +84,7 @@
             </div>
         </div>
     </div>
-    <div class="dropdown-container" id="names_container">
+    <div class="dropdown-container" id="names_container" style="display: none;">
         <h3>Select an individual:</h3>
         <div class="search-categories">
             <div class="select">
@@ -96,6 +97,14 @@
         </div>
     </div>
 {% endblock %}
+
+{% block selection_descriptions %}
+    <p class="category-description"><b>Data Category: </b><span class="category-description"></span></p>
+    <p class="type-description"><b>Data Type: </b><span class="type-description"></span></p>
+    <p class="group-description"><b>Group: </b><span class="group-description"></span></p>
+    <p class="aggregation-description"><b>Aggregation: </b><span class="aggregation-description"></span></p>
+    <p class="individual-description" style="display: none;"><b>Individual: </b><span class="individual-description"></span></p>
+{%  endblock %}
 
 {% block script %}
     <script src="{% static 'js/study_trends.js' %}"></script>

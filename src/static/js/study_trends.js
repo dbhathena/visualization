@@ -513,7 +513,7 @@ function getDataTypeText(type) {
 
 function getGroupText(group) {
     if (group === "All") {
-        return "Aggregate over all participants in the study"
+        return "All participants in the study"
     } else if (group === "Depression") {
         return "Group and aggregate over participants by their depression status: Major Depressive Disorder or Healthy Control";
     } else if (group === "Gender") {

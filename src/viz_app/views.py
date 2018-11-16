@@ -156,7 +156,10 @@ def get_study_trends_data(request):
                               "right": {} }
             group_sizes = {}
             for subgroup in group_dictionary:
-                group_sizes[subgroup] = len(group_dictionary[subgroup])
+                group_sizes[subgroup] = PhysData.objects.filter(category=type,
+                                                                interval='24hrs',
+                                                                measurement__isnull=False,
+                                                                name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data_left = []
                 subgroup_data_right = []
                 for day in range(0, 56):
@@ -198,7 +201,10 @@ def get_study_trends_data(request):
             aggregate_data = {}
             group_sizes = {}
             for subgroup in group_dictionary:
-                group_sizes[subgroup] = len(group_dictionary[subgroup])
+                group_sizes[subgroup] = PhysData.objects.filter(category=type,
+                                                                interval='24hrs',
+                                                                measurement__isnull=False,
+                                                                name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data = []
                 for day in range(0, 56):
                     day_data = []
@@ -266,7 +272,10 @@ def get_daily_trends_data(request):
             for hand in {"left", "right"}:
                 hand_aggregate_data = {}
                 for subgroup in group_dictionary:
-                    group_sizes[subgroup] = len(group_dictionary[subgroup])
+                    group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
+                                                                                            interval='1hr',
+                                                                                            measurement__isnull=False,
+                                                                                            name__in=group_dictionary[subgroup]).distinct('name').count()
                     subgroup_data = []
                     for hour in range(0, 24):
                         hour_data = list(PhysData.objects
@@ -288,7 +297,10 @@ def get_daily_trends_data(request):
             aggregate_data = {}
             group_sizes = {}
             for subgroup in group_dictionary:
-                group_sizes[subgroup] = len(group_dictionary[subgroup])
+                group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
+                                                                                        interval='1hr',
+                                                                                        measurement__isnull=False,
+                                                                                        name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data = []
                 for hour in range(0, 24):
                     hour_data = list(PhysData.objects
@@ -316,7 +328,10 @@ def get_scatter_plot_data(request):
         data = {}
         group_sizes = {}
         for subgroup in group_dictionary:
-            group_sizes[subgroup] = len(group_dictionary[subgroup])
+            group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
+                                                                                    interval='24hrs',
+                                                                                    measurement__isnull=False,
+                                                                                    name__in=group_dictionary[subgroup]).distinct('name').count()
             if (x_axis in SEPARATE_HANDS):
                 x_data_left = list(PhysData.objects
                                    .filter(name__in=group_dictionary[subgroup],
@@ -371,7 +386,10 @@ def get_scatter_plot_data(request):
         data = {}
         group_sizes = {}
         for subgroup in group_dictionary:
-            group_sizes[subgroup] = len(group_dictionary[subgroup])
+            group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
+                                                                                    interval='24hrs',
+                                                                                    measurement__isnull=False,
+                                                                                    name__in=group_dictionary[subgroup]).distinct('name').count()
             x_data = list(PhysData.objects
                           .filter(name__in=group_dictionary[subgroup],
                                   category=x_axis,

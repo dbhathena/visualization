@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    <div class="dropdown-container" id="names_container">
+    <div class="dropdown-container" id="names_container" style="display: none;">
         <h3>Select an individual:</h3>
         <div class="search-categories">
             <div class="select">
@@ -96,6 +96,14 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block selection_descriptions %}
+    <p class="category-description"><b>Data Category: </b><span class="category-description"></span></p>
+    <p class="type-description"><b>Data Type: </b><span class="type-description"></span></p>
+    <p class="group-description"><b>Group: </b><span class="group-description"></span></p>
+    <p class="aggregation-description"><b>Aggregation: </b><span class="aggregation-description"></span></p>
+    <p class="individual-description" style="display: none;"><b>Individual: </b></p>
 {% endblock %}
 
 {% block script %}

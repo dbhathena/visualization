@@ -12,7 +12,7 @@ $( document ).ready(function() {
 
     drawStudyTrendsGroup();
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
-        $("#loading").css('display','flex');
+        $("#loading").css("display","flex");
         if (group_dropdown.val() === "None") {
             $("#aggregation_container").css("display", "none");
             $("#names_container").css("display", "flex");
@@ -72,8 +72,8 @@ function drawStudyTrendsIndividual() {
             subject_data_left = data.subject_data["left"];
             subject_data_right = data.subject_data["right"];
 
-            const dates_left = ['x'];
-            const dates_right = ['x'];
+            const dates_left = ["x"];
+            const dates_right = ["x"];
             subject_data_left["dates"].forEach(function(d) {
                 dates_left.push(new Date(d));
             });
@@ -85,9 +85,9 @@ function drawStudyTrendsIndividual() {
             const measurements_right = [name].concat(subject_data_right["measurements"]);
 
             var chart_left = c3.generate({
-                bindto: '.chart-container #chart1',
+                bindto: ".chart-container #chart1",
                 data: {
-                    x: 'x',
+                    x: "x",
                     columns: [
                         dates_left,
                         measurements_left
@@ -97,22 +97,22 @@ function drawStudyTrendsIndividual() {
                     x: {
                         label: {
                             text: "Date",
-                            position: 'outer-center'
+                            position: "outer-center"
                         },
-                        type: 'timeseries',
+                        type: "timeseries",
                         tick: {
                             count: 6,
-                            format: '%Y-%m-%d'
+                            format: "%Y-%m-%d"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
                             count: 8,
-                            format: d3.format('.3r')
+                            format: d3.format(".3r")
                         }
                     }
                 },
@@ -120,10 +120,10 @@ function drawStudyTrendsIndividual() {
                     text: getTitle(type) + " - Left Hand"
                 },
                 color: {
-                    pattern: ['steelblue']
+                    pattern: ["steelblue"]
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -134,9 +134,9 @@ function drawStudyTrendsIndividual() {
             });
 
             var chart_right = c3.generate({
-                bindto: '.chart-container #chart2',
+                bindto: ".chart-container #chart2",
                 data: {
-                    x: 'x',
+                    x: "x",
                     columns: [
                         dates_right,
                         measurements_right
@@ -146,22 +146,22 @@ function drawStudyTrendsIndividual() {
                     x: {
                         label: {
                             text: "Date",
-                            position: 'outer-center'
+                            position: "outer-center"
                         },
-                        type: 'timeseries',
+                        type: "timeseries",
                         tick: {
                             count: 6,
-                            format: '%Y-%m-%d'
+                            format: "%Y-%m-%d"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
                             count: 8,
-                            format: d3.format('.3r')
+                            format: d3.format(".3r")
                         }
                     }
                 },
@@ -169,10 +169,10 @@ function drawStudyTrendsIndividual() {
                     text: getTitle(type) + " - Right Hand"
                 },
                 color: {
-                    pattern: ['orangered']
+                    pattern: ["orangered"]
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -185,16 +185,16 @@ function drawStudyTrendsIndividual() {
             $("#chart2").hide();
 
             var subject_data = data.subject_data[null];
-            const dates = ['x'];
-            const measurements = [names_dropdown.val()].concat(subject_data["measurements"]);
+            const dates = ["x"];
+            const measurements = [name].concat(subject_data["measurements"]);
             subject_data["dates"].forEach(function(d) {
                 dates.push(new Date(d));
             });
 
             var chart = c3.generate({
-                bindto: '.chart-container #chart1',
+                bindto: ".chart-container #chart1",
                 data: {
-                    x: 'x',
+                    x: "x",
                     columns: [
                         dates,
                         measurements
@@ -204,21 +204,21 @@ function drawStudyTrendsIndividual() {
                     x: {
                         label: {
                             text: "Date",
-                            position: 'outer-center'
+                            position: "outer-center"
                         },
-                        type: 'timeseries',
+                        type: "timeseries",
                         tick: {
                             count: 6,
-                            format: '%Y-%m-%d'
+                            format: "%Y-%m-%d"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
-                            format: d3.format('.3r')
+                            format: d3.format(".3r")
                         }
                     }
                 },
@@ -226,7 +226,7 @@ function drawStudyTrendsIndividual() {
                     text: getTitle(type)
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -236,7 +236,7 @@ function drawStudyTrendsIndividual() {
                 }
             });
         }
-        $("#loading").css('display', 'none');
+        $("#loading").css("display", "none");
     });
 }
 
@@ -270,7 +270,7 @@ function drawStudyTrendsGroup() {
             }
 
             var chart_left = c3.generate({
-                bindto: '.chart-container #chart1',
+                bindto: ".chart-container #chart1",
                 data: {
                     columns: columns_left
                 },
@@ -284,11 +284,11 @@ function drawStudyTrendsGroup() {
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
                             count: 8,
-                            format: d3.format('.3r')
+                            format: d3.format(".3r")
                         }
                     }
                 },
@@ -296,7 +296,7 @@ function drawStudyTrendsGroup() {
                     text: getTitle(type) + " - Left Hand"
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -307,7 +307,7 @@ function drawStudyTrendsGroup() {
             });
 
             var chart_right = c3.generate({
-                bindto: '.chart-container #chart2',
+                bindto: ".chart-container #chart2",
                 data: {
                     columns: columns_right
                 },
@@ -315,17 +315,17 @@ function drawStudyTrendsGroup() {
                     x: {
                         label: {
                             text: "Day in Study",
-                            position: 'outer-center'
+                            position: "outer-center"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
                             count: 8,
-                            format: d3.format('.3r')
+                            format: d3.format(".3r")
                         }
                     }
                 },
@@ -333,7 +333,7 @@ function drawStudyTrendsGroup() {
                     text: getTitle(type) + " - Right Hand"
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -353,7 +353,7 @@ function drawStudyTrendsGroup() {
             }
 
             var chart = c3.generate({
-                bindto: '.chart-container #chart1',
+                bindto: ".chart-container #chart1",
                 data: {
                     columns: columns
                 },
@@ -361,16 +361,16 @@ function drawStudyTrendsGroup() {
                     x: {
                         label: {
                             text: "Day in Study",
-                            position: 'outer-center'
+                            position: "outer-center"
                         }
                     },
                     y: {
                         label: {
                             text: getUnits(type),
-                            position: 'outer-middle'
+                            position: "outer-middle"
                         },
                         tick: {
-                            format: d3.format('.3r')
+                            format: d3.format(".3r")
                         }
                     }
                 },
@@ -378,7 +378,7 @@ function drawStudyTrendsGroup() {
                     text: getTitle(type)
                 },
                 legend: {
-                    position: 'right'
+                    position: "right"
                 },
                 padding: {
                     bottom: 20
@@ -388,7 +388,7 @@ function drawStudyTrendsGroup() {
                 }
             });
         }
-        $("#loading").css('display', 'none');
+        $("#loading").css("display", "none");
     });
 }
 
@@ -473,7 +473,7 @@ function getDataCategoryText(category) {
     } else if (category === "Physiology") {
         return "Physiology data collected from E4 measurements";
     } else {
-        throw new Error("Invalid category value!")
+        throw new Error("Invalid category value!");
     }
 }
 
@@ -508,6 +508,8 @@ function getDataTypeText(type) {
         return "The standard deviation of the duration of all incoming phone calls over the course of a day";
     } else if (type === "Outgoing Call Std Duration") {
         return "The standard deviation of the duration of all outgoing phone calls over the course of a day";
+    } else {
+        throw new Error("Invalid type value!");
     }
 }
 
@@ -539,21 +541,25 @@ function getGroupText(group) {
     } else if (group === "New Medication") {
         return "Group and aggregate over participants based on whether they plan on taking additional medication or not";
     } else if (group === "None") {
-        return "Show an individual's data"
+        return "Show an individual's data";
+    } else {
+        throw new Error("Invalid group value!");
     }
 }
 
 function getAggregationText(aggregation) {
     if (aggregation === "Mean") {
-        return "Calculate the arithmetic mean over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the mean"
+        return "Calculate the arithmetic mean over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the mean";
     } else if (aggregation === "Median") {
-        return "Find the median measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the median"
+        return "Find the median measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the median";
     } else if (aggregation === "Max") {
-        return "Find the maximum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the max"
+        return "Find the maximum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the max";
     } else if (aggregation === "Min") {
-        return "Find the minimum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the min"
+        return "Find the minimum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the min";
     } else if (aggregation === "Std Dev") {
-        return "Calculate the standard deviation over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the standard deviation"
+        return "Calculate the standard deviation over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the standard deviation";
+    } else {
+        throw new Error("Invalid aggregation value!");
     }
 }
 

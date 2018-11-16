@@ -41,7 +41,7 @@ $( document ).ready(function() {
     });
     group_dropdown.change(function() {
         const group = group_dropdown.val();
-        $("span.group-description").text(getGroupText());
+        $("span.group-description").text(getGroupText(group));
     });
     aggregation_dropdown.change(function () {
         const aggregation = aggregation_dropdown.val();
@@ -49,6 +49,7 @@ $( document ).ready(function() {
     });
     names_dropdown.change(function () {
         const name = names_dropdown.val();
+        console.log(getIndividualText(name));
         $("span.individual-description").text(getIndividualText(name));
     });
 });

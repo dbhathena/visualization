@@ -101,6 +101,14 @@
     </div>
 {% endblock %}
 
+{% block selection_descriptions %}
+    <p class="x-category-description"><b>X-Axis Data Category: </b><span class="x-category-description"></span></p>
+    <p class="x-type-description"><b>X-Axis Data Type: </b><span class="x-type-description"></span></p>
+    <p class="y-category-description"><b>Y-Axis Data Category: </b><span class="y-category-description"></span></p>
+    <p class="y-type-description"><b>Y-Axis Data Type: </b><span class="y-type-description"></span></p>
+    <p class="group-desciprion"><b>Group: </b><span class="group-description"></span></p>
+{% endblock %}
+
 {% block script %}
     <script src="{% static 'js/scatter_plot.js' %}"></script>
 {% endblock %}

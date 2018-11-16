@@ -222,7 +222,7 @@ function drawDailyTrendsGroup() {
 
             const columns_left = [];
             const columns_right = [];
-            for (var subgroup in group_data_left) {
+            for (const subgroup in group_data_left) {
                 const subgroup_data_left = group_data_left[subgroup];
                 const subgroup_data_right = group_data_right[subgroup];
                 columns_left.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data_left));
@@ -308,7 +308,7 @@ function drawDailyTrendsGroup() {
             const group_data = data.aggregate_data;
 
             const columns = [];
-            for (var subgroup in group_data) {
+            for (const subgroup in group_data) {
                 const subgroup_data = group_data[subgroup];
                 columns.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data));
             }
@@ -435,43 +435,43 @@ function getDataCategoryText(category) {
     } else if (category === "Physiology") {
         return "Physiology data collected from E4 measurements";
     } else {
-        throw new Error("Invalid category value!");
+        throw new Error("Invalid category value: " + category);
     }
 }
 
 function getDataTypeText(type) {
     if (type === "Accelerometer") {
-        return "The daily average of the magnitude of motion vectors combining 3-axis accelerometer measurements";
+        return "The hourly average of the magnitude of motion vectors combining 3-axis accelerometer measurements";
     } else if (type === "Heart Rate") {
-        return "The daily average heart rate, measured in beats per minute";
+        return "The hourly average heart rate, measured in beats per minute";
     } else if (type === "Motion") {
-        return "The decimal percentage of the day when the individual was in motion (estimated using actigraphy)";
+        return "The decimal percentage of the hour when the individual was in motion (estimated using actigraphy)";
     } else if (type === "Temperature") {
-        return "The daily average skin temperature measured from each hand";
+        return "The hourly average skin temperature measured from each hand";
     } else if (type === "EDA Mean Difference") {
-        return "The daily average of the difference between right and left hand Skin Conductance Level signals (Right - Left)";
+        return "The hourly average of the difference between right and left hand Skin Conductance Level signals (Right - Left)";
     } else if (type === "EDA Mean") {
-        return "The daily average amplitude of Skin Conductance Response measured from each hand";
+        return "The hourly average amplitude of Skin Conductance Response measured from each hand";
     } else if (type === "Skin Conductance Response") {
-        return "The number of Skin Conductance Responses (peaks) accumulated over the course of a day measured from each hand";
+        return "The number of Skin Conductance Responses (peaks) accumulated over the course of an hour measured from each hand";
     } else if (type === "Incoming Call Count") {
-        return "The number of incoming phone calls accumulated over the course of a day";
+        return "The number of incoming phone calls accumulated over the course of an hour";
     } else if (type === "Outgoing Call Count") {
-        return "The number of outgoing phone calls accumulated over the course of a day";
+        return "The number of outgoing phone calls accumulated over the course of an hour";
     } else if (type === "Incoming Call Mean Duration") {
-        return "The average duration of all incoming phone calls over the course of a day";
+        return "The average duration of all incoming phone calls over the course of an hour";
     } else if (type === "Outgoing Call Mean Duration") {
-        return "The average duration of all outgoing phone calls over the course of a day";
+        return "The average duration of all outgoing phone calls over the course of an hour";
     } else if (type === "Incoming Call Median Duration") {
-        return "The median duration of all incoming phone calls over the course of a day";
+        return "The median duration of all incoming phone calls over the course of an hour";
     } else if (type === "Outgoing Call Median Duration") {
-        return "The median duration of all outgoing phone calls over the course of a day";
+        return "The median duration of all outgoing phone calls over the course of an hour";
     } else if (type === "Incoming Call Std Duration") {
-        return "The standard deviation of the duration of all incoming phone calls over the course of a day";
+        return "The standard deviation of the duration of all incoming phone calls over the course of an hour";
     } else if (type === "Outgoing Call Std Duration") {
-        return "The standard deviation of the duration of all outgoing phone calls over the course of a day";
+        return "The standard deviation of the duration of all outgoing phone calls over the course of an hour";
     } else {
-        throw new Error("Invalid type value!");
+        throw new Error("Invalid type value: " + type);
     }
 }
 
@@ -511,17 +511,17 @@ function getGroupText(group) {
 
 function getAggregationText(aggregation) {
     if (aggregation === "Mean") {
-        return "Calculate the arithmetic mean over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the mean";
+        return "Calculate the arithmetic mean over the participants in each group for every hour - missing data points for any particular hour are not included in calculating the mean";
     } else if (aggregation === "Median") {
-        return "Find the median measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the median";
+        return "Find the median measurement over the participants in each group for every hour -  missing data points for any particular hour are not included in finding the median";
     } else if (aggregation === "Max") {
-        return "Find the maximum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the max";
+        return "Find the maximum measurement over the participants in each group for every hour - missing data points for any particular hour are not included in finding the max";
     } else if (aggregation === "Min") {
-        return "Find the minimum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the min";
+        return "Find the minimum measurement over the participants in each group for every hour - missing data points for any particular hour are not included in finding the min";
     } else if (aggregation === "Std Dev") {
-        return "Calculate the standard deviation over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the standard deviation";
+        return "Calculate the standard deviation over the participants in each group for every hour - missing data points for any particular hour are not included in calculating the standard deviation";
     } else {
-        throw new Error("Invalid aggregation value!");
+        throw new Error("Invalid aggregation value: " + aggregation);
     }
 }
 

@@ -262,7 +262,7 @@ function drawStudyTrendsGroup() {
 
             const columns_left = [];
             const columns_right = [];
-            for (var subgroup in group_data_left) {
+            for (const subgroup in group_data_left) {
                 const subgroup_data_left = group_data_left[subgroup];
                 const subgroup_data_right = group_data_right[subgroup];
                 columns_left.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data_left));
@@ -347,7 +347,7 @@ function drawStudyTrendsGroup() {
             const group_data = data.aggregate_data;
 
             const columns = [];
-            for (var subgroup in group_data) {
+            for (const subgroup in group_data) {
                 const subgroup_data = group_data[subgroup];
                 columns.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data));
             }
@@ -473,7 +473,7 @@ function getDataCategoryText(category) {
     } else if (category === "Physiology") {
         return "Physiology data collected from E4 measurements";
     } else {
-        throw new Error("Invalid category value!");
+        throw new Error("Invalid category value: " + category);
     }
 }
 
@@ -509,7 +509,7 @@ function getDataTypeText(type) {
     } else if (type === "Outgoing Call Std Duration") {
         return "The standard deviation of the duration of all outgoing phone calls over the course of a day";
     } else {
-        throw new Error("Invalid type value!");
+        throw new Error("Invalid type value: " + type);
     }
 }
 
@@ -543,7 +543,7 @@ function getGroupText(group) {
     } else if (group === "None") {
         return "Show an individual's data";
     } else {
-        throw new Error("Invalid group value!");
+        throw new Error("Invalid group value: " + group);
     }
 }
 
@@ -559,7 +559,7 @@ function getAggregationText(aggregation) {
     } else if (aggregation === "Std Dev") {
         return "Calculate the standard deviation over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the standard deviation";
     } else {
-        throw new Error("Invalid aggregation value!");
+        throw new Error("Invalid aggregation value: " + aggregation);
     }
 }
 

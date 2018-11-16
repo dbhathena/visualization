@@ -7,7 +7,7 @@ def change_null_to_zero(apps, schema_editor):
     PhysData = apps.get_model("viz_app", "PhysData")
     for line in PhysData.objects.filter(category__contains='Call Count'):
         if line.measurement == None:
-            line.measurement = 0;
+            line.measurement = 0
             line.save()
 
 

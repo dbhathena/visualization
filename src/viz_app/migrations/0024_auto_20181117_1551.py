@@ -31,8 +31,7 @@ def get_files(directory):
 
 
 def populate_sms_data(apps, schema_editor):
-    # directory = '../../../../../opt/data/Phone/phone_usage/sms'
-    directory = '../../data/Phone/phone_usage/sms'
+    directory = '../../../../../opt/data/Phone/phone_usage/sms'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for smsFile in files:

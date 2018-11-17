@@ -115,13 +115,21 @@ CATEGORY_MAPPING = {
                    'EDA Mean',
                    'Skin Conductance Response'],
     'Phone_Usage': ['Incoming Call Count',
-                    'Outgoing Call Count',
                     'Incoming Call Mean Duration',
-                    'Outgoing Call Mean Duration',
                     'Incoming Call Median Duration',
-                    'Outgoing Call Median Duration',
                     'Incoming Call Std Duration',
-                    'Outgoing Call Std Duration']
+                    'Incoming Call Sum Duration',
+                    'Outgoing Call Count',
+                    'Outgoing Call Mean Duration',
+                    'Outgoing Call Median Duration',
+                    'Outgoing Call Std Duration',
+                    'Outgoing Call Sum Duration',
+                    'Screen On Count',
+                    'Screen On Mean Duration',
+                    'Screen On Median Duration',
+                    'Screen On Std Duration',
+                    'Screen On Sum Duration',
+    ]
 }
 
 CATEGORIES = {

@@ -409,20 +409,34 @@ function getUnits(dataType) {
         return "Number of SCRs";
     } else if (dataType === "Incoming Call Count") {
         return "Number of Calls";
-    } else if (dataType === "Outgoing Call Count") {
-        return "Number of Calls";
     } else if (dataType === "Incoming Call Mean Duration") {
-        return "Seconds";
-    } else if (dataType === "Outgoing Call Mean Duration") {
         return "Seconds";
     } else if (dataType === "Incoming Call Median Duration") {
         return "Seconds";
-    } else if (dataType === "Outgoing Call Median Duration") {
-        return "Seconds";
     } else if (dataType === "Incoming Call Std Duration") {
+        return "Seconds";
+    } else if (dataType === "Incoming Call Sum Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Count") {
+        return "Number of Calls";
+    } else if (dataType === "Outgoing Call Mean Duration") {
+        return "Seconds";
+    } else if (dataType === "Outgoing Call Median Duration") {
         return "Seconds";
     } else if (dataType === "Outgoing Call Std Duration") {
         return "Seconds";
+    } else if (dataType === "Outgoing Call Sum Duration") {
+        return "Seconds";
+    } else if (dataType === "Screen On Count") {
+        return "Number of Times On"
+    } else if (dataType === "Screen On Mean Duration") {
+        return ("Seconds")
+    } else if (dataType === "Screen On Median Duration") {
+        return ("Seconds")
+    } else if (dataType === "Screen On Std Duration") {
+        return ("Seconds")
+    } else if (dataType === "Screen On Sum Duration") {
+        return ("Seconds")
     }
 }
 
@@ -443,20 +457,34 @@ function getTitle(dataType) {
         return "Skin Conductance Responses per Day in Study";
     } else if (dataType === "Incoming Call Count") {
         return "Number of Incoming Calls";
-    } else if (dataType === "Outgoing Call Count") {
-        return "Number of Outgoing Calls";
     } else if (dataType === "Incoming Call Mean Duration") {
         return "Mean Duration of Incoming Calls";
-    } else if (dataType === "Outgoing Call Mean Duration") {
-        return "Mean Duration of Outgoing Calls";
     } else if (dataType === "Incoming Call Median Duration") {
         return "Median Duration of Incoming Calls";
-    } else if (dataType === "Outgoing Call Median Duration") {
-        return "Median Duration of Outgoing Calls";
     } else if (dataType === "Incoming Call Std Duration") {
         return "Std Dev of Duration of Incoming Calls";
+    } else if (dataType === "Incoming Call Sum Duration") {
+        return "Sum of Duration of Incoming Calls";
+    } else if (dataType === "Outgoing Call Count") {
+        return "Number of Outgoing Calls";
+    } else if (dataType === "Outgoing Call Mean Duration") {
+        return "Mean Duration of Outgoing Calls";
+    } else if (dataType === "Outgoing Call Median Duration") {
+        return "Median Duration of Outgoing Calls";
     } else if (dataType === "Outgoing Call Std Duration") {
         return "Std Dev of Duration of Outgoing Calls";
+    } else if (dataType === "Outgoing Call Sum Duration") {
+        return "Sum of Duration of Outgoing Calls";
+    } else if (dataType === "Screen On Count") {
+        return "Number of Times Screen Turned On"
+    } else if (dataType === "Screen On Mean Duration") {
+        return ("Mean Duration of Screen Time")
+    } else if (dataType === "Screen On Median Duration") {
+        return ("Median Duration of Screen Time")
+    } else if (dataType === "Screen On Std Duration") {
+        return ("Std Dev of Duration of Screen Time")
+    } else if (dataType === "Screen On Sum Duration") {
+        return ("Sum of Duration of Screen Time")
     }
 }
 
@@ -494,20 +522,34 @@ function getDataTypeText(type) {
         return "The number of Skin Conductance Responses (peaks) accumulated over the course of a day measured from each hand";
     } else if (type === "Incoming Call Count") {
         return "The number of incoming phone calls accumulated over the course of a day";
-    } else if (type === "Outgoing Call Count") {
-        return "The number of outgoing phone calls accumulated over the course of a day";
     } else if (type === "Incoming Call Mean Duration") {
         return "The average duration of all incoming phone calls over the course of a day";
-    } else if (type === "Outgoing Call Mean Duration") {
-        return "The average duration of all outgoing phone calls over the course of a day";
     } else if (type === "Incoming Call Median Duration") {
         return "The median duration of all incoming phone calls over the course of a day";
-    } else if (type === "Outgoing Call Median Duration") {
-        return "The median duration of all outgoing phone calls over the course of a day";
     } else if (type === "Incoming Call Std Duration") {
         return "The standard deviation of the duration of all incoming phone calls over the course of a day";
+    } else if (type === "Incoming Call Sum Duration") {
+        return "The sum of the duration of all incoming phone calls over the course of a day";
+    } else if (type === "Outgoing Call Count") {
+        return "The number of outgoing phone calls accumulated over the course of a day";
+    } else if (type === "Outgoing Call Mean Duration") {
+        return "The average duration of all outgoing phone calls over the course of a day";
+    } else if (type === "Outgoing Call Median Duration") {
+        return "The median duration of all outgoing phone calls over the course of a day";
     } else if (type === "Outgoing Call Std Duration") {
         return "The standard deviation of the duration of all outgoing phone calls over the course of a day";
+    } else if (type === "Outgoing Call Sum Duration") {
+        return "The sum of the duration of all outgoing phone calls over the course of a day";
+    } else if (type === "Screen On Count") {
+        return "The number of times an individual's phone display was turned on over the course of a day"
+    } else if (type === "Screen On Mean Duration") {
+        return ("Average duration for which an individual's phone display was on over the course of a day")
+    } else if (type === "Screen On Median Duration") {
+        return ("Median duration for which an individual's phone display was on over the course of a day")
+    } else if (type === "Screen On Std Duration") {
+        return ("Standard deviation of duration for which an individual's phone display was on over the course of a day")
+    } else if (type === "Screen On Sum Duration") {
+        return ("Total amount of time an individual's phone display was on over the course of a day")
     } else {
         throw new Error("Invalid type value: " + type);
     }

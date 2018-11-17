@@ -428,15 +428,35 @@ function getUnits(dataType) {
     } else if (dataType === "Outgoing Call Sum Duration") {
         return "Seconds";
     } else if (dataType === "Screen On Count") {
-        return "Number of Times On"
+        return "Number of Times On";
     } else if (dataType === "Screen On Mean Duration") {
-        return ("Seconds")
+        return "Seconds";
     } else if (dataType === "Screen On Median Duration") {
-        return ("Seconds")
+        return "Seconds";
     } else if (dataType === "Screen On Std Duration") {
-        return ("Seconds")
+        return "Seconds";
     } else if (dataType === "Screen On Sum Duration") {
-        return ("Seconds")
+        return "Seconds";
+    } else if (dataType === "Incoming SMS Count") {
+        return "Number of Messages";
+    } else if (dataType === "Incoming SMS Mean Length") {
+        return "Characters";
+    } else if (dataType === "Incoming SMS Median Length") {
+        return "Characters";
+    } else if (dataType === "Incoming SMS Std Length") {
+        return "Characters";
+    } else if (dataType === "Incoming SMS Sum Length") {
+        return "Characters";
+    } else if (dataType === "Outgoing SMS Count") {
+        return "Number of Messages";
+    } else if (dataType === "Outgoing SMS Mean Length") {
+        return "Characters";
+    } else if (dataType === "Outgoing SMS Median Length") {
+        return "Characters";
+    } else if (dataType === "Outgoing SMS Std Length") {
+        return "Characters";
+    } else if (dataType === "Outgoing SMS Sum Length") {
+        return "Characters";
     }
 }
 
@@ -476,15 +496,35 @@ function getTitle(dataType) {
     } else if (dataType === "Outgoing Call Sum Duration") {
         return "Sum of Duration of Outgoing Calls";
     } else if (dataType === "Screen On Count") {
-        return "Number of Times Screen Turned On"
+        return "Number of Times Screen Turned On";
     } else if (dataType === "Screen On Mean Duration") {
-        return ("Mean Duration of Screen Time")
+        return "Mean Duration of Screen Time";
     } else if (dataType === "Screen On Median Duration") {
-        return ("Median Duration of Screen Time")
+        return "Median Duration of Screen Time";
     } else if (dataType === "Screen On Std Duration") {
-        return ("Std Dev of Duration of Screen Time")
+        return "Std Dev of Duration of Screen Time";
     } else if (dataType === "Screen On Sum Duration") {
-        return ("Sum of Duration of Screen Time")
+        return "Sum of Duration of Screen Time";
+    } else if (dataType === "Incoming SMS Count") {
+        return "Number of Incoming SMSs";
+    } else if (dataType === "Incoming SMS Mean Length") {
+        return "Mean Length of Incoming SMSs";
+    } else if (dataType === "Incoming SMS Median Length") {
+        return "Median Length of Incoming SMSs";
+    } else if (dataType === "Incoming SMS Std Length") {
+        return "Std Dev of Length of Incoming SMSs";
+    } else if (dataType === "Incoming SMS Sum Length") {
+        return "Sum of Length of Incoming SMSs";
+    } else if (dataType === "Outgoing SMS Count") {
+        return "Number of Outgoing SMSs";
+    } else if (dataType === "Outgoing SMS Mean Length") {
+        return "Mean Length of Outgoing SMSs";
+    } else if (dataType === "Outgoing SMS Median Length") {
+        return "Median Length of Outgoing SMSs";
+    } else if (dataType === "Outgoing SMS Std Length") {
+        return "Std Dev of Length of Outgoing SMSs";
+    } else if (dataType === "Outgoing SMS Sum Length") {
+        return "Sum of Length of Outgoing SMSs";
     }
 }
 
@@ -529,7 +569,7 @@ function getDataTypeText(type) {
     } else if (type === "Incoming Call Std Duration") {
         return "The standard deviation of the duration of all incoming phone calls over the course of a day";
     } else if (type === "Incoming Call Sum Duration") {
-        return "The sum of the duration of all incoming phone calls over the course of a day";
+        return "The sum of the durations of all incoming phone calls over the course of a day";
     } else if (type === "Outgoing Call Count") {
         return "The number of outgoing phone calls accumulated over the course of a day";
     } else if (type === "Outgoing Call Mean Duration") {
@@ -539,17 +579,37 @@ function getDataTypeText(type) {
     } else if (type === "Outgoing Call Std Duration") {
         return "The standard deviation of the duration of all outgoing phone calls over the course of a day";
     } else if (type === "Outgoing Call Sum Duration") {
-        return "The sum of the duration of all outgoing phone calls over the course of a day";
+        return "The sum of the durations of all outgoing phone calls over the course of a day";
     } else if (type === "Screen On Count") {
-        return "The number of times an individual's phone display was turned on over the course of a day"
+        return "The number of times an individual's phone display was turned on over the course of a day";
     } else if (type === "Screen On Mean Duration") {
-        return ("Average duration for which an individual's phone display was on over the course of a day")
+        return "Average duration for which an individual's phone display was on over the course of a day";
     } else if (type === "Screen On Median Duration") {
-        return ("Median duration for which an individual's phone display was on over the course of a day")
+        return "Median duration for which an individual's phone display was on over the course of a day";
     } else if (type === "Screen On Std Duration") {
-        return ("Standard deviation of duration for which an individual's phone display was on over the course of a day")
+        return "Standard deviation of duration for which an individual's phone display was on over the course of a day";
     } else if (type === "Screen On Sum Duration") {
-        return ("Total amount of time an individual's phone display was on over the course of a day")
+        return "Total amount of time an individual's phone display was on over the course of a day";
+    } else if (type === "Incoming SMS Count") {
+        return "The number of incoming SMS messages accumulated over the course of a day";
+    } else if (type === "Incoming SMS Mean Length") {
+        return "The average length of all incoming SMS messages over the course of a day";
+    } else if (type === "Incoming SMS Median Length") {
+        return "The median length of all incoming SMS messages over the course of a day";
+    } else if (type === "Incoming SMS Std Length") {
+        return "The standard deviation of the length of all incoming SMS messages over the course of a day";
+    } else if (type === "Incoming SMS Sum Length") {
+        return "The sum of the lengths of all incoming SMS messages over the course of a day";
+    } else if (type === "Outgoing SMS Count") {
+        return "The number of outgoing SMS messages accumulated over the course of a day";
+    } else if (type === "Outgoing SMS Mean Length") {
+        return "The average length of all outgoing SMS messages over the course of a day";
+    } else if (type === "Outgoing SMS Median Length") {
+        return "The median length of all outgoing SMS messages over the course of a day";
+    } else if (type === "Outgoing SMS Std Length") {
+        return "The standard deviation of the length of all outgoing SMS messages over the course of a day";
+    } else if (type === "Outgoing SMS Sum Length") {
+        return "The sum of the lengths of all incoming SMS messages over the course of a day";
     } else {
         throw new Error("Invalid type value: " + type);
     }

@@ -129,6 +129,16 @@ CATEGORY_MAPPING = {
                     'Screen On Median Duration',
                     'Screen On Std Duration',
                     'Screen On Sum Duration',
+                    'Incoming SMS Count',
+                    'Incoming SMS Mean Length',
+                    'Incoming SMS Median Length',
+                    'Incoming SMS Std Length',
+                    'Incoming SMS Sum Length',
+                    'Outgoing SMS Count',
+                    'Outgoing SMS Mean Length',
+                    'Outgoing SMS Median Length',
+                    'Outgoing SMS Std Length',
+                    'Outgoing SMS Sum Length'
     ]
 }
 

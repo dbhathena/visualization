@@ -26,8 +26,7 @@ def get_files(directory):
 
 
 def populate_display_data(apps, schema_editor):
-    # directory = '../../../../../opt/data/Phone/phone_usage/calls'
-    directory = '../../data/Phone/phone_usage/display'
+    directory = '../../../../../opt/data/Phone/phone_usage/display'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for displayFile in files:

@@ -603,8 +603,6 @@ function getGroupText(group) {
         return "Group and aggregate over participants based on whether they have General Anxiety Disorder or not";
     } else if (group === "Current Medication") {
         return "Group and aggregate over participants based on whether they are currently taking medication or not";
-    } else if (group === "New Medication") {
-        return "Group and aggregate over participants based on whether they plan on taking additional medication or not";
     } else if (group === "None") {
         return "Show an individual's data";
     } else {

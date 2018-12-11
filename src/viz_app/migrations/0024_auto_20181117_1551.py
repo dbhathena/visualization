@@ -66,7 +66,7 @@ def populate_sms_data(apps, schema_editor):
 
                 measurement = day_data[daily_key]
                 frequency = '24hrs'
-                group = "Phone Usage"
+                group = "Phone_Usage"
                 line = PhysData(name=participant,
                                 date=date,
                                 category=category,

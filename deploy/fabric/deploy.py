@@ -101,7 +101,7 @@ def setup_server():
         put('{0}/nginx-conf'.format(os.path.dirname(FILE_DIRECTORY)), '/etc/nginx/nginx.conf', use_sudo=True)
         put('{0}/uwsgi-conf'.format(os.path.dirname(FILE_DIRECTORY)), '/etc/init/uwsgi.conf', use_sudo=True)
 
-        run('rm -rf /data')
+        run('rm -rf data')
 
     sudo('mkdir -p /opt/staticfiles')
     sudo('chown www-data:www-data /opt/staticfiles')

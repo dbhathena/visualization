@@ -15,6 +15,9 @@ class PhysData(models.Model):
     def __str__(self):
         return "Date: " + str(self.date) + " Measurement: " + str(self.measurement)
 
+    def __hash__(self):
+        return hash((self.name, self.date, self.category, self.interval, self.measurement))
+
 
 class PhoneData(models.Model):
     name = models.CharField(null=True, max_length=4)
@@ -26,3 +29,6 @@ class PhoneData(models.Model):
 
     def __str__(self):
         return "Date: " + str(self.date) + " Measurement: " + str(self.measurement)
+
+    def __hash__(self):
+        return hash((self.name, self.date, self.category, self.interval, self.measurement))

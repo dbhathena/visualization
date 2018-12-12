@@ -1,10 +1,31 @@
 import statistics
+from .models import PhysData,PhoneData
+
+
+PARTICIPANTS = ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
+                'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042', 'M045', 'M047', 'M048',
+                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
+
+DATABASE_MAPPING = {
+    PhysData: {'Accelerometer', 'Motion', 'Heart Rate', 'Temperature', 'EDA Mean Difference', 'EDA Mean',
+               'Skin Conductance Response'},
+    PhoneData: {'Incoming Call Count', 'Incoming Call Mean Duration', 'Incoming Call Median Duration',
+                'Incoming Call Std Duration', 'Incoming Call Sum Duration', 'Outgoing Call Count',
+                'Outgoing Call Mean Duration', 'Outgoing Call Median Duration', 'Outgoing Call Std Duration',
+                'Outgoing Call Sum Duration', 'Screen On Count', 'Screen On Mean Duration', 'Screen On Median Duration',
+                'Screen On Std Duration', 'Screen On Sum Duration', 'Incoming SMS Count', 'Incoming SMS Mean Length',
+                'Incoming SMS Median Length', 'Incoming SMS Std Length', 'Incoming SMS Sum Length', 'Outgoing SMS Count',
+                'Outgoing SMS Mean Length', 'Outgoing SMS Median Length', 'Outgoing SMS Std Length',
+                'Outgoing SMS Sum Length', 'Latitude Std', 'Latitude Stationary Std', 'Longitude Std',
+                'Longitude Stationary Std', 'Average Location Std', 'Average Stationary Std', 'Home Stay',
+                'Total Distance', 'Transition Time'}
+}
 
 GROUPINGS = {
     "All": {
-        "All": ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016',
-                'M017', 'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042',
-                'M045', 'M047', 'M048', 'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
+        "All": ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
+                'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042', 'M045', 'M047', 'M048',
+                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
     },
     "Depression": {
         "HC": ['M001', 'M002', 'M014', 'M021'],
@@ -131,7 +152,16 @@ CATEGORY_MAPPING = {
                     'Outgoing SMS Mean Length',
                     'Outgoing SMS Median Length',
                     'Outgoing SMS Std Length',
-                    'Outgoing SMS Sum Length'
+                    'Outgoing SMS Sum Length',
+                    'Latitude Std',
+                    'Latitude Stationary Std',
+                    'Longitude Std',
+                    'Longitude Stationary Std',
+                    'Average Location Std',
+                    'Average Stationary Std',
+                    'Home Stay',
+                    'Total Distance',
+                    'Transition Time'
     ]
 }
 

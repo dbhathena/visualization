@@ -7,13 +7,10 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
-from .models import PhysData
+from .models import PhysData, PhoneData
 from .value_mappings import *
 
 # Create your views here.
-
-PARTICIPANTS = [x[0] for x in PhysData.objects.distinct("name").order_by("name").values_list("name")]
-TYPES = [x[0] for x in PhysData.objects.distinct("category").order_by("category").values_list("category")]
 
 @login_required
 def index(request):
@@ -22,13 +19,13 @@ def index(request):
 
 @login_required
 def study_trends(request):
-    context = {"names": sorted(PARTICIPANTS), "category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
+    context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
     return render(request, 'viz_app/study_trends.html', context)
 
 
 @login_required
 def daily_trends(request):
-    context = {"names": sorted(PARTICIPANTS), "category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
+    context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING.items()), "categories": sorted(CATEGORIES.items())}
     return render(request, 'viz_app/daily_trends.html', context)
 
 
@@ -113,22 +110,40 @@ def logout(request):
 def get_study_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
+    model = None
+    for m in DATABASE_MAPPING:
+        if type in DATABASE_MAPPING[m]:
+            model = m
+    assert model is not None
     if group == "None":
         name = request.GET.get("name")
-        subject_data = {"left": {"dates": [], "measurements": []},
-                        "right": {"dates": [], "measurements": []},
-                        None: {"dates": [], "measurements": []}
-                        }
-        raw_data = list(PhysData.objects
-                        .filter(name=name,
-                                category=type,
-                                interval="24hrs")
-                        .order_by("date")
-                        .values("date", "measurement", "hand"))
-        for x in raw_data:
-            subject_data[x["hand"]]["dates"].append(x["date"].isoformat())
-            subject_data[x["hand"]]["measurements"].append(x["measurement"])
-        return HttpResponse(json.dumps({"subject_data": subject_data}))
+        if type in SEPARATE_HANDS:
+            subject_data = {"left": {"dates": [], "measurements": []},
+                            "right": {"dates": [], "measurements": []},
+                            }
+            raw_data = list(model.objects
+                            .filter(name=name,
+                                    category=type,
+                                    interval="24hrs")
+                            .order_by("date")
+                            .values("date", "measurement", "hand"))
+            for x in raw_data:
+                subject_data[x["hand"]]["dates"].append(x["date"].isoformat())
+                subject_data[x["hand"]]["measurements"].append(x["measurement"])
+            return HttpResponse(json.dumps({"subject_data": subject_data}))
+        else:
+            subject_data = {None: {"dates": [], "measurements": []},
+                            }
+            raw_data = list(model.objects
+                            .filter(name=name,
+                                    category=type,
+                                    interval="24hrs")
+                            .order_by("date")
+                            .values("date", "measurement"))
+            for x in raw_data:
+                subject_data[None]["dates"].append(x["date"].isoformat())
+                subject_data[None]["measurements"].append(x["measurement"])
+            return HttpResponse(json.dumps({"subject_data": subject_data}))
     else:
         aggregation = request.GET.get("aggregation")
         aggregation_method = AGGREGATION_METHODS[aggregation]
@@ -137,14 +152,14 @@ def get_study_trends_data(request):
             raw_data_left = {}
             raw_data_right = {}
             for participant in PARTICIPANTS:
-                raw_data_left[participant] = list(PhysData.objects
+                raw_data_left[participant] = list(model.objects
                                                   .filter(name=participant,
                                                           category=type,
                                                           interval="24hrs",
                                                           hand="left")
                                                   .order_by("date")
                                                   .values_list("measurement", flat=True))
-                raw_data_right[participant] = list(PhysData.objects
+                raw_data_right[participant] = list(model.objects
                                                    .filter(name=participant,
                                                            category=type,
                                                            interval="24hrs",
@@ -156,10 +171,10 @@ def get_study_trends_data(request):
                               "right": {} }
             group_sizes = {}
             for subgroup in group_dictionary:
-                group_sizes[subgroup] = PhysData.objects.filter(category=type,
-                                                                interval='24hrs',
-                                                                measurement__isnull=False,
-                                                                name__in=group_dictionary[subgroup]).distinct('name').count()
+                group_sizes[subgroup] = model.objects.filter(category=type,
+                                                             interval='24hrs',
+                                                             measurement__isnull=False,
+                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data_left = []
                 subgroup_data_right = []
                 for day in range(0, 56):
@@ -189,7 +204,7 @@ def get_study_trends_data(request):
         else:
             raw_data = {}
             for participant in PARTICIPANTS:
-                participant_data = list(PhysData.objects
+                participant_data = list(model.objects
                                         .filter(name=participant,
                                                 category=type,
                                                 interval="24hrs")
@@ -201,10 +216,10 @@ def get_study_trends_data(request):
             aggregate_data = {}
             group_sizes = {}
             for subgroup in group_dictionary:
-                group_sizes[subgroup] = PhysData.objects.filter(category=type,
-                                                                interval='24hrs',
-                                                                measurement__isnull=False,
-                                                                name__in=group_dictionary[subgroup]).distinct('name').count()
+                group_sizes[subgroup] = model.objects.filter(category=type,
+                                                             interval='24hrs',
+                                                             measurement__isnull=False,
+                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data = []
                 for day in range(0, 56):
                     day_data = []
@@ -225,6 +240,11 @@ def get_study_trends_data(request):
 @login_required
 def get_daily_trends_data(request):
     type = request.GET.get("type")
+    model = None
+    for m in DATABASE_MAPPING:
+        if type in DATABASE_MAPPING[m]:
+            model = m
+    assert model is not None
     group = request.GET.get("group")
     if group == "None":
         name = request.GET.get("name")
@@ -232,7 +252,7 @@ def get_daily_trends_data(request):
             subject_data = {"left": [], "right": []}
             for hour in range(0, 24):
                 for hand in subject_data:
-                    hour_data = list(PhysData.objects
+                    hour_data = list(model.objects
                                      .filter(name=name,
                                              category=type,
                                              interval="1hr",
@@ -247,7 +267,7 @@ def get_daily_trends_data(request):
         else:
             subject_data = {"both": []}
             for hour in range(0, 24):
-                hour_data = list(PhysData.objects
+                hour_data = list(model.objects
                                  .filter(name=name,
                                          category=type,
                                          interval="1hr",
@@ -272,13 +292,13 @@ def get_daily_trends_data(request):
             for hand in {"left", "right"}:
                 hand_aggregate_data = {}
                 for subgroup in group_dictionary:
-                    group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
-                                                                                            interval='1hr',
-                                                                                            measurement__isnull=False,
-                                                                                            name__in=group_dictionary[subgroup]).distinct('name').count()
+                    group_sizes[subgroup] = model.objects.filter(category=type,
+                                                                 interval='1hr',
+                                                                 measurement__isnull=False,
+                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
                     subgroup_data = []
                     for hour in range(0, 24):
-                        hour_data = list(PhysData.objects
+                        hour_data = list(model.objects
                                          .filter(name__in=group_dictionary[subgroup],
                                                  category=type,
                                                  interval="1hr",
@@ -297,13 +317,13 @@ def get_daily_trends_data(request):
             aggregate_data = {}
             group_sizes = {}
             for subgroup in group_dictionary:
-                group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
-                                                                                        interval='1hr',
-                                                                                        measurement__isnull=False,
-                                                                                        name__in=group_dictionary[subgroup]).distinct('name').count()
+                group_sizes[subgroup] = model.objects.filter(category=type,
+                                                             interval='1hr',
+                                                             measurement__isnull=False,
+                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data = []
                 for hour in range(0, 24):
-                    hour_data = list(PhysData.objects
+                    hour_data = list(model.objects
                                      .filter(name__in=group_dictionary[subgroup],
                                              category=type,
                                              interval="1hr",
@@ -321,26 +341,36 @@ def get_daily_trends_data(request):
 @login_required
 def get_scatter_plot_data(request):
     x_axis = request.GET.get("x_axis")
+    model_x = None
+    for m in DATABASE_MAPPING:
+        if x_axis in DATABASE_MAPPING[m]:
+            model_x = m
+    assert model_x is not None
     y_axis = request.GET.get("y_axis")
+    model_y = None
+    for m in DATABASE_MAPPING:
+        if y_axis in DATABASE_MAPPING[m]:
+            model_y = m
+    assert model_y is not None
     group = request.GET.get("group")
     group_dictionary = GROUPINGS[group]
     if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
         data = {}
         group_sizes = {}
         for subgroup in group_dictionary:
-            group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
-                                                                                    interval='24hrs',
-                                                                                    measurement__isnull=False,
-                                                                                    name__in=group_dictionary[subgroup]).distinct('name').count()
+            group_sizes[subgroup] = model_x.objects.filter(category=type,
+                                                           interval='24hrs',
+                                                           measurement__isnull=False,
+                                                           name__in=group_dictionary[subgroup]).distinct('name').count()
             if (x_axis in SEPARATE_HANDS):
-                x_data_left = list(PhysData.objects
+                x_data_left = list(model_x.objects
                                    .filter(name__in=group_dictionary[subgroup],
                                            category=x_axis,
                                            interval="24hrs",
                                            hand="left")
                                    .order_by("date", "name")
                                    .values_list("measurement", flat=True))
-                x_data_right = list(PhysData.objects
+                x_data_right = list(model_x.objects
                                    .filter(name__in=group_dictionary[subgroup],
                                            category=x_axis,
                                            interval="24hrs",
@@ -349,7 +379,7 @@ def get_scatter_plot_data(request):
                                    .values_list("measurement", flat=True))
                 x_data = {"left": x_data_left, "right": x_data_right}
             else:
-                x_data_both = list(PhysData.objects
+                x_data_both = list(model_x.objects
                               .filter(name__in=group_dictionary[subgroup],
                                       category=x_axis,
                                       interval="24hrs")
@@ -357,14 +387,14 @@ def get_scatter_plot_data(request):
                               .values_list("measurement", flat=True))
                 x_data = {"left": x_data_both, "right": x_data_both}
             if (y_axis in SEPARATE_HANDS):
-                y_data_left = list(PhysData.objects
+                y_data_left = list(model_y.objects
                                    .filter(name__in=group_dictionary[subgroup],
                                            category=y_axis,
                                            interval="24hrs",
                                            hand="left")
                                    .order_by("date", "name")
                                    .values_list("measurement", flat=True))
-                y_data_right = list(PhysData.objects
+                y_data_right = list(model_y.objects
                                    .filter(name__in=group_dictionary[subgroup],
                                            category=y_axis,
                                            interval="24hrs",
@@ -373,7 +403,7 @@ def get_scatter_plot_data(request):
                                    .values_list("measurement", flat=True))
                 y_data = {"left": y_data_left, "right": y_data_right}
             else:
-                y_data_both = list(PhysData.objects
+                y_data_both = list(model_y.objects
                               .filter(name__in=group_dictionary[subgroup],
                                       category=y_axis,
                                       interval="24hrs")
@@ -386,17 +416,22 @@ def get_scatter_plot_data(request):
         data = {}
         group_sizes = {}
         for subgroup in group_dictionary:
-            group_sizes[subgroup] = group_sizes[subgroup] = PhysData.objects.filter(category=type,
-                                                                                    interval='24hrs',
-                                                                                    measurement__isnull=False,
-                                                                                    name__in=group_dictionary[subgroup]).distinct('name').count()
-            x_data = list(PhysData.objects
+            group_sizes[subgroup] = max(model_x.objects.filter(category=type,
+                                                                interval='24hrs',
+                                                                measurement__isnull=False,
+                                                                name__in=group_dictionary[subgroup]).distinct('name').count(),
+                                        model_y.objects.filter(category=type,
+                                                                 interval='24hrs',
+                                                                 measurement__isnull=False,
+                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
+                                        )
+            x_data = list(model_x.objects
                           .filter(name__in=group_dictionary[subgroup],
                                   category=x_axis,
                                   interval="24hrs")
                           .order_by("date", "name")
                           .values_list("measurement", flat=True))
-            y_data = list(PhysData.objects
+            y_data = list(model_y.objects
                           .filter(name__in=group_dictionary[subgroup],
                                   category=y_axis,
                                   interval="24hrs")

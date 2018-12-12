@@ -401,62 +401,54 @@ function getUnits(dataType) {
         return "Fraction of Time in Motion";
     } else if (dataType === "Temperature") {
         return "°Celsius";
-    } else if (dataType === "EDA Mean Difference") {
-        return "Microsiemens (µS)";
-    } else if (dataType === "EDA Mean") {
+    } else if (dataType === "EDA Mean Difference" ||
+                dataType === "EDA Mean") {
         return "Microsiemens (µS)";
     } else if (dataType === "Skin Conductance Response") {
         return "Number of SCRs";
-    } else if (dataType === "Incoming Call Count") {
+    } else if (dataType === "Incoming Call Count" ||
+                dataType === "Outgoing Call Count") {
         return "Number of Calls";
-    } else if (dataType === "Incoming Call Mean Duration") {
-        return "Seconds";
-    } else if (dataType === "Incoming Call Median Duration") {
-        return "Seconds";
-    } else if (dataType === "Incoming Call Std Duration") {
-        return "Seconds";
-    } else if (dataType === "Incoming Call Sum Duration") {
-        return "Seconds";
-    } else if (dataType === "Outgoing Call Count") {
-        return "Number of Calls";
-    } else if (dataType === "Outgoing Call Mean Duration") {
-        return "Seconds";
-    } else if (dataType === "Outgoing Call Median Duration") {
-        return "Seconds";
-    } else if (dataType === "Outgoing Call Std Duration") {
-        return "Seconds";
-    } else if (dataType === "Outgoing Call Sum Duration") {
+    } else if (dataType === "Incoming Call Mean Duration" ||
+                dataType === "Incoming Call Median Duration" ||
+                dataType === "Incoming Call Std Duration" ||
+                dataType === "Incoming Call Sum Duration" ||
+                dataType === "Outgoing Call Mean Duration" ||
+                dataType === "Outgoing Call Median Duration" ||
+                dataType === "Outgoing Call Std Duration" ||
+                dataType === "Outgoing Call Sum Duration" ||
+                dataType === "Screen On Mean Duration" ||
+                dataType === "Screen On Median Duration" ||
+                dataType === "Screen On Std Duration" ||
+                dataType === "Screen On Sum Duration") {
         return "Seconds";
     } else if (dataType === "Screen On Count") {
         return "Number of Times On";
-    } else if (dataType === "Screen On Mean Duration") {
-        return "Seconds";
-    } else if (dataType === "Screen On Median Duration") {
-        return "Seconds";
-    } else if (dataType === "Screen On Std Duration") {
-        return "Seconds";
-    } else if (dataType === "Screen On Sum Duration") {
-        return "Seconds";
-    } else if (dataType === "Incoming SMS Count") {
+    } else if (dataType === "Incoming SMS Mean Length" ||
+                dataType === "Incoming SMS Median Length" ||
+                dataType === "Incoming SMS Std Length" ||
+                dataType === "Incoming SMS Sum Length" ||
+                dataType === "Outgoing SMS Mean Length" ||
+                dataType === "Outgoing SMS Median Length" ||
+                dataType === "Outgoing SMS Std Length" ||
+                dataType === "Outgoing SMS Sum Length"
+                ) {
+        return "Characters";
+    } else if (dataType === "Incoming SMS Count" ||
+                dataType === "Outgoing SMS Count") {
         return "Number of Messages";
-    } else if (dataType === "Incoming SMS Mean Length") {
-        return "Characters";
-    } else if (dataType === "Incoming SMS Median Length") {
-        return "Characters";
-    } else if (dataType === "Incoming SMS Std Length") {
-        return "Characters";
-    } else if (dataType === "Incoming SMS Sum Length") {
-        return "Characters";
-    } else if (dataType === "Outgoing SMS Count") {
-        return "Number of Messages";
-    } else if (dataType === "Outgoing SMS Mean Length") {
-        return "Characters";
-    } else if (dataType === "Outgoing SMS Median Length") {
-        return "Characters";
-    } else if (dataType === "Outgoing SMS Std Length") {
-        return "Characters";
-    } else if (dataType === "Outgoing SMS Sum Length") {
-        return "Characters";
+    } else if (dataType === "Latitude Std" ||
+                dataType === "Latitude Stationary Std" ||
+                dataType === "Longitude Std" ||
+                dataType === "Longitude Stationary Std" ||
+                dataType === "Average Location Std" ||
+                dataType === "Average Stationary Std") {
+        return "Degrees"
+    } else if (dataType === "Home Stay" ||
+                dataType === "Transition Time") {
+        return "Percentage of Day"
+    } else if (dataType === "Total Distance") {
+        return "Meters"
     }
 }
 
@@ -525,6 +517,24 @@ function getTitle(dataType) {
         return "Std Dev of Length of Outgoing SMSs";
     } else if (dataType === "Outgoing SMS Sum Length") {
         return "Sum of Length of Outgoing SMSs";
+    } else if (dataType === "Latitude Std") {
+        return "Std Dev of Latitude";
+    } else if (dataType === "Latitude Stationary Std") {
+        return "Std Dev of Latitude while Stationary";
+    } else if (dataType === "Longitude Std") {
+        return "Std Dev of Longitude";
+    } else if (dataType === "Longitude Stationary Std") {
+        return "Std Dev of Longitude while Stationary";
+    } else if (dataType === "Average Location Std") {
+        return "Std Dev of Average Location";
+    } else if (dataType === "Average Stationary Std") {
+        return "Std Dev of Average Location while Stationary";
+    } else if (dataType === "Home Stay") {
+        return "Percentage of Time at Home";
+    } else if (dataType === "Total Distance") {
+        return "Total Distance Traveled";
+    } else if (dataType === "Transition Time") {
+        return "Time Spent in Transition";
     }
 }
 
@@ -610,6 +620,24 @@ function getDataTypeText(type) {
         return "The standard deviation of the length of all outgoing SMS messages over the course of a day";
     } else if (type === "Outgoing SMS Sum Length") {
         return "The sum of the lengths of all incoming SMS messages over the course of a day";
+    } else if (type === "Latitude Std") {
+        return "The standard deviation of an individual's latitude over the course of a day";
+    } else if (type === "Latitude Stationary Std") {
+        return "The standard deviation of an individual's latitude while stationary over the course of a day (stationary is defined as a moving speed of less than 0.3 m/s)";
+    } else if (type === "Longitude Std") {
+        return "The standard deviation of an individual's longitude over the course of a day";
+    } else if (type === "Longitude Stationary Std") {
+        return "The standard deviation of an individual's longitude while stationary over the course of a day (stationary is defined as a moving speed of less than 0.3 m/s)";
+    } else if (type === "Average Location Std") {
+        return "The average of the standard deviation of an individual's latitude and longitude over the course of a day";
+    } else if (type === "Average Stationary Std") {
+        return "The average of the standard deviation of an individual's latitude and longitude while stationary over the course of a day (stationary is defined as a moving speed of less than 0.3 m/s)";
+    } else if (type === "Home Stay") {
+        return "The percentage of time spent at home throughout the day (home location is estimated based on median of stationary locations)";
+    } else if (type === "Total Distance") {
+        return "The sum total distance traveled throughout the day";
+    } else if (type === "Transition Time") {
+        return "The percentage of time spent in transition throughout the day";
     } else {
         throw new Error("Invalid type value: " + type);
     }

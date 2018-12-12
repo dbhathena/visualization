@@ -66,6 +66,7 @@ def populate_call_data(apps, schema_editor):
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for callFile in files:
+        print("Call", callFile)
         filenameElements = callFile.split('_')
         participant = filenameElements[2][:-5]
         data = json.load(open(directory + '/' + callFile, 'r'))
@@ -113,6 +114,7 @@ def populate_display_data(apps, schema_editor):
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for displayFile in files:
+        print("Display", displayFile)
         filenameElements = displayFile.split('_')
         participant = filenameElements[2][:-5]
         data = json.load(open(directory + '/' + displayFile, 'r'))
@@ -160,6 +162,7 @@ def populate_sms_data(apps, schema_editor):
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for smsFile in files:
+        print("SMS", smsFile)
         filenameElements = smsFile.split('_')
         participant = filenameElements[2][:-5]
         data = json.load(open(directory + '/' + smsFile, 'r'))
@@ -207,6 +210,7 @@ def populate_location_data(apps, schema_editor):
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for locationFile in files:
+        print("Location", locationFile)
         filenameElements = locationFile.split('_')
         participant = filenameElements[1][:-5]
         data = json.load(open(directory + '/' + locationFile, 'r'))

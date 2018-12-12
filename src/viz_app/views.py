@@ -358,10 +358,15 @@ def get_scatter_plot_data(request):
         data = {}
         group_sizes = {}
         for subgroup in group_dictionary:
-            group_sizes[subgroup] = model_x.objects.filter(category=type,
-                                                           interval='24hrs',
-                                                           measurement__isnull=False,
-                                                           name__in=group_dictionary[subgroup]).distinct('name').count()
+            group_sizes[subgroup] = max(model_x.objects.filter(category=x_axis,
+                                                               interval='24hrs',
+                                                               measurement__isnull=False,
+                                                               name__in=group_dictionary[subgroup]).distinct('name').count(),
+                                        model_y.objects.filter(category=y_axis,
+                                                               interval='24hrs',
+                                                               measurement__isnull=False,
+                                                               name__in=group_dictionary[subgroup]).distinct('name').count()
+                                        )
             if (x_axis in SEPARATE_HANDS):
                 x_data_left = list(model_x.objects
                                    .filter(name__in=group_dictionary[subgroup],
@@ -416,11 +421,11 @@ def get_scatter_plot_data(request):
         data = {}
         group_sizes = {}
         for subgroup in group_dictionary:
-            group_sizes[subgroup] = max(model_x.objects.filter(category=type,
+            group_sizes[subgroup] = max(model_x.objects.filter(category=x_axis,
                                                                 interval='24hrs',
                                                                 measurement__isnull=False,
                                                                 name__in=group_dictionary[subgroup]).distinct('name').count(),
-                                        model_y.objects.filter(category=type,
+                                        model_y.objects.filter(category=y_axis,
                                                                  interval='24hrs',
                                                                  measurement__isnull=False,
                                                                  name__in=group_dictionary[subgroup]).distinct('name').count()

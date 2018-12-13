@@ -8,11 +8,11 @@ $( document ).ready(function() {
     chart_container.css('justify-content', 'center');
     chart_container.css('align-items', 'stretch');
 
-    $("span.x-category-description").text(getDataCategoryText(x_category_dropdown.val()));
-    $("span.x-type-description").text(getDataTypeText($("#x_axis_" + x_category_dropdown.val() + "_dropdown").val()));
-    $("span.y-category-description").text(getDataCategoryText(y_category_dropdown.val()));
-    $("span.y-type-description").text(getDataTypeText($("#y_axis_" + y_category_dropdown.val() + "_dropdown").val()));
-    $("span.group-description").text(getGroupText(group_dropdown.val()));
+    var x_category = x_category_dropdown.val();
+    var y_category = y_category_dropdown.val();
+    var x_dataType = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
+    var y_dataType = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
+    var group = group_dropdown.val();
 
     drawScatterPlot();
     $("#x_axis_category, #y_axis_category, .x_axis_dropdown, .y_axis_dropdown, #group_dropdown").change(function() {
@@ -22,31 +22,123 @@ $( document ).ready(function() {
     x_category_dropdown.change(function() {
         $(".data-dropdown-container.x_axis").css("display", "none");
         $("#x_axis_" + x_category_dropdown.val() + "_container").css("display", "flex");
-        const x_category = x_category_dropdown.val();
-        $("span.x-category-description").text(getDataCategoryText(x_category));
-        const x_dataType = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
-        $("span.x-type-description").text(getDataTypeText(x_dataType));
+        x_category = x_category_dropdown.val();
+        x_dataType = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
     });
     y_category_dropdown.change(function() {
         $(".data-dropdown-container.y_axis").css("display", "none");
         $("#y_axis_" + y_category_dropdown.val() + "_container").css("display", "flex");
-        const y_category = y_category_dropdown.val();
-        $("span.y-category-description").text(getDataCategoryText(y_category));
-        const y_dataType = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
-        $("span.y-type-description").text(getDataTypeText(y_dataType));
+        y_category = y_category_dropdown.val();
+        y_dataType = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
     });
     $(".x_axis_dropdown").change(function() {
-        const x_dataType = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
-        $("span.x-type-description").text(getDataTypeText(x_dataType));
+        x_dataType = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
     });
     $(".y_axis_dropdown").change(function() {
-        const y_dataType = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
-        $("span.y-type-description").text(getDataTypeText(y_dataType));
+        y_dataType = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
     });
     group_dropdown.change(function() {
-        const group = group_dropdown.val();
-        $("span.group-description").text(getGroupText(group));
+        group = group_dropdown.val();
     });
+
+    $(".x-category-description").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getDataCategoryText(x_category));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
+    $(".y-category-description").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getDataCategoryText(y_category));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
+    $(".x-type-description").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getDataTypeText(x_dataType));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
+    $(".y-type-description").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getDataTypeText(y_dataType));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
+    $(".x-type-preprocessing").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getPreprocessText(x_dataType));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
+    $(".y-type-preprocessing").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getPreprocessText(y_dataType));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
+    $(".group-description").hover(
+        function () {
+            description = $("span#description-text");
+            description.text(getGroupText(group));
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        },
+        function () {
+            description = $("span#description-text");
+            description.text("Hover over the options below to see more details");
+            description.css("font-style", "italic");
+            description.css("color", "#666");
+        }
+    );
 });
 
 function drawScatterPlot() {
@@ -396,6 +488,46 @@ function getDataTypeText(type) {
         return "The percentage of time spent in transition throughout the day";
     } else {
         throw new Error("Invalid type value: " + type);
+    }
+}
+
+function getPreprocessText(dataType) {
+    if (dataType === "Accelerometer") {
+        return "To calculate the instantaneous motion vector, the 3-axis raw acceleration was first rescaled to the " +
+            "range [-2g; 2g]. Then, each second (32 samples) the acceleration data is summarized using the following " +
+            "method: sum+= max3(abs(buffX[i] - prevX), abs(buffY[i] - prevY), abs(buffZ[i] - prevZ)). " +
+            "The output is then filtered: avg=avg*0.9+(sum/32)*0.1. Finally the mean over 1 day is calculated."
+    } else if (dataType === "Motion") {
+        return "To estimate the time when a person is in motion, the value of the motion vector magnitude is compared" +
+            " to a predefined threshold. To calculate the instantaneous motion vector, the 3-axis raw acceleration was" +
+            " first rescaled to the range [-2g; 2g]. Then, each second (32 samples) the acceleration data is " +
+            "summarized using the following method: " +
+            "sum+= max3(abs(buffX[i] - prevX), abs(buffY[i] - prevY), abs(buffZ[i] - prevZ)). " +
+            "The output is then filtered: avg=avg*0.9+(sum/32)*0.1. Finally, the instances when the obtained value is" +
+            " greater than 0.05 (motion threshold), are counted and divided by the number of accelerometer samples in" +
+            " a day to estimate the fraction time when a participant was in motion."
+    } else if (dataType === "EDA Mean") {
+        return "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
+            "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer" +
+            " data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +
+            "average of the EDA signal is calculated over 1 day."
+    } else if (dataType === "Skin Conductance Response") {
+        return "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
+            "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer " +
+            "data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +
+            "average number of EDA peaks (SCRs) is calculated over 1 day."
+    } else if (dataType === "EDA Mean Difference") {
+        return "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
+            "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer " +
+            "data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +
+            "difference between the averages of the EDA signals from the right and left wrists (right minus left) is" +
+            " calculated over 1 day."
+    } else if (dataType === "Heart Rate") {
+        return "Heart rate is computed by detecting peaks (beats) from the PPG and computing the lengths of the" +
+            " intervals between adjacent beats.  The inter-beat-interval (IBI) timing is used to estimate the" +
+            " instantaneous heart rate. The average of the instantaneous HR is calculated over 1 day."
+    } else {
+        return "There is no additional preprocessing for this data type"
     }
 }
 

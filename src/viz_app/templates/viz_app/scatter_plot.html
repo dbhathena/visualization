@@ -101,11 +101,19 @@
 {% endblock %}
 
 {% block selection_descriptions %}
-    <p class="x-category-description"><b>X-Axis Data Category: </b><span class="x-category-description"></span></p>
-    <p class="x-type-description"><b>X-Axis Data Type: </b><span class="x-type-description"></span></p>
-    <p class="y-category-description"><b>Y-Axis Data Category: </b><span class="y-category-description"></span></p>
-    <p class="y-type-description"><b>Y-Axis Data Type: </b><span class="y-type-description"></span></p>
-    <p class="group-desciprion"><b>Group: </b><span class="group-description"></span></p>
+    <div class="description-group">
+        <div class="description-label x-category-description">X-Axis Data Category</div>
+        <div class="description-label x-type-description">X-Axis Data Type</div>
+        <div class="description-label x-type-preprocessing">X-Axis Preprocessing</div>
+    </div>
+    <div class="description-group">
+        <div class="description-label y-category-description">Y-Axis Data Category</div>
+        <div class="description-label y-type-description">Y-Axis Data Type</div>
+        <div class="description-label y-type-preprocessing">Y-Axis Preprocessing</div>
+    </div>
+    <div class="description-group">
+        <div style="display: flex; flex-direction: column; justify-content: center;" class="description-label group-description">Group</div>
+    </div>
 {% endblock %}
 
 {% block script %}

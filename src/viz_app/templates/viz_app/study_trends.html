@@ -98,11 +98,12 @@
 {% endblock %}
 
 {% block selection_descriptions %}
-    <p class="category-description"><b>Data Category: </b><span class="category-description"></span></p>
-    <p class="type-description"><b>Data Type: </b><span class="type-description"></span></p>
-    <p class="group-description"><b>Group: </b><span class="group-description"></span></p>
-    <p class="aggregation-description"><b>Aggregation: </b><span class="aggregation-description"></span></p>
-    <p class="individual-description" style="display: none;"><b>Individual: </b><span class="individual-description"></span></p>
+    <div class="description-label category-description">Data Category</div>
+    <div class="description-label type-description">Data Type</div>
+    <div class="description-label preprocess-description">Preprocessing</div>
+    <div class="description-label group-description">Group</div>
+    <div class="description-label aggregation-description">Aggregation</div>
+    <div class="description-label individual-description" style="display: none;">Individual</div>
 {%  endblock %}
 
 {% block script %}

@@ -1,5 +1,5 @@
 import statistics
-from .models import PhysData,PhoneData
+from .models import PhysData, PhoneData, WeatherData
 
 
 PARTICIPANTS = ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
@@ -18,7 +18,8 @@ DATABASE_MAPPING = {
                 'Outgoing SMS Mean Length', 'Outgoing SMS Median Length', 'Outgoing SMS Std Length',
                 'Outgoing SMS Sum Length', 'Latitude Std', 'Latitude Stationary Std', 'Longitude Std',
                 'Longitude Stationary Std', 'Average Location Std', 'Average Stationary Std', 'Home Stay',
-                'Total Distance', 'Transition Time'}
+                'Total Distance', 'Transition Time'},
+    WeatherData: {'Insolation Seconds', 'Precipitation Intensity', 'Apparent Temperature High'}
 }
 
 GROUPINGS = {
@@ -120,7 +121,7 @@ MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Temperature": (20, 40),
                           }
 
-CATEGORY_MAPPING = {
+CATEGORY_MAPPING_DAILY = {
     'Activity': ['Accelerometer',
                  'Motion'],
     'Physiology': ['Heart Rate',
@@ -152,21 +153,76 @@ CATEGORY_MAPPING = {
                     'Outgoing SMS Mean Length',
                     'Outgoing SMS Median Length',
                     'Outgoing SMS Std Length',
-                    'Outgoing SMS Sum Length',
-                    'Latitude Std',
-                    'Latitude Stationary Std',
-                    'Longitude Std',
-                    'Longitude Stationary Std',
-                    'Average Location Std',
-                    'Average Stationary Std',
-                    'Home Stay',
-                    'Total Distance',
-                    'Transition Time'
-    ]
+                    'Outgoing SMS Sum Length'],
+    "Location": ['Latitude Std',
+                 'Latitude Stationary Std',
+                 'Longitude Std',
+                 'Longitude Stationary Std',
+                 'Average Location Std',
+                 'Average Stationary Std',
+                 'Home Stay',
+                 'Total Distance',
+                 'Transition Time'],
+    "Weather": ['Insolation Seconds',
+                'Precipitation Intensity',
+                'Apparent Temperature High']
 }
 
-CATEGORIES = {
+CATEGORY_MAPPING_HOURLY = {
+    'Activity': ['Accelerometer',
+                 'Motion'],
+    'Physiology': ['Heart Rate',
+                   'Temperature',
+                   'EDA Mean Difference',
+                   'EDA Mean',
+                   'Skin Conductance Response'],
+    'Phone_Usage': ['Incoming Call Count',
+                    'Incoming Call Mean Duration',
+                    'Incoming Call Median Duration',
+                    'Incoming Call Std Duration',
+                    'Incoming Call Sum Duration',
+                    'Outgoing Call Count',
+                    'Outgoing Call Mean Duration',
+                    'Outgoing Call Median Duration',
+                    'Outgoing Call Std Duration',
+                    'Outgoing Call Sum Duration',
+                    'Screen On Count',
+                    'Screen On Mean Duration',
+                    'Screen On Median Duration',
+                    'Screen On Std Duration',
+                    'Screen On Sum Duration',
+                    'Incoming SMS Count',
+                    'Incoming SMS Mean Length',
+                    'Incoming SMS Median Length',
+                    'Incoming SMS Std Length',
+                    'Incoming SMS Sum Length',
+                    'Outgoing SMS Count',
+                    'Outgoing SMS Mean Length',
+                    'Outgoing SMS Median Length',
+                    'Outgoing SMS Std Length',
+                    'Outgoing SMS Sum Length'],
+    "Location": ['Latitude Std',
+                 'Latitude Stationary Std',
+                 'Longitude Std',
+                 'Longitude Stationary Std',
+                 'Average Location Std',
+                 'Average Stationary Std',
+                 'Home Stay',
+                 'Total Distance',
+                 'Transition Time']
+}
+
+CATEGORIES_DAILY = {
     'Activity': 'Activity',
     'Physiology': 'Physiology',
     'Phone_Usage': 'Phone Usage',
+    'Location': 'Location',
+    'Weather': 'Weather'
+}
+
+CATEGORIES_HOURLY = {
+    'Activity': 'Activity',
+    'Physiology': 'Physiology',
+    'Phone_Usage': 'Phone Usage',
+    'Location': 'Location'
 }

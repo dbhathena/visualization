@@ -348,7 +348,8 @@ function getUnits(dataType) {
                 dataType === "Screen On Mean Duration" ||
                 dataType === "Screen On Median Duration" ||
                 dataType === "Screen On Std Duration" ||
-                dataType === "Screen On Sum Duration") {
+                dataType === "Screen On Sum Duration" ||
+                dataType === "Insolation Seconds") {
         return "Seconds";
     } else if (dataType === "Screen On Count") {
         return "Number of Times On";
@@ -371,12 +372,16 @@ function getUnits(dataType) {
                 dataType === "Longitude Stationary Std" ||
                 dataType === "Average Location Std" ||
                 dataType === "Average Stationary Std") {
-        return "Degrees"
+        return "Degrees";
     } else if (dataType === "Home Stay" ||
                 dataType === "Transition Time") {
-        return "Percentage of Day"
+        return "Percentage of Day";
     } else if (dataType === "Total Distance") {
-        return "Meters"
+        return "Meters";
+    } else if (dataType === "Precipitation Intensity") {
+        return "Inches per Hour";
+    } else if (dataType === "Apparent Temperature High") {
+        return "°Fahrenheit";
     }
 }
 
@@ -398,6 +403,10 @@ function getDataCategoryText(category) {
         return "Phone Usage data collected from Movisens Android application";
     } else if (category === "Physiology") {
         return "Physiology data collected from E4 measurements";
+    } else if (category === "Location") {
+        return "Location data collected from phone GPS measurements";
+    } else if (category === "Weather") {
+        return "Weather data collected from Dark Sky API database";
     } else {
         throw new Error("Invalid category value: " + category);
     }
@@ -486,6 +495,12 @@ function getDataTypeText(type) {
         return "The sum total distance traveled throughout the day";
     } else if (type === "Transition Time") {
         return "The percentage of time spent in transition throughout the day";
+    } else if (type === "Insolation Seconds") {
+        return "The total elapsed time between sunrise and sunset for a given day";
+    } else if (type === "Precipitation Intensity") {
+        return "The average intensity of precipitation over the course of a day";
+    } else if (type === "Apparent Temperature High") {
+        return "The daytime high apparent temperature";
     } else {
         throw new Error("Invalid type value: " + type);
     }

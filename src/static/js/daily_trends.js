@@ -245,7 +245,7 @@ function drawDailyTrendsIndividual() {
                 }]
             };
 
-            Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.react("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
             const subject_data = data.subject_data["both"];
@@ -414,7 +414,7 @@ function drawDailyTrendsGroup() {
                 }]
             };
 
-            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
             const group_data = data.aggregate_data;

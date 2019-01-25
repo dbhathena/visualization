@@ -2,6 +2,18 @@ var chart_container = $(".chart-container");
 var x_category_dropdown = $("#x_axis_category");
 var y_category_dropdown = $("#y_axis_category");
 var group_dropdown = $("#group_dropdown");
+const chart_colors = [
+    '#1f77b4',
+    '#ff7f0e',
+    '#2ca02c',
+    '#d62728',
+    '#9467bd',
+    '#8c564b',
+    '#e377c2',
+    '#7f7f7f',
+    '#bcbd22',
+    '#17becf'
+];
 
 $( document ).ready(function() {
     chart_container.css('flex-direction', 'row');
@@ -156,111 +168,103 @@ function drawScatterPlot() {
         const group_data = data.scatter_data;
         const group_sizes = data.group_sizes;
         if (isTwoHands(x_type) || isTwoHands(y_type)) {
-            $("#chart2").show();
-
-            const columns_left = [];
-            const columns_right = [];
-            const xs = {};
+            const traces_left = [];
+            const traces_right = [];
+            var color_index = 0;
             for (const subgroup in group_data) {
+                const group_size = group_sizes[subgroup];
                 const subgroup_data = group_data[subgroup];
                 const x_data_left  = subgroup_data['x']['left'];
                 const x_data_right = subgroup_data['x']['right'];
                 const y_data_left  = subgroup_data['y']['left'];
                 const y_data_right = subgroup_data['y']['right'];
-                columns_left.push([subgroup + '_x'].concat(x_data_left));
-                columns_left.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(y_data_left));
-                columns_right.push([subgroup + '_x'].concat(x_data_right));
-                columns_right.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(y_data_right));
-                xs[subgroup + " (n = " + group_sizes[subgroup] + ")"] = subgroup + '_x';
+                traces_left.push({
+                    x: x_data_left,
+                    y: y_data_left,
+                    xaxis: 'x',
+                    mode: 'markers',
+                    name: subgroup + " (" + group_size + ") - Left Hand",
+                    marker: {
+                        color: chart_colors[color_index]
+                    }
+                });
+                traces_right.push({
+                    x: x_data_right,
+                    y: y_data_right,
+                    xaxis: 'x2',
+                    mode: 'markers',
+                    name: subgroup + " (" + group_size + ") - Right Hand",
+                    marker: {
+                        color: chart_colors[color_index]
+                    }
+                });
+                color_index = (color_index + 1)%10;
             }
+            const traces = traces_left.concat(traces_right);
 
-            var chart_left = c3.generate({
-                bindto: '.chart-container #chart1',
-                data: {
-                    xs: xs,
-                    columns: columns_left,
-                    type: 'scatter'
+            const layout = {
+                title: "<b>" + getTitle(x_type, y_type) + "</b>",
+                margin: {
+                    pad: 4
                 },
-                axis: {
-                    x: {
-                        label: {
-                            text: getUnits(x_type),
-                            position: 'outer-center'
-                        },
-                        tick: {
-                            fit: false,
-                            format: d3.format('.3r')
-                        }
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
+                },
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: getUnits(x_type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     },
-                    y: {
-                        label: {
-                            text: getUnits(y_type),
-                            position: 'outer-middle'
-                        },
-                        tick: {
-                            format: d3.format('.3r')
-                        }
+                    domain: [0, 0.5]
+                },
+                xaxis2: {
+                    title: getUnits(x_type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    domain: [0.5, 1]
+                },
+                yaxis: {
+                    title: getUnits(y_type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     }
                 },
-                title: {
-                    text: getTitle(x_type, y_type) + " - Left Hand"
-                },
+                showlegend: true,
                 legend: {
-                    position: 'right'
+                    x: 1,
+                    y: 0.5
                 },
-                padding: {
-                    bottom: 20,
-                    top: 20
+                dragmode: "pan",
+                grid: {
+                    subplots: [['xy', 'x2y']]
                 },
-                zoom: {
-                    enabled: true
-                }
-            });
-
-            var chart_right = c3.generate({
-                bindto: '.chart-container #chart2',
-                data: {
-                    xs: xs,
-                    columns: columns_right,
-                    type: 'scatter'
-                },
-                axis: {
-                    x: {
-                        label: {
-                            text: getUnits(x_type),
-                            position: 'outer-center'
-                        },
-                        tick: {
-                            fit: false,
-                            format: d3.format('.3r')
-                        }
-                    },
-                    y: {
-                        label: {
-                            text: getUnits(y_type),
-                            position: 'outer-middle'
-                        },
-                        tick: {
-                            format: d3.format('.3r')
-                        }
+                shapes: [{
+                    type: 'line',
+                    xref: 'paper',
+                    yref: 'paper',
+                    x0: 0.5,
+                    x1: 0.5,
+                    y0: 0,
+                    y1: 1,
+                    line: {
+                        width: 1
                     }
-                },
-                title: {
-                    text: getTitle(x_type, y_type) + " - Right Hand"
-                },
-                legend: {
-                    position: 'right'
-                },
-                padding: {
-                    bottom: 20,
-                    top: 20
-                },
-                zoom: {
-                    enabled: true
-                }
-            });
+                }]
+            };
+
+            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         } else {
-            $("#chart2").hide();
             const columns = [];
             const xs = {};
             for (const subgroup in group_data) {
@@ -272,48 +276,57 @@ function drawScatterPlot() {
                 xs[subgroup + " (n = " + group_sizes[subgroup] + ")"] = subgroup + '_x';
             }
 
-            var chart = c3.generate({
-                bindto: '.chart-container #chart1',
-                data: {
-                    xs: xs,
-                    columns: columns,
-                    type: 'scatter'
+            const traces = [];
+            var color_index = 0;
+            for (const subgroup in group_data) {
+                const group_size = group_sizes[subgroup];
+                traces.push({
+                    x: group_data[subgroup]['x'],
+                    y: group_data[subgroup]['y'],
+                    mode: 'markers',
+                    name: subgroup + " (" + group_size + ")",
+                    marker: {
+                        color: chart_colors[color_index],
+                        size: 4
+                    }
+                });
+                color_index = (color_index + 1)%10
+            }
+
+            const layout = {
+                title: "<b>" + getTitle(x_type, y_type) + "</b>",
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
                 },
-                axis: {
-                    x: {
-                        label: {
-                            text: getUnits(x_type),
-                            position: 'outer-center'
-                        },
-                        tick: {
-                            fit: false,
-                            format: d3.format('.3r')
-                        }
-                    },
-                    y: {
-                        label: {
-                            text: getUnits(y_type),
-                            position: 'outer-middle'
-                        },
-                        tick: {
-                            format: d3.format('.3r')
-                        }
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: getUnits(x_type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     }
                 },
-                title: {
-                    text: getTitle(x_type, y_type)
+                yaxis: {
+                    title: getUnits(y_type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    }
                 },
+                showlegend: true,
                 legend: {
-                    position: 'right'
+                    x: 1,
+                    y: 0.5
                 },
-                padding: {
-                    bottom: 20,
-                    top: 20
-                },
-                zoom: {
-                    enabled: true
-                }
-            });
+                dragmode: "pan"
+            };
+
+            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         $('#loading').css('display', 'none');
     });

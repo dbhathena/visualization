@@ -159,8 +159,8 @@ function drawStudyTrendsIndividual() {
         const type = $("#" + category_dropdown.val() + "_dropdown").val();
         const name = names_dropdown.val();
         if (isTwoHands(type)) {
-            var subject_data_left = data.subject_data["left"];
-            var subject_data_right = data.subject_data["right"];
+            const subject_data_left = data.subject_data["left"];
+            const subject_data_right = data.subject_data["right"];
 
             const dates_left = [];
             const dates_right = [];
@@ -171,9 +171,8 @@ function drawStudyTrendsIndividual() {
                 dates_right.push(new Date(new Date(d).toDateString()));
             });
 
-            const measurements_left = [name].concat(subject_data_left["measurements"]);
-            const measurements_right = [name].concat(subject_data_right["measurements"]);
-
+            const measurements_left = subject_data_left["measurements"];
+            const measurements_right = subject_data_right["measurements"];
             const left_trace = {
                 x: dates_left,
                 y: measurements_left,
@@ -261,10 +260,8 @@ function drawStudyTrendsIndividual() {
 
             Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
-
         } else {
-
-            var subject_data = data.subject_data[null];
+            const subject_data = data.subject_data[null];
             const dates = [];
             subject_data["dates"].forEach(function(d) {
                 dates.push(new Date(new Date(d).toDateString()));

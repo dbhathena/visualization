@@ -2,6 +2,18 @@ var category_dropdown = $("#category_dropdown");
 var group_dropdown = $("#group_dropdown");
 var aggregation_dropdown = $("#aggregation_dropdown");
 var names_dropdown = $("#names_dropdown");
+const chart_colors = [
+    '#1f77b4',
+    '#ff7f0e',
+    '#2ca02c',
+    '#d62728',
+    '#9467bd',
+    '#8c564b',
+    '#e377c2',
+    '#7f7f7f',
+    '#bcbd22',
+    '#17becf'
+];
 
 $( document ).ready(function() {
     var category = category_dropdown.val();
@@ -147,134 +159,140 @@ function drawDailyTrendsIndividual() {
         const type = $("#" + category_dropdown.val() + "_dropdown").val();
         const name = names_dropdown.val();
         if (isTwoHands(type)) {
-            $("#chart2").show();
+            const subject_data_left = data.subject_data["left"];
+            const subject_data_right = data.subject_data["right"];
 
-            const subject_data_left = [name].concat(data.subject_data["left"]);
-            const subject_data_right = [name].concat(data.subject_data["right"]);
+            const left_trace = {
+                y: subject_data_left,
+                yaxis: 'y',
+                mode: 'lines',
+                name: name + " - Left Hand",
+                line: {
+                    width: 1.5
+                }
+            };
 
-            var chart_left = c3.generate({
-                bindto: ".chart-container #chart1",
-                data: {
-                    columns: [
-                        subject_data_left
-                    ]
+            const right_trace = {
+                y: subject_data_right,
+                yaxis: 'y2',
+                mode: 'lines',
+                name: name + " - Right Hand",
+                line: {
+                    width: 1.5
+                }
+            };
+
+            const layout = {
+                title: "<b>" + getTitle(type) + "</b>",
+                margin: {
+                    pad: 4
                 },
-                axis: {
-                    x: {
-                        label: {
-                            text: "Hour of Day",
-                            position: "outer-center"
-                        }
-                    },
-                    y: {
-                        label: {
-                            text: getUnits(type),
-                            position: "outer-middle"
-                        },
-                        tick: {
-                            format: d3.format(".3r")
-                        }
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
+                },
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: "Hour of Day",
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     }
                 },
-                title: {
-                    text: getTitle(type) + " - Left Hand"
-                },
-                color: {
-                    pattern: ["steelblue"]
-                },
-                legend: {
-                    position: "right"
-                },
-                padding: {
-                    bottom: 20
-                },
-                zoom: {
-                    enabled: true
-                }
-            });
-
-            var chart_right = c3.generate({
-                bindto: ".chart-container #chart2",
-                data: {
-                    columns: [
-                        subject_data_right
-                    ]
-                },
-                axis: {
-                    x: {
-                        label: {
-                            text: "Hour of Day",
-                            position: "outer-center"
-                        }
+                yaxis: {
+                    title: getUnits(type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     },
-                    y: {
-                        label: {
-                            text: getUnits(type),
-                            position: "outer-middle"
-                        },
-                        tick: {
-                            format: d3.format(".3r")
-                        }
-                    }
+                    fixedrange: true,
+                    domain: [0.5, 1]
                 },
-                title: {
-                    text: getTitle(type) + " - Right Hand"
+                yaxis2: {
+                    title: getUnits(type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    fixedrange: true,
+                    domain: [0, 0.5]
                 },
-                color: {
-                    pattern: ["orangered"]
-                },
+                showlegend: true,
                 legend: {
-                    position: "right"
+                    x: 1,
+                    y: 0.5
                 },
-                padding: {
-                    bottom: 20
+                dragmode: "pan",
+                grid: {
+                    subplots: [['xy'], ['xy2']]
                 },
-                zoom: {
-                    enabled: true
-                }
-            });
+                shapes: [{
+                    type: 'line',
+                    xref: 'paper',
+                    yref: 'paper',
+                    x0: 0,
+                    x1: 1,
+                    y0: 0.5,
+                    y1: 0.5,
+                    line: {
+                        width: 1
+                    }
+                }]
+            };
+
+            Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+
         } else {
-            $("#chart2").hide();
+            const subject_data = data.subject_data["both"];
 
-            const subject_data = [name].concat(data.subject_data["both"]);
+            const individual_trace = {
+                y: subject_data,
+                mode: 'lines',
+                name: name,
+                line: {
+                    width: 1.5
+                }
+            };
 
-            var chart = c3.generate({
-                bindto: ".chart-container #chart1",
-                data: {
-                    columns: [
-                        subject_data
-                    ]
+            const layout = {
+                title: "<b>" + getTitle(type) + "</b>",
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
                 },
-                axis: {
-                    x: {
-                        label: {
-                            text: "Hour of Day",
-                            position: "outer-center"
-                        }
-                    },
-                    y: {
-                        label: {
-                            text: getUnits(type),
-                            position: "outer-middle"
-                        },
-                        tick: {
-                            format: d3.format(".3r")
-                        }
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: "Hour of Day",
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     }
                 },
-                title: {
-                    text: getTitle(type)
+                yaxis: {
+                    title: getUnits(type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    fixedrange: true
                 },
+                showlegend: true,
                 legend: {
-                    position: "right"
+                    x: 1,
+                    y: 0.5
                 },
-                padding: {
-                    bottom: 20
-                },
-                zoom: {
-                    enabled: true
-                }
-            });
+                dragmode: "pan",
+            };
+            Plotly.react("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         $("#loading").css("display","none");
     });
@@ -300,134 +318,155 @@ function drawDailyTrendsGroup() {
             const group_data_left = data.aggregate_data["left"];
             const group_data_right = data.aggregate_data["right"];
 
-            const columns_left = [];
-            const columns_right = [];
+            const traces_left = [];
+            const traces_right = [];
+            var color_index = 0;
             for (const subgroup in group_data_left) {
-                const subgroup_data_left = group_data_left[subgroup];
-                const subgroup_data_right = group_data_right[subgroup];
-                columns_left.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data_left));
-                columns_right.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data_right))
+                const group_size = group_sizes[subgroup];
+                traces_left.push({
+                    y: group_data_left[subgroup],
+                    yaxis: 'y',
+                    mode: 'lines',
+                    name: subgroup + " (" + group_size + ") - Left Hand",
+                    // marker: {
+                    //     color: chart_colors[color_index]
+                    // },
+                    line: {
+                        color: chart_colors[color_index]
+                    }
+                });
+                traces_right.push({
+                    y: group_data_right[subgroup],
+                    yaxis: 'y2',
+                    mode: 'lines',
+                    name: subgroup + " (" + group_size + ") - Right Hand",
+                    // marker: {
+                    //     color: chart_colors[color_index]
+                    // },
+                    line: {
+                        color: chart_colors[color_index]
+                    }
+                });
+                color_index = (color_index + 1)%10;
             }
+            const traces = traces_left.concat(traces_right);
 
-            var chart_left = c3.generate({
-                bindto: ".chart-container #chart1",
-                data: {
-                    columns: columns_left
+            const layout = {
+                title: "<b>" + getTitle(type) + "</b>",
+                margin: {
+                    pad: 4
                 },
-                axis: {
-                    x: {
-                        label: {
-                            text: "Hour of Day",
-                            position: "outer-center"
-                        }
-                    },
-                    y: {
-                        label: {
-                            text: getUnits(type),
-                            position: "outer-middle"
-                        },
-                        tick: {
-                            count: 8,
-                            format: d3.format(".3r")
-                        }
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
+                },
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: "Hour of Day",
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     }
                 },
-                title: {
-                    text: getTitle(type) + " - Left Hand"
-                },
-                legend: {
-                    position: "right"
-                },
-                padding: {
-                    bottom: 20
-                },
-                zoom: {
-                    enabled: true
-                }
-            });
-
-            var chart_right = c3.generate({
-                bindto: ".chart-container #chart2",
-                data: {
-                    columns: columns_right
-                },
-                axis: {
-                    x: {
-                        label: {
-                            text: "Hour of Day",
-                            position: "outer-center"
-                        }
+                yaxis: {
+                    title: getUnits(type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     },
-                    y: {
-                        label: {
-                            text: getUnits(type),
-                            position: "outer-middle"
-                        },
-                        tick: {
-                            count: 8,
-                            format: d3.format(".3r")
-                        }
-                    }
+                    fixedrange: true,
+                    domain: [0.5, 1]
                 },
-                title: {
-                    text: getTitle(type) + " - Right Hand"
+                yaxis2: {
+                    title: getUnits(type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    fixedrange: true,
+                    domain: [0, 0.5]
                 },
+                showlegend: true,
                 legend: {
-                    position: "right"
+                    x: 1,
+                    y: 0.5
                 },
-                padding: {
-                    bottom: 20
+                dragmode: "pan",
+                grid: {
+                    subplots: [['xy'], ['xy2']]
                 },
-                zoom: {
-                    enabled: true
-                }
-            });
+                shapes: [{
+                    type: 'line',
+                    xref: 'paper',
+                    yref: 'paper',
+                    x0: 0,
+                    x1: 1,
+                    y0: 0.5,
+                    y1: 0.5,
+                    line: {
+                        width: 1
+                    }
+                }]
+            };
+
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
-            $("#chart2").hide();
             const group_data = data.aggregate_data;
 
-            const columns = [];
+            const traces = [];
             for (const subgroup in group_data) {
-                const subgroup_data = group_data[subgroup];
-                columns.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(subgroup_data));
+                const group_size = group_sizes[subgroup];
+                traces.push({
+                    y: group_data[subgroup],
+                    mode: 'lines',
+                    name: subgroup + " (" + group_size + ")",
+                    line: {
+                        width: 1.5
+                    }
+                });
             }
 
-            var chart = c3.generate({
-                bindto: ".chart-container #chart1",
-                data: {
-                    columns: columns
+            const layout = {
+                title: "<b>" + getTitle(type) + "</b>",
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
                 },
-                axis: {
-                    x: {
-                        label: {
-                            text: "Hour of Day",
-                            position: "outer-center"
-                        }
-                    },
-                    y: {
-                        label: {
-                            text: getUnits(type),
-                            position: "outer-middle"
-                        },
-                        tick: {
-                            format: d3.format(".3r")
-                        }
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: "Hour of Day",
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
                     }
                 },
-                title: {
-                    text: getTitle(type)
+                yaxis: {
+                    title: getUnits(type),
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    fixedrange: true
                 },
+                showlegend: true,
                 legend: {
-                    position: "right"
+                    x: 1,
+                    y: 0.5
                 },
-                padding: {
-                    bottom: 20
-                },
-                zoom: {
-                    enabled: true
-                }
-            });
+                dragmode: "pan",
+            };
+
+            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         $("#loading").css("display","none");
     });

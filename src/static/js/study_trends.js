@@ -345,6 +345,38 @@ function drawStudyTrendsGroup() {
         const group_sizes = data.group_sizes;
         var errorIsVisible = false;
         var chart = document.getElementById('chart1');
+        function toggleErrorShading() {
+            const traceIndices = [];
+            for (var i=0; i < chart.data.length; i++) {
+                if (errorIsVisible && chart.data[i].name.includes("error")) {
+                    traceIndices.push(i);
+                }
+                if (!errorIsVisible && chart.data[i].name.includes("error") && chart.data[i-1].visible === true) {
+                    traceIndices.push(i);
+                }
+            }
+
+            var button_label;
+            if (errorIsVisible) {
+                button_label = "Show Error Shading";
+            } else {
+                button_label = "Hide Error Shading";
+            }
+
+            const data_update = {
+                visible: !errorIsVisible
+            };
+
+            const layout_update = {
+                'updatemenus[0].buttons[0].label': button_label
+            };
+            if (traceIndices.length > 0) {
+                Plotly.update('chart1', data_update, layout_update, traceIndices);
+            } else {
+                Plotly.relayout('chart1', layout_update);
+            }
+            errorIsVisible = !errorIsVisible;
+        }
 
         if (isTwoHands(type)) {
             const group_data_left = data.aggregate_data["left"];
@@ -352,12 +384,11 @@ function drawStudyTrendsGroup() {
             const group_error_left = data.error_traces["left"];
             const group_error_right = data.error_traces["right"];
 
-            const traces_left = [];
-            const traces_right = [];
+            const traces = [];
             var color_index = 0;
             for (const subgroup in group_data_left) {
                 const group_size = group_sizes[subgroup];
-                traces_left.push({
+                traces.push({
                     y: group_data_left[subgroup],
                     yaxis: 'y',
                     mode: 'lines',
@@ -365,9 +396,10 @@ function drawStudyTrendsGroup() {
                     line: {
                         color: chart_colors[color_index]
                     },
-                    legendgroup: subgroup
+                    legendgroup: subgroup,
+                    visible: true
                 });
-                traces_left.push({
+                traces.push({
                     x: group_error_left[subgroup]['x'],
                     y: group_error_left[subgroup]['y'],
                     fill: 'toself',
@@ -381,7 +413,7 @@ function drawStudyTrendsGroup() {
                     legendgroup:subgroup,
                     visible: errorIsVisible
                 });
-                traces_right.push({
+                traces.push({
                     y: group_data_right[subgroup],
                     yaxis: 'y2',
                     mode: 'lines',
@@ -390,9 +422,10 @@ function drawStudyTrendsGroup() {
                     line: {
                         color: chart_colors[color_index]
                     },
-                    legendgroup: subgroup
+                    legendgroup: subgroup,
+                    visible: true
                 });
-                traces_right.push({
+                traces.push({
                     x: group_error_right[subgroup]['x'],
                     y: group_error_right[subgroup]['y'],
                     yaxis: 'y2',
@@ -409,7 +442,6 @@ function drawStudyTrendsGroup() {
                 });
                 color_index = (color_index + 1)%10;
             }
-            const traces = traces_left.concat(traces_right);
 
             var updatemenus=[
                 {
@@ -495,33 +527,6 @@ function drawStudyTrendsGroup() {
             };
 
             Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
-            chart.on('plotly_buttonclicked', function() {
-                const traceIndices = [];
-                for (var i=0; i < chart.data.length; i++) {
-                    if (chart.data[i].name.includes("error")) {
-                        traceIndices.push(i);
-                    }
-                }
-
-                var button_label;
-                if (errorIsVisible) {
-                    button_label = "Show Error Shading";
-                } else {
-                    button_label = "Hide Error Shading";
-                }
-
-                const data_update = {
-                    visible: !errorIsVisible
-                };
-
-                const layout_update = {
-                    'updatemenus[0].buttons[0].label': button_label
-                };
-
-                Plotly.update('chart1', data_update, layout_update, traceIndices);
-                errorIsVisible = !errorIsVisible;
-            });
-
         } else {
             const group_data = data.aggregate_data;
             const group_error = data.error_traces;
@@ -538,7 +543,8 @@ function drawStudyTrendsGroup() {
                         width: 1.5,
                         color: chart_colors[color_index]
                     },
-                    legendgroup: subgroup
+                    legendgroup: subgroup,
+                    visible: true
                 });
                 traces.push({
                     x: group_error[subgroup]['x'],
@@ -612,33 +618,17 @@ function drawStudyTrendsGroup() {
             };
 
             Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
-            chart.on('plotly_buttonclicked', function() {
-                const traceIndices = [];
-                for (var i=0; i < chart.data.length; i++) {
-                    if (chart.data[i].name.includes("error")) {
-                        traceIndices.push(i);
-                    }
-                }
-
-                var button_label;
-                if (errorIsVisible) {
-                    button_label = "Show Error Shading";
-                } else {
-                    button_label = "Hide Error Shading";
-                }
-
-                const data_update = {
-                    visible: !errorIsVisible
-                };
-
-                const layout_update = {
-                    'updatemenus[0].buttons[0].label': button_label
-                };
-
-                Plotly.update('chart1', data_update, layout_update, traceIndices);
-                errorIsVisible = !errorIsVisible;
-            });
         }
+        chart.on('plotly_buttonclicked', toggleErrorShading);
+        chart.on('plotly_legendclick', function(clickData) {
+            if (errorIsVisible && clickData.data[clickData.curveNumber].visible === 'legendonly') {
+                chart.data[clickData.curveNumber+1].visible = true;
+                if (isTwoHands(type)) {
+                    chart.data[clickData.curveNumber+3].visible = true;
+                }
+            }
+        });
+        chart.on('plotly_legenddoubleclick', function() {return false;});
         $("#loading").css("display", "none");
     });
 }
@@ -1008,17 +998,5 @@ function getIndividualText(individual) {
     return "Individual " + ind_num + " of the study";
 }
 
-function newTraceVisibilities() {
-    const chart = document.getElementById("chart1");
-    const visibilities = [];
-    for (var i=0; i < chart.data.length; i++) {
-        if (chart.data[i].name.includes("error")) {
-            const isVisible = chart.data[i].visible;
-            visibilities.push(!isVisible);
-        } else {
-            visibilities.push(true);
-        }
-    }
-    return visibilities;
-}
+
 

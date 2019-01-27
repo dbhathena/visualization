@@ -14,6 +14,18 @@ const chart_colors = [
     '#bcbd22',
     '#17becf'
 ];
+const error_colors = [
+    'rgba(31, 119, 180, 0.2)',
+    'rgba(255, 127, 14, 0.2)',
+    'rgba(44, 160, 44, 0.2)',
+    'rgba(214, 39, 40, 0.2)',
+    'rgba(148, 103, 189, 0.2)',
+    'rgba(140, 86, 75, 0.2)',
+    'rgba(227, 119, 194, 0.2)',
+    'rgba(127, 127, 127, 0.2)',
+    'rgba(188, 189, 34, 0.2)',
+    'rgba(23, 190, 207, 0.2)'
+];
 
 $( document ).ready(function() {
     var category = category_dropdown.val();
@@ -181,7 +193,7 @@ function drawStudyTrendsIndividual() {
                 name: name + " - Left Hand",
                 line: {
                     width: 1.5
-                }
+                },
             };
 
             const right_trace = {
@@ -192,7 +204,7 @@ function drawStudyTrendsIndividual() {
                 name: name + " - Right Hand",
                 line: {
                     width: 1.5
-                }
+                },
             };
 
             const layout = {
@@ -331,10 +343,14 @@ function drawStudyTrendsGroup() {
     }).done(function(data) {
         const type = $("#" + category_dropdown.val() + "_dropdown").val();
         const group_sizes = data.group_sizes;
+        var errorIsVisible = false;
+        var chart = document.getElementById('chart1');
 
         if (isTwoHands(type)) {
             const group_data_left = data.aggregate_data["left"];
             const group_data_right = data.aggregate_data["right"];
+            const group_error_left = data.error_traces["left"];
+            const group_error_right = data.error_traces["right"];
 
             const traces_left = [];
             const traces_right = [];
@@ -345,29 +361,74 @@ function drawStudyTrendsGroup() {
                     y: group_data_left[subgroup],
                     yaxis: 'y',
                     mode: 'lines',
-                    name: subgroup + " (" + group_size + ") - Left Hand",
-                    // marker: {
-                    //     color: chart_colors[color_index]
-                    // },
+                    name: subgroup + " (" + group_size + ")",
                     line: {
                         color: chart_colors[color_index]
-                    }
+                    },
+                    legendgroup: subgroup
+                });
+                traces_left.push({
+                    x: group_error_left[subgroup]['x'],
+                    y: group_error_left[subgroup]['y'],
+                    fill: 'toself',
+                    fillcolor: error_colors[color_index],
+                    line: {
+                        color: "transparent"
+                    },
+                    name: subgroup + " error left",
+                    showlegend: false,
+                    type: "scatter",
+                    legendgroup:subgroup,
+                    visible: errorIsVisible
                 });
                 traces_right.push({
                     y: group_data_right[subgroup],
                     yaxis: 'y2',
                     mode: 'lines',
                     name: subgroup + " (" + group_size + ") - Right Hand",
-                    // marker: {
-                    //     color: chart_colors[color_index]
-                    // },
+                    showlegend: false,
                     line: {
                         color: chart_colors[color_index]
-                    }
+                    },
+                    legendgroup: subgroup
+                });
+                traces_right.push({
+                    x: group_error_right[subgroup]['x'],
+                    y: group_error_right[subgroup]['y'],
+                    yaxis: 'y2',
+                    fill: 'toself',
+                    fillcolor: error_colors[color_index],
+                    line: {
+                        color: "transparent"
+                    },
+                    name: subgroup + " error right",
+                    showlegend: false,
+                    type: "scatter",
+                    legendgroup: subgroup,
+                    visible: errorIsVisible
                 });
                 color_index = (color_index + 1)%10;
             }
             const traces = traces_left.concat(traces_right);
+
+            var updatemenus=[
+                {
+                    buttons: [
+                        {
+                            label: 'Show Error Shading',
+                            method: 'skip'
+                        },
+                    ],
+                    direction: 'left',
+                    pad: {'r': 10, 't': 10},
+                    showactive: true,
+                    type: 'buttons',
+                    x: 1.1,
+                    xanchor: 'right',
+                    y: 1.1,
+                    yanchor: 'top'
+                }
+            ];
 
             const layout = {
                 title: "<b>" + getTitle(type) + "</b>",
@@ -381,6 +442,7 @@ function drawStudyTrendsGroup() {
                 titlefont: {
                     size: 28
                 },
+                updatemenus: updatemenus,
                 xaxis: {
                     title: "Day in Study",
                     showline: true,
@@ -433,10 +495,39 @@ function drawStudyTrendsGroup() {
             };
 
             Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            chart.on('plotly_buttonclicked', function() {
+                const traceIndices = [];
+                for (var i=0; i < chart.data.length; i++) {
+                    if (chart.data[i].name.includes("error")) {
+                        traceIndices.push(i);
+                    }
+                }
+
+                var button_label;
+                if (errorIsVisible) {
+                    button_label = "Show Error Shading";
+                } else {
+                    button_label = "Hide Error Shading";
+                }
+
+                const data_update = {
+                    visible: !errorIsVisible
+                };
+
+                const layout_update = {
+                    'updatemenus[0].buttons[0].label': button_label
+                };
+
+                Plotly.update('chart1', data_update, layout_update, traceIndices);
+                errorIsVisible = !errorIsVisible;
+            });
+
         } else {
             const group_data = data.aggregate_data;
+            const group_error = data.error_traces;
 
             const traces = [];
+            var color_index = 0;
             for (const subgroup in group_data) {
                 const group_size = group_sizes[subgroup];
                 traces.push({
@@ -444,10 +535,46 @@ function drawStudyTrendsGroup() {
                     mode: 'lines',
                     name: subgroup + " (" + group_size + ")",
                     line: {
-                        width: 1.5
-                    }
+                        width: 1.5,
+                        color: chart_colors[color_index]
+                    },
+                    legendgroup: subgroup
                 });
+                traces.push({
+                    x: group_error[subgroup]['x'],
+                    y: group_error[subgroup]['y'],
+                    fill: 'toself',
+                    fillcolor: error_colors[color_index],
+                    line: {
+                        color: "transparent"
+                    },
+                    name: subgroup + " error",
+                    showlegend: false,
+                    type: "scatter",
+                    legendgroup: subgroup,
+                    visible: errorIsVisible
+                });
+                color_index = (color_index+1)%10;
             }
+
+            var updatemenus=[
+                {
+                    buttons: [
+                        {
+                            label: 'Show Error Shading',
+                            method: 'skip'
+                        },
+                    ],
+                    direction: 'left',
+                    pad: {'r': 10, 't': 10},
+                    showactive: true,
+                    type: 'buttons',
+                    x: 1.1,
+                    xanchor: 'right',
+                    y: 1.1,
+                    yanchor: 'top'
+                }
+            ];
 
             const layout = {
                 title: "<b>" + getTitle(type) + "</b>",
@@ -458,6 +585,7 @@ function drawStudyTrendsGroup() {
                 titlefont: {
                     size: 28
                 },
+                updatemenus: updatemenus,
                 xaxis: {
                     title: "Day in Study",
                     showline: true,
@@ -484,7 +612,32 @@ function drawStudyTrendsGroup() {
             };
 
             Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            chart.on('plotly_buttonclicked', function() {
+                const traceIndices = [];
+                for (var i=0; i < chart.data.length; i++) {
+                    if (chart.data[i].name.includes("error")) {
+                        traceIndices.push(i);
+                    }
+                }
 
+                var button_label;
+                if (errorIsVisible) {
+                    button_label = "Show Error Shading";
+                } else {
+                    button_label = "Hide Error Shading";
+                }
+
+                const data_update = {
+                    visible: !errorIsVisible
+                };
+
+                const layout_update = {
+                    'updatemenus[0].buttons[0].label': button_label
+                };
+
+                Plotly.update('chart1', data_update, layout_update, traceIndices);
+                errorIsVisible = !errorIsVisible;
+            });
         }
         $("#loading").css("display", "none");
     });
@@ -853,5 +1006,19 @@ function getAggregationText(aggregation) {
 function getIndividualText(individual) {
     ind_num = parseInt(individual.slice(1));
     return "Individual " + ind_num + " of the study";
+}
+
+function newTraceVisibilities() {
+    const chart = document.getElementById("chart1");
+    const visibilities = [];
+    for (var i=0; i < chart.data.length; i++) {
+        if (chart.data[i].name.includes("error")) {
+            const isVisible = chart.data[i].visible;
+            visibilities.push(!isVisible);
+        } else {
+            visibilities.push(true);
+        }
+    }
+    return visibilities;
 }
 

@@ -169,6 +169,8 @@ def get_study_trends_data(request):
 
             aggregate_data = {"left": {},
                               "right": {} }
+            error_trace_by_subgroup = {"left": {},
+                                       "right": {} }
             group_sizes = {}
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
@@ -177,6 +179,8 @@ def get_study_trends_data(request):
                                                              name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data_left = []
                 subgroup_data_right = []
+                subgroup_error_left = []
+                subgroup_error_right = []
                 for day in range(0, 56):
                     day_data_left = []
                     day_data_right = []
@@ -191,16 +195,23 @@ def get_study_trends_data(request):
                             day_data_right.append(raw_data_right[participant][day])
                     if not day_data_left:
                         subgroup_data_left.append(None)
+                        subgroup_error_left.append(None)
                     else:
                         subgroup_data_left.append(aggregation_method(day_data_left))
+                        subgroup_error_left.append(statistics.pstdev(day_data_left))
                     if not day_data_right:
                         subgroup_data_right.append(None)
+                        subgroup_error_right.append(None)
                     else:
                         subgroup_data_right.append(aggregation_method(day_data_right))
+                        subgroup_error_right.append(statistics.pstdev(day_data_right))
+
                 aggregate_data["left"][subgroup] = subgroup_data_left
                 aggregate_data["right"][subgroup] = subgroup_data_right
+                error_trace_by_subgroup["left"][subgroup] = get_error_trace_from_std_devs(subgroup_data_left, subgroup_error_left)
+                error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
         else:
             raw_data = {}
             for participant in PARTICIPANTS:
@@ -215,12 +226,14 @@ def get_study_trends_data(request):
 
             aggregate_data = {}
             group_sizes = {}
+            error_trace_by_subgroup = {}
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
                                                              interval='24hrs',
                                                              measurement__isnull=False,
                                                              name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data = []
+                subgroup_std_devs = []
                 for day in range(0, 56):
                     day_data = []
                     for participant in group_dictionary[subgroup]:
@@ -230,11 +243,14 @@ def get_study_trends_data(request):
                             day_data.append(raw_data[participant][day])
                     if not day_data:
                         subgroup_data.append(None)
+                        subgroup_std_devs.append(None)
                     else:
                         subgroup_data.append(aggregation_method(day_data))
+                        subgroup_std_devs.append(statistics.pstdev(day_data))
                 aggregate_data[subgroup] = subgroup_data
+                error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
 
 
 @login_required
@@ -444,3 +460,23 @@ def get_scatter_plot_data(request):
                           .values_list("measurement", flat=True))
             data[subgroup] = {"x": x_data, "y": y_data}
         return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
+
+
+def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):
+    assert len(subgroup_data) == len(subgroup_std_devs)
+
+    upper_y_error = []
+    lower_y_error = []
+    x_forward = []
+    for i in range(len(subgroup_data)):
+        data_point = subgroup_data[i]
+        std_dev = subgroup_std_devs[i]
+        if std_dev is not None:
+            upper_y_error.append(data_point + (std_dev/2))
+            lower_y_error.append(data_point - (std_dev/2))
+            x_forward.append(i)
+    x = x_forward + list(reversed(x_forward))
+    y = upper_y_error + list(reversed(lower_y_error))
+    return {'x': x, 'y': y}
+
+

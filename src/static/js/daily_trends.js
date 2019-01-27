@@ -327,25 +327,22 @@ function drawDailyTrendsGroup() {
                     y: group_data_left[subgroup],
                     yaxis: 'y',
                     mode: 'lines',
-                    name: subgroup + " (" + group_size + ") - Left Hand",
-                    // marker: {
-                    //     color: chart_colors[color_index]
-                    // },
+                    name: subgroup + " (" + group_size + ")",
                     line: {
                         color: chart_colors[color_index]
-                    }
+                    },
+                    legendgroup: subgroup
                 });
                 traces_right.push({
                     y: group_data_right[subgroup],
                     yaxis: 'y2',
                     mode: 'lines',
                     name: subgroup + " (" + group_size + ") - Right Hand",
-                    // marker: {
-                    //     color: chart_colors[color_index]
-                    // },
+                    showlegend: false,
                     line: {
                         color: chart_colors[color_index]
-                    }
+                    },
+                    legendgroup: subgroup
                 });
                 color_index = (color_index + 1)%10;
             }

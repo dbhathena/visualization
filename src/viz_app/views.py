@@ -305,14 +305,17 @@ def get_daily_trends_data(request):
         if type in SEPARATE_HANDS:
             aggregate_data = {}
             group_sizes = {}
+            error_trace_by_subgroup = {}
             for hand in {"left", "right"}:
                 hand_aggregate_data = {}
+                hand_error_data = {}
                 for subgroup in group_dictionary:
                     group_sizes[subgroup] = model.objects.filter(category=type,
                                                                  interval='1hr',
                                                                  measurement__isnull=False,
                                                                  name__in=group_dictionary[subgroup]).distinct('name').count()
                     subgroup_data = []
+                    subgroup_error = []
                     for hour in range(0, 24):
                         hour_data = list(model.objects
                                          .filter(name__in=group_dictionary[subgroup],
@@ -324,20 +327,26 @@ def get_daily_trends_data(request):
                                          .values_list("measurement", flat=True))
                         if hour_data:
                             subgroup_data.append(aggregation_method(hour_data))
+                            subgroup_error.append(statistics.pstdev(hour_data))
                         else:
                             subgroup_data.append(None)
+                            subgroup_error.append(None)
                     hand_aggregate_data[subgroup] = subgroup_data
+                    hand_error_data[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_error)
                 aggregate_data[hand] = hand_aggregate_data
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
+                error_trace_by_subgroup[hand] = hand_error_data
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
         else:
             aggregate_data = {}
             group_sizes = {}
+            error_trace_by_subgroup = {}
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
                                                              interval='1hr',
                                                              measurement__isnull=False,
                                                              name__in=group_dictionary[subgroup]).distinct('name').count()
                 subgroup_data = []
+                subgroup_std_devs = []
                 for hour in range(0, 24):
                     hour_data = list(model.objects
                                      .filter(name__in=group_dictionary[subgroup],
@@ -348,10 +357,13 @@ def get_daily_trends_data(request):
                                      .values_list("measurement", flat=True))
                     if hour_data:
                         subgroup_data.append(aggregation_method(hour_data))
+                        subgroup_std_devs.append(statistics.pstdev(hour_data))
                     else:
                         subgroup_data.append(None)
+                        subgroup_std_devs.append(None)
                 aggregate_data[subgroup] = subgroup_data
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes}))
+                error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
 
 
 @login_required

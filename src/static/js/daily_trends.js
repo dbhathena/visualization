@@ -14,6 +14,18 @@ const chart_colors = [
     '#bcbd22',
     '#17becf'
 ];
+const error_colors = [
+    'rgba(31, 119, 180, 0.2)',
+    'rgba(255, 127, 14, 0.2)',
+    'rgba(44, 160, 44, 0.2)',
+    'rgba(214, 39, 40, 0.2)',
+    'rgba(148, 103, 189, 0.2)',
+    'rgba(140, 86, 75, 0.2)',
+    'rgba(227, 119, 194, 0.2)',
+    'rgba(127, 127, 127, 0.2)',
+    'rgba(188, 189, 34, 0.2)',
+    'rgba(23, 190, 207, 0.2)'
+];
 
 $( document ).ready(function() {
     var category = category_dropdown.val();
@@ -311,19 +323,54 @@ function drawDailyTrendsGroup() {
     }).done(function(data) {
         const type = $("#" + category_dropdown.val() + "_dropdown").val();
         const group_sizes = data.group_sizes;
+        var errorIsVisible = false;
+        var chart = document.getElementById('chart1');
+        function toggleErrorShading() {
+            const traceIndices = [];
+            for (var i=0; i < chart.data.length; i++) {
+                if (errorIsVisible && chart.data[i].name.includes("error")) {
+                    traceIndices.push(i);
+                }
+                if (!errorIsVisible && chart.data[i].name.includes("error") && chart.data[i-1].visible === true) {
+                    traceIndices.push(i);
+                }
+            }
+
+            var button_label;
+            if (errorIsVisible) {
+                button_label = "Show Error Shading";
+            } else {
+                button_label = "Hide Error Shading";
+            }
+
+            const data_update = {
+                visible: !errorIsVisible
+            };
+
+            const layout_update = {
+                'updatemenus[0].buttons[0].label': button_label
+            };
+
+            if (traceIndices.length > 0) {
+                Plotly.update('chart1', data_update, layout_update, traceIndices);
+            } else {
+                Plotly.relayout('chart1', layout_update);
+            }
+
+            errorIsVisible = !errorIsVisible;
+        }
 
         if (isTwoHands(type)) {
-            $("#chart2").show();
-
             const group_data_left = data.aggregate_data["left"];
             const group_data_right = data.aggregate_data["right"];
+            const group_error_left = data.error_traces["left"];
+            const group_error_right = data.error_traces["right"];
 
-            const traces_left = [];
-            const traces_right = [];
+            const traces = [];
             var color_index = 0;
             for (const subgroup in group_data_left) {
                 const group_size = group_sizes[subgroup];
-                traces_left.push({
+                traces.push({
                     y: group_data_left[subgroup],
                     yaxis: 'y',
                     mode: 'lines',
@@ -331,9 +378,24 @@ function drawDailyTrendsGroup() {
                     line: {
                         color: chart_colors[color_index]
                     },
-                    legendgroup: subgroup
+                    legendgroup: subgroup,
+                    visible: true
                 });
-                traces_right.push({
+                traces.push({
+                    x: group_error_left[subgroup]['x'],
+                    y: group_error_left[subgroup]['y'],
+                    fill: 'toself',
+                    fillcolor: error_colors[color_index],
+                    line: {
+                        color: "transparent"
+                    },
+                    name: subgroup + " error left",
+                    showlegend: false,
+                    type: "scatter",
+                    legendgroup: subgroup,
+                    visible: errorIsVisible
+                });
+                traces.push({
                     y: group_data_right[subgroup],
                     yaxis: 'y2',
                     mode: 'lines',
@@ -342,11 +404,44 @@ function drawDailyTrendsGroup() {
                     line: {
                         color: chart_colors[color_index]
                     },
-                    legendgroup: subgroup
+                    legendgroup: subgroup,
+                    visible: true
+                });
+                traces.push({
+                    x: group_error_right[subgroup]['x'],
+                    y: group_error_right[subgroup]['y'],
+                    yaxis: 'y2',
+                    fill: 'toself',
+                    fillcolor: error_colors[color_index],
+                    line: {
+                        color: "transparent"
+                    },
+                    name: subgroup + " error right",
+                    showlegend: false,
+                    type: "scatter",
+                    legendgroup: subgroup,
+                    visible: errorIsVisible
                 });
                 color_index = (color_index + 1)%10;
             }
-            const traces = traces_left.concat(traces_right);
+
+            var updatemenus = [
+                {
+                    buttons: [
+                        {
+                            label: 'Show Error Shading',
+                            method: 'skip'
+                        },
+                    ],
+                    direction: 'right',
+                    showactive: true,
+                    type: 'buttons',
+                    x: 1.1,
+                    xanchor: 'right',
+                    y: 1.1,
+                    yanchor: 'top'
+                }
+            ];
 
             const layout = {
                 title: "<b>" + getTitle(type) + "</b>",
@@ -360,6 +455,7 @@ function drawDailyTrendsGroup() {
                 titlefont: {
                     size: 28
                 },
+                updatemenus: updatemenus,
                 xaxis: {
                     title: "Hour of Day",
                     showline: true,
@@ -415,8 +511,10 @@ function drawDailyTrendsGroup() {
 
         } else {
             const group_data = data.aggregate_data;
+            const group_error = data.error_traces;
 
             const traces = [];
+            var color_index = 0;
             for (const subgroup in group_data) {
                 const group_size = group_sizes[subgroup];
                 traces.push({
@@ -424,10 +522,46 @@ function drawDailyTrendsGroup() {
                     mode: 'lines',
                     name: subgroup + " (" + group_size + ")",
                     line: {
-                        width: 1.5
-                    }
+                        width: 1.5,
+                        color: chart_colors[color_index]
+                    },
+                    legendgroup: subgroup,
+                    visible: true
                 });
+                traces.push({
+                    x: group_error[subgroup]['x'],
+                    y: group_error[subgroup]['y'],
+                    fill: 'toself',
+                    fillcolor: error_colors[color_index],
+                    line: {
+                        color: "transparent"
+                    },
+                    name: subgroup + " error",
+                    showlegend: false,
+                    type: "scatter",
+                    legendgroup: subgroup,
+                    visible: errorIsVisible
+                });
+                color_index = (color_index+1)%10;
             }
+
+            var updatemenus = [
+                {
+                    buttons: [
+                        {
+                            label: 'Show Error Shading',
+                            method: 'skip'
+                        },
+                    ],
+                    direction: 'right',
+                    showactive: true,
+                    type: 'buttons',
+                    x: 1.1,
+                    xanchor: 'right',
+                    y: 1.1,
+                    yanchor: 'top'
+                }
+            ];
 
             const layout = {
                 title: "<b>" + getTitle(type) + "</b>",
@@ -438,6 +572,7 @@ function drawDailyTrendsGroup() {
                 titlefont: {
                     size: 28
                 },
+                updatemenus: updatemenus,
                 xaxis: {
                     title: "Hour of Day",
                     showline: true,
@@ -465,6 +600,16 @@ function drawDailyTrendsGroup() {
 
             Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
+        chart.on('plotly_buttonclicked', toggleErrorShading);
+        chart.on('plotly_legendclick', function(clickData) {
+            if (errorIsVisible && clickData.data[clickData.curveNumber].visible === 'legendonly') {
+                chart.data[clickData.curveNumber+1].visible = true;
+                if (isTwoHands(type)) {
+                    chart.data[clickData.curveNumber+3].visible = true;
+                }
+            }
+        });
+        chart.on('plotly_legenddoubleclick', function() {return false;});
         $("#loading").css("display","none");
     });
 }

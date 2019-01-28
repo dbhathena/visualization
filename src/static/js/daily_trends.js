@@ -257,7 +257,7 @@ function drawDailyTrendsIndividual() {
                 }]
             };
 
-            Plotly.react("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
             const subject_data = data.subject_data["both"];
@@ -304,7 +304,7 @@ function drawDailyTrendsIndividual() {
                 },
                 dragmode: "pan",
             };
-            Plotly.react("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         $("#loading").css("display","none");
     });
@@ -376,7 +376,8 @@ function drawDailyTrendsGroup() {
                     mode: 'lines',
                     name: subgroup + " (" + group_size + ")",
                     line: {
-                        color: chart_colors[color_index]
+                        color: chart_colors[color_index],
+                        width: 1.5
                     },
                     legendgroup: subgroup,
                     visible: true
@@ -402,7 +403,8 @@ function drawDailyTrendsGroup() {
                     name: subgroup + " (" + group_size + ") - Right Hand",
                     showlegend: false,
                     line: {
-                        color: chart_colors[color_index]
+                        color: chart_colors[color_index],
+                        width: 1.5
                     },
                     legendgroup: subgroup,
                     visible: true
@@ -507,7 +509,7 @@ function drawDailyTrendsGroup() {
                 }]
             };
 
-            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
             const group_data = data.aggregate_data;
@@ -598,7 +600,7 @@ function drawDailyTrendsGroup() {
                 dragmode: "pan",
             };
 
-            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         chart.on('plotly_buttonclicked', toggleErrorShading);
         chart.on('plotly_legendclick', function(clickData) {

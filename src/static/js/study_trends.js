@@ -270,7 +270,7 @@ function drawStudyTrendsIndividual() {
                 }]
             };
 
-            Plotly.react("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
             const subject_data = data.subject_data[null];
@@ -324,7 +324,7 @@ function drawStudyTrendsIndividual() {
                 dragmode: "pan",
             };
 
-            Plotly.react("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         $("#loading").css("display", "none");
     });
@@ -370,11 +370,13 @@ function drawStudyTrendsGroup() {
             const layout_update = {
                 'updatemenus[0].buttons[0].label': button_label
             };
+
             if (traceIndices.length > 0) {
                 Plotly.update('chart1', data_update, layout_update, traceIndices);
             } else {
                 Plotly.relayout('chart1', layout_update);
             }
+
             errorIsVisible = !errorIsVisible;
         }
 
@@ -394,7 +396,8 @@ function drawStudyTrendsGroup() {
                     mode: 'lines',
                     name: subgroup + " (" + group_size + ")",
                     line: {
-                        color: chart_colors[color_index]
+                        color: chart_colors[color_index],
+                        width: 1.5
                     },
                     legendgroup: subgroup,
                     visible: true
@@ -420,7 +423,8 @@ function drawStudyTrendsGroup() {
                     name: subgroup + " (" + group_size + ") - Right Hand",
                     showlegend: false,
                     line: {
-                        color: chart_colors[color_index]
+                        color: chart_colors[color_index],
+                        width: 1.5
                     },
                     legendgroup: subgroup,
                     visible: true
@@ -443,7 +447,7 @@ function drawStudyTrendsGroup() {
                 color_index = (color_index + 1)%10;
             }
 
-            var updatemenus=[
+            var updatemenus = [
                 {
                     buttons: [
                         {
@@ -451,8 +455,7 @@ function drawStudyTrendsGroup() {
                             method: 'skip'
                         },
                     ],
-                    direction: 'left',
-                    pad: {'r': 10, 't': 10},
+                    direction: 'right',
                     showactive: true,
                     type: 'buttons',
                     x: 1.1,
@@ -526,7 +529,7 @@ function drawStudyTrendsGroup() {
                 }]
             };
 
-            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         } else {
             const group_data = data.aggregate_data;
             const group_error = data.error_traces;
@@ -563,7 +566,7 @@ function drawStudyTrendsGroup() {
                 color_index = (color_index+1)%10;
             }
 
-            var updatemenus=[
+            var updatemenus = [
                 {
                     buttons: [
                         {
@@ -571,8 +574,7 @@ function drawStudyTrendsGroup() {
                             method: 'skip'
                         },
                     ],
-                    direction: 'left',
-                    pad: {'r': 10, 't': 10},
+                    direction: 'right',
                     showactive: true,
                     type: 'buttons',
                     x: 1.1,
@@ -617,7 +619,7 @@ function drawStudyTrendsGroup() {
                 dragmode: "pan",
             };
 
-            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         chart.on('plotly_buttonclicked', toggleErrorShading);
         chart.on('plotly_legendclick', function(clickData) {

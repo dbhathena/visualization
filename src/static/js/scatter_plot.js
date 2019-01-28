@@ -263,7 +263,7 @@ function drawScatterPlot() {
                 }]
             };
 
-            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         } else {
             const columns = [];
             const xs = {};
@@ -326,7 +326,7 @@ function drawScatterPlot() {
                 dragmode: "pan"
             };
 
-            Plotly.react("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
         $('#loading').css('display', 'none');
     });

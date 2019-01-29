@@ -1,4 +1,3 @@
-var chart_container = $(".chart-container");
 var x_category_dropdown = $("#x_axis_category");
 var y_category_dropdown = $("#y_axis_category");
 var group_dropdown = $("#group_dropdown");
@@ -16,9 +15,6 @@ const chart_colors = [
 ];
 
 $( document ).ready(function() {
-    chart_container.css('flex-direction', 'row');
-    chart_container.css('justify-content', 'center');
-    chart_container.css('align-items', 'stretch');
 
     var x_category = x_category_dropdown.val();
     var y_category = y_category_dropdown.val();

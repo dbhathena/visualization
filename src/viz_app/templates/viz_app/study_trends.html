@@ -107,5 +107,6 @@
 {%  endblock %}
 
 {% block script %}
+    {{ block.super }}
     <script src="{% static 'js/study_trends.js' %}"></script>
 {% endblock %}

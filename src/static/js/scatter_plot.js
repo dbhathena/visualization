@@ -185,7 +185,8 @@ function drawScatterPlot() {
                     mode: 'markers',
                     name: subgroup + " (" + group_size + ") - Left Hand",
                     marker: {
-                        color: chart_colors[color_index]
+                        color: chart_colors[color_index],
+                        size: 4
                     }
                 });
                 traces_right.push({
@@ -195,7 +196,8 @@ function drawScatterPlot() {
                     mode: 'markers',
                     name: subgroup + " (" + group_size + ") - Right Hand",
                     marker: {
-                        color: chart_colors[color_index]
+                        color: chart_colors[color_index],
+                        size: 4
                     }
                 });
                 color_index = (color_index + 1)%10;

@@ -380,7 +380,8 @@ function drawDailyTrendsGroup() {
                         width: 1.5
                     },
                     legendgroup: subgroup,
-                    visible: true
+                    visible: true,
+                    hoverinfo: "x+y"
                 });
                 traces.push({
                     x: group_error_left[subgroup]['x'],
@@ -394,7 +395,8 @@ function drawDailyTrendsGroup() {
                     showlegend: false,
                     type: "scatter",
                     legendgroup: subgroup,
-                    visible: errorIsVisible
+                    visible: errorIsVisible,
+                    hoverinfo: "none"
                 });
                 traces.push({
                     y: group_data_right[subgroup],
@@ -407,7 +409,8 @@ function drawDailyTrendsGroup() {
                         width: 1.5
                     },
                     legendgroup: subgroup,
-                    visible: true
+                    visible: true,
+                    hoverinfo: "x+y"
                 });
                 traces.push({
                     x: group_error_right[subgroup]['x'],
@@ -422,7 +425,8 @@ function drawDailyTrendsGroup() {
                     showlegend: false,
                     type: "scatter",
                     legendgroup: subgroup,
-                    visible: errorIsVisible
+                    visible: errorIsVisible,
+                    hoverinfo: "none"
                 });
                 color_index = (color_index + 1)%10;
             }
@@ -436,12 +440,14 @@ function drawDailyTrendsGroup() {
                         },
                     ],
                     direction: 'right',
-                    showactive: true,
+                    showactive: false,
                     type: 'buttons',
                     x: 1.1,
                     xanchor: 'right',
                     y: 1.1,
-                    yanchor: 'top'
+                    yanchor: 'top',
+                    bgcolor: 'rgba(76, 175, 80, 0.5)',
+                    bordercolor: 'transparent'
                 }
             ];
 
@@ -528,7 +534,8 @@ function drawDailyTrendsGroup() {
                         color: chart_colors[color_index]
                     },
                     legendgroup: subgroup,
-                    visible: true
+                    visible: true,
+                    hoverinfo: "x+y"
                 });
                 traces.push({
                     x: group_error[subgroup]['x'],
@@ -542,7 +549,8 @@ function drawDailyTrendsGroup() {
                     showlegend: false,
                     type: "scatter",
                     legendgroup: subgroup,
-                    visible: errorIsVisible
+                    visible: errorIsVisible,
+                    hoverinfo: "none"
                 });
                 color_index = (color_index+1)%10;
             }
@@ -556,12 +564,14 @@ function drawDailyTrendsGroup() {
                         },
                     ],
                     direction: 'right',
-                    showactive: true,
+                    showactive: false,
                     type: 'buttons',
                     x: 1.1,
                     xanchor: 'right',
                     y: 1.1,
-                    yanchor: 'top'
+                    yanchor: 'top',
+                    bgcolor: 'rgba(76, 175, 80, 0.5)',
+                    bordercolor: 'transparent'
                 }
             ];
 

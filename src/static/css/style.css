@@ -1,5 +1,6 @@
 body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: #444;
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -209,9 +210,9 @@ form {
 
 #login-button {
     font-family: inherit;
-    color: #fff;
-    background-color: #4CAF50;
-    border-color: #2C8C59;
+    color: #444;
+    background-color: rgba(76, 175, 80, 0.5);
+    border-color: rgba(44, 140, 89, 0.5);
     border-style: solid;
     margin-left: 30px;
     text-align: center;
@@ -220,11 +221,12 @@ form {
     cursor: pointer;
     padding: 6px 12px;
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
 #login-button:hover {
     background-color: #2C8C59;
+    color: #f6f9f6;
 }
 
 
@@ -246,7 +248,7 @@ form {
     display: none;
     margin-left: 5px;
     background-color: white;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
     z-index: 100;
 }
 
@@ -332,16 +334,16 @@ p {
 }
 
 #learn-more {
-    background-color: white;
+    background-color: rgba(76, 175, 80, 0.5);
     font-family: inherit;
-    color: black;
+    color: #444;
     font-size: 20px;
     text-align: center;
     cursor: pointer;
-    border: 1px solid black;
+    border: 1px solid rgba(44,140,89, 0.5);
     text-decoration: none;
     width: 150px;
-    border-radius: 5px;
+    border-radius: 2px;
     margin-left: auto;
     margin-right: auto;
     padding-top: 8px;
@@ -349,7 +351,8 @@ p {
 }
 
 #learn-more:hover {
-    background-color: #dcefdc;
+    background-color: #2C8C59;
+    color: #f6f9f6;
 }
 
 .row ul,ol {
@@ -413,9 +416,9 @@ p,span,li {
 .search-categories {
     padding: 6px 4px 6px 4px;
     font-size: 14px;
-    background: #e5f3e6;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    background: rgba(76, 175, 80, 0.5);
+    border: none;
+    border-radius: 2px;
     position: relative;
 }
 
@@ -429,7 +432,6 @@ p,span,li {
     line-height: 1;
     border: 0;
     padding: 5px;
-    border-radius: 0;
     min-height: 20px;
     width: 100%;
     position: relative;

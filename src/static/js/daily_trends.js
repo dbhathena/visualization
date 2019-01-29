@@ -181,7 +181,9 @@ function drawDailyTrendsIndividual() {
                 name: name + " - Left Hand",
                 line: {
                     width: 1.5
-                }
+                },
+                text: "Left Hand",
+                hoverinfo: "x+y+text"
             };
 
             const right_trace = {
@@ -191,7 +193,9 @@ function drawDailyTrendsIndividual() {
                 name: name + " - Right Hand",
                 line: {
                     width: 1.5
-                }
+                },
+                text: "Right Hand",
+                hoverinfo: "x+y+text"
             };
 
             const layout = {
@@ -222,7 +226,7 @@ function drawDailyTrendsIndividual() {
                         size: 20
                     },
                     fixedrange: true,
-                    domain: [0.5, 1]
+                    domain: [0.53, 1]
                 },
                 yaxis2: {
                     title: unitsHourly[type],
@@ -232,7 +236,7 @@ function drawDailyTrendsIndividual() {
                         size: 20
                     },
                     fixedrange: true,
-                    domain: [0, 0.5]
+                    domain: [0, 0.47]
                 },
                 showlegend: true,
                 legend: {
@@ -381,7 +385,8 @@ function drawDailyTrendsGroup() {
                     },
                     legendgroup: subgroup,
                     visible: true,
-                    hoverinfo: "x+y"
+                    text: "Left Hand",
+                    hoverinfo: "x+y+text"
                 });
                 traces.push({
                     x: group_error_left[subgroup]['x'],
@@ -396,7 +401,7 @@ function drawDailyTrendsGroup() {
                     type: "scatter",
                     legendgroup: subgroup,
                     visible: errorIsVisible,
-                    hoverinfo: "none"
+                    hoverinfo: "x"
                 });
                 traces.push({
                     y: group_data_right[subgroup],
@@ -410,7 +415,8 @@ function drawDailyTrendsGroup() {
                     },
                     legendgroup: subgroup,
                     visible: true,
-                    hoverinfo: "x+y"
+                    text: "Right Hand",
+                    hoverinfo: "x+y+text"
                 });
                 traces.push({
                     x: group_error_right[subgroup]['x'],
@@ -426,7 +432,7 @@ function drawDailyTrendsGroup() {
                     type: "scatter",
                     legendgroup: subgroup,
                     visible: errorIsVisible,
-                    hoverinfo: "none"
+                    hoverinfo: "x"
                 });
                 color_index = (color_index + 1)%10;
             }
@@ -480,7 +486,7 @@ function drawDailyTrendsGroup() {
                         size: 20
                     },
                     fixedrange: true,
-                    domain: [0.5, 1]
+                    domain: [0.53, 1]
                 },
                 yaxis2: {
                     title: unitsHourly[type],
@@ -490,7 +496,7 @@ function drawDailyTrendsGroup() {
                         size: 20
                     },
                     fixedrange: true,
-                    domain: [0, 0.5]
+                    domain: [0, 0.47]
                 },
                 showlegend: true,
                 legend: {
@@ -550,7 +556,7 @@ function drawDailyTrendsGroup() {
                     type: "scatter",
                     legendgroup: subgroup,
                     visible: errorIsVisible,
-                    hoverinfo: "none"
+                    hoverinfo: "x"
                 });
                 color_index = (color_index+1)%10;
             }

@@ -221,7 +221,7 @@ function drawScatterPlot() {
                     titlefont: {
                         size: 20
                     },
-                    domain: [0, 0.5]
+                    domain: [0, 0.47]
                 },
                 xaxis2: {
                     title: unitsDaily[x_type],
@@ -230,7 +230,7 @@ function drawScatterPlot() {
                     titlefont: {
                         size: 20
                     },
-                    domain: [0.5, 1]
+                    domain: [0.53, 1]
                 },
                 yaxis: {
                     title: unitsDaily[y_type],
@@ -246,6 +246,7 @@ function drawScatterPlot() {
                     y: 0.5
                 },
                 dragmode: "pan",
+                hovermode: "closest",
                 grid: {
                     subplots: [['xy', 'x2y']]
                 },
@@ -323,7 +324,8 @@ function drawScatterPlot() {
                     x: 1,
                     y: 0.5
                 },
-                dragmode: "pan"
+                dragmode: "pan",
+                hovermode: "closest"
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});

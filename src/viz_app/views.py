@@ -279,39 +279,41 @@ def get_weekly_trends_data(request):
                                                    category=type,
                                                    interval="24hrs",
                                                    hand="left",
-                                                   date__week_day=1).order_by("date").first().date
+                                                   date__week_day=1).order_by("date").first()
             end_date_left = model.objects.filter(name=participant,
                                                  category=type,
                                                  interval="24hrs",
                                                  hand="left",
-                                                 date__week_day=7).order_by("date").last().date
-            raw_data_left[participant] = list(model.objects
-                                              .filter(name=participant,
-                                                      category=type,
-                                                      interval="24hrs",
-                                                      hand="left",
-                                                      date__range=(start_date_left, end_date_left))
-                                              .order_by("date")
-                                              .values_list("measurement", flat=True))
+                                                 date__week_day=7).order_by("date").last()
+            if (start_date_left and end_date_left):
+                raw_data_left[participant] = list(model.objects
+                                                  .filter(name=participant,
+                                                          category=type,
+                                                          interval="24hrs",
+                                                          hand="left",
+                                                          date__range=(start_date_left.date, end_date_left.date))
+                                                  .order_by("date")
+                                                  .values_list("measurement", flat=True))
 
             start_date_right = model.objects.filter(name=participant,
                                                    category=type,
                                                    interval="24hrs",
                                                    hand="right",
-                                                   date__week_day=1).order_by("date").first().date
+                                                   date__week_day=1).order_by("date").first()
             end_date_right = model.objects.filter(name=participant,
                                                  category=type,
                                                  interval="24hrs",
                                                  hand="right",
-                                                 date__week_day=7).order_by("date").last().date
-            raw_data_right[participant] = list(model.objects
-                                              .filter(name=participant,
-                                                      category=type,
-                                                      interval="24hrs",
-                                                      hand="right",
-                                                      date__range=(start_date_right, end_date_right))
-                                              .order_by("date")
-                                              .values_list("measurement", flat=True))
+                                                 date__week_day=7).order_by("date").last()
+            if (start_date_right and end_date_right):
+                raw_data_right[participant] = list(model.objects
+                                                  .filter(name=participant,
+                                                          category=type,
+                                                          interval="24hrs",
+                                                          hand="right",
+                                                          date__range=(start_date_right.date, end_date_right.date))
+                                                  .order_by("date")
+                                                  .values_list("measurement", flat=True))
         aggregate_data = {"left": {},
                           "right": {} }
         error_trace_by_subgroup = {"left": {},
@@ -366,18 +368,19 @@ def get_weekly_trends_data(request):
             start_date = model.objects.filter(name=participant,
                                               category=type,
                                               interval="24hrs",
-                                              date__week_day=1).order_by("date").first().date
+                                              date__week_day=1).order_by("date").first()
             end_date = model.objects.filter(name=participant,
                                             category=type,
                                             interval="24hrs",
-                                            date__week_day=7).order_by("date").last().date
-            raw_data[participant] = list(model.objects
-                                         .filter(name=participant,
-                                                 category=type,
-                                                 interval="24hrs",
-                                                 date__range=(start_date, end_date))
-                                         .order_by("date")
-                                         .values_list("measurement", flat=True))
+                                            date__week_day=7).order_by("date").last()
+            if (start_date and end_date):
+                raw_data[participant] = list(model.objects
+                                             .filter(name=participant,
+                                                     category=type,
+                                                     interval="24hrs",
+                                                     date__range=(start_date.date, end_date.date))
+                                             .order_by("date")
+                                             .values_list("measurement", flat=True))
 
         aggregate_data = {}
         group_sizes = {}

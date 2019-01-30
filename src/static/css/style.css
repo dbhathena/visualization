@@ -101,6 +101,7 @@ p,span,li {
     justify-content: space-evenly;
     padding: 0 10px 10px;
     font-size: larger;
+    flex-wrap: wrap;
 }
 
 .description-label {
@@ -108,7 +109,7 @@ p,span,li {
     position: relative;
     text-align: center;
     color: #20603b;
-    padding: 5px 0 10px;
+    padding: 5px 5px 10px;
 }
 
 .description-label:hover {

@@ -295,6 +295,7 @@ function drawWeeklyTrends() {
                     ticktext: constructWeekLabels(7),
                     tickvals: constructWeekTickVals(7),
                     tickmode: "array",
+                    showgrid: false
                 },
                 yaxis: {
                     title: unitsDaily[type],
@@ -419,9 +420,7 @@ function drawWeeklyTrends() {
                     ticktext: constructWeekLabels(7),
                     tickvals: constructWeekTickVals(7),
                     tickmode: "array",
-                    ticksuffix: "hello",
-                    showticksuffix: "all"
-
+                    showgrid: false
                 },
                 yaxis: {
                     title: unitsDaily[type],

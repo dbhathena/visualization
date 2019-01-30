@@ -418,7 +418,7 @@ function constructWeekLabels(number_of_weeks) {
 
 function constructWeekTickVals(number_of_weeks) {
     const tick_vals = [];
-    var tick_index = 3;
+    var tick_index = 3.5;
     for (var i=0; i < number_of_weeks; i++) {
         tick_vals.push(tick_index);
         tick_index += 7;

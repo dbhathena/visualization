@@ -2,6 +2,7 @@ var category_dropdown = $("#category_dropdown");
 var group_dropdown = $("#group_dropdown");
 var aggregation_dropdown = $("#aggregation_dropdown");
 var names_dropdown = $("#names_dropdown");
+var last_request;
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -158,7 +159,10 @@ $( document ).ready(function() {
 });
 
 function drawStudyTrendsIndividual() {
-    $.ajax({
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
         url: "/get-study-trends-data/",
         data: {
             type: $("#" + category_dropdown.val() + "_dropdown").val(),
@@ -335,7 +339,10 @@ function drawStudyTrendsIndividual() {
 }
 
 function drawStudyTrendsGroup() {
-    $.ajax({
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
         url: "/get-study-trends-data/",
         data: {
             type: $("#" + category_dropdown.val() + "_dropdown").val(),

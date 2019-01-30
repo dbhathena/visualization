@@ -1,6 +1,7 @@
 var x_category_dropdown = $("#x_axis_category");
 var y_category_dropdown = $("#y_axis_category");
 var group_dropdown = $("#group_dropdown");
+var last_request;
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -150,7 +151,10 @@ $( document ).ready(function() {
 });
 
 function drawScatterPlot() {
-    $.ajax({
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
         url: "/get-scatter-plot-data/",
         data: {
             x_axis: $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val(),

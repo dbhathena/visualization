@@ -442,8 +442,9 @@ function constructVerticalDividers(spacing, num_categories) {
             y0: 0,
             y1: 1,
             line: {
-                color: '#888',
-                width: 1
+                color: '#999',
+                width: 1,
+                dash: "dash"
             }
         });
     }

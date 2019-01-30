@@ -1,0 +1,99 @@
+{% extends "viz_app/visualization_base.html" %}
+
+{% load staticfiles %}
+{% load static from staticfiles %}
+
+{% block header %}
+    <h1>Weekly Trends</h1>
+{% endblock %}
+
+{% block description%}
+    <b>
+        A time series showing the trend of a measured or reported variable over most of the study, aligned by days
+        of the week. One data point per day was calculated for each participant by taking the arithmetic mean of all
+        raw data collected in that day. If no data was collected on any particular day for a participant, no data point
+        is generated for that day. Data before the first Sunday and after the last Saturday for each participant was
+        excluded.
+    </b>
+    <br>
+    Select options from the drop-down menus to see different data. Hover, click, and scroll on the graph/legend to
+    see the data in more detail.
+{% endblock %}
+
+{% block options %}
+
+    <div class="dropdown-container">
+        <h3>Select a data category:</h3>
+        <div class="search-categories">
+            <div class="select">
+                <select id="category_dropdown">
+                    {%  for category_value, category_label in categories %}
+                        <option value="{{ category_value }}">{{ category_label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+    {% for category, types in category_mapping %}
+        <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
+            <h3>Select a data type:</h3>
+            <div class="search-categories">
+                <div class="select">
+                    <select class="type_dropdown" id="{{ category }}_dropdown">
+                        {% for type in types %}
+                            <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="dropdown-container">
+        <h3>Select a group (or none):</h3>
+        <div class="search-categories">
+            <div class="select">
+                <select id="group_dropdown">
+                    <option value="All" selected>All</option>
+                    <option value="Depression">Depression Status</option>
+                    <option value="Gender">Gender</option>
+                    <option value="Marital">Marital Status</option>
+                    <option value="Employment">Employment Status</option>
+                    <option value="Age">Age</option>
+                    <option value="Psychotherapy">Psychotherapy</option>
+                    <option value="Episode Length">Episode Length</option>
+                    <option value="Episode Type">Episode Type</option>
+                    <option value="Phobia">Social Phobia</option>
+                    <option value="Anxiety">Generalized Anxiety Disorder</option>
+                    <option value="Current Medication">Current Medication Status</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="dropdown-container" id="aggregation_container">
+        <h3>Select an aggregation method:</h3>
+        <div class="search-categories">
+            <div class="select">
+                <select id="aggregation_dropdown">
+                    <option value="Mean" selected>Mean</option>
+                    <option value="Median">Median</option>
+                    <option value="Max">Max</option>
+                    <option value="Min">Min</option>
+                    <option value="Std Dev">Standard Deviation</option>
+                </select>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block selection_descriptions %}
+    <div class="description-label category-description">Data Category</div>
+    <div class="description-label type-description">Data Type</div>
+    <div class="description-label preprocess-description">Preprocessing</div>
+    <div class="description-label group-description">Group</div>
+    <div class="description-label aggregation-description">Aggregation</div>
+{%  endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/weekly_trends.js' %}"></script>
+{% endblock %}

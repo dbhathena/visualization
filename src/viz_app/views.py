@@ -36,6 +36,11 @@ def scatter_plot(request):
 
 
 @login_required
+def weekly_trends(request):
+    context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories":sorted(CATEGORIES_DAILY.items())}
+    return render(request, 'viz_app/weekly_trends.html', context)
+
+@login_required
 def radar_chart(request):
     return render(request, 'viz_app/radar_chart.html')
 
@@ -212,6 +217,7 @@ def get_study_trends_data(request):
                 error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
 
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+
         else:
             raw_data = {}
             for participant in PARTICIPANTS:
@@ -251,6 +257,155 @@ def get_study_trends_data(request):
                 error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
 
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+
+
+@login_required
+def get_weekly_trends_data(request):
+    type = request.GET.get("type")
+    group = request.GET.get("group")
+    model = None
+    for m in DATABASE_MAPPING:
+        if type in DATABASE_MAPPING[m]:
+            model = m
+    assert model is not None
+    aggregation = request.GET.get("aggregation")
+    aggregation_method = AGGREGATION_METHODS[aggregation]
+    group_dictionary = GROUPINGS[group]
+    if type in SEPARATE_HANDS:
+        raw_data_left = {}
+        raw_data_right = {}
+        for participant in PARTICIPANTS:
+            start_date_left = model.objects.filter(name=participant,
+                                                   category=type,
+                                                   interval="24hrs",
+                                                   hand="left",
+                                                   date__week_day=1).order_by("date").first().date
+            end_date_left = model.objects.filter(name=participant,
+                                                 category=type,
+                                                 interval="24hrs",
+                                                 hand="left",
+                                                 date__week_day=7).order_by("date").last().date
+            raw_data_left[participant] = list(model.objects
+                                              .filter(name=participant,
+                                                      category=type,
+                                                      interval="24hrs",
+                                                      hand="left",
+                                                      date__range=(start_date_left, end_date_left))
+                                              .order_by("date")
+                                              .values_list("measurement", flat=True))
+
+            start_date_right = model.objects.filter(name=participant,
+                                                   category=type,
+                                                   interval="24hrs",
+                                                   hand="right",
+                                                   date__week_day=1).order_by("date").first().date
+            end_date_right = model.objects.filter(name=participant,
+                                                 category=type,
+                                                 interval="24hrs",
+                                                 hand="right",
+                                                 date__week_day=7).order_by("date").last().date
+            raw_data_right[participant] = list(model.objects
+                                              .filter(name=participant,
+                                                      category=type,
+                                                      interval="24hrs",
+                                                      hand="right",
+                                                      date__range=(start_date_right, end_date_right))
+                                              .order_by("date")
+                                              .values_list("measurement", flat=True))
+        aggregate_data = {"left": {},
+                          "right": {} }
+        error_trace_by_subgroup = {"left": {},
+                                   "right": {} }
+        group_sizes = {}
+        for subgroup in group_dictionary:
+            group_sizes[subgroup] = model.objects.filter(category=type,
+                                                         interval="24hrs",
+                                                         measurement__isnull=False,
+                                                         name__in=group_dictionary[subgroup]).distinct('name').count()
+            subgroup_data_left = []
+            subgroup_data_right = []
+            subgroup_error_left = []
+            subgroup_error_right = []
+            for day in range(0, 49):
+                day_data_left = []
+                day_data_right = []
+                for participant in group_dictionary[subgroup]:
+                    if (participant in raw_data_left
+                            and day < len(raw_data_left[participant])
+                            and raw_data_left[participant][day] is not None):
+                        day_data_left.append(raw_data_left[participant][day])
+                    if (participant in raw_data_right
+                            and day < len(raw_data_right[participant])
+                            and raw_data_right[participant][day] is not None):
+                        day_data_right.append(raw_data_right[participant][day])
+
+                if not day_data_left:
+                    subgroup_data_left.append(None)
+                    subgroup_error_left.append(None)
+                else:
+                    subgroup_data_left.append(aggregation_method(day_data_left))
+                    subgroup_error_left.append(statistics.pstdev(day_data_left))
+
+                if not day_data_right:
+                    subgroup_data_right.append(None)
+                    subgroup_error_right.append(None)
+                else:
+                    subgroup_data_right.append(aggregation_method(day_data_right))
+                    subgroup_error_right.append(statistics.pstdev(day_data_right))
+
+            aggregate_data["left"][subgroup] = subgroup_data_left
+            aggregate_data["right"][subgroup] = subgroup_data_right
+            error_trace_by_subgroup["left"][subgroup] = get_error_trace_from_std_devs(subgroup_data_left, subgroup_error_left)
+            error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
+
+        return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+
+    else:
+        raw_data = {}
+        for participant in PARTICIPANTS:
+            start_date = model.objects.filter(name=participant,
+                                              category=type,
+                                              interval="24hrs",
+                                              date__week_day=1).order_by("date").first().date
+            end_date = model.objects.filter(name=participant,
+                                            category=type,
+                                            interval="24hrs",
+                                            date__week_day=7).order_by("date").last().date
+            raw_data[participant] = list(model.objects
+                                         .filter(name=participant,
+                                                 category=type,
+                                                 interval="24hrs",
+                                                 date__range=(start_date, end_date))
+                                         .order_by("date")
+                                         .values_list("measurement", flat=True))
+
+        aggregate_data = {}
+        group_sizes = {}
+        error_trace_by_subgroup = {}
+        for subgroup in group_dictionary:
+            group_sizes[subgroup] = model.objects.filter(category=type,
+                                                         interval='24hrs',
+                                                         measurement__isnull=False,
+                                                         name__in=group_dictionary[subgroup]).distinct("name").count()
+            subgroup_data = []
+            subgroup_std_devs = []
+            for day in range(0, 49):
+                day_data = []
+                for participant in group_dictionary[subgroup]:
+                    if (participant in raw_data
+                            and day < len(raw_data[participant])
+                            and raw_data[participant][day] is not None):
+                        day_data.append(raw_data[participant][day])
+                if not day_data:
+                    subgroup_data.append(None)
+                    subgroup_std_devs.append(None)
+                else:
+                    subgroup_data.append(aggregation_method(day_data))
+                    subgroup_std_devs.append(statistics.pstdev(day_data))
+            aggregate_data[subgroup] = subgroup_data
+            error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+
+        return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
 
 
 @login_required

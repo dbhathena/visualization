@@ -1,7 +1,6 @@
 var category_dropdown = $("#category_dropdown");
 var group_dropdown = $("#group_dropdown");
 var aggregation_dropdown = $("#aggregation_dropdown");
-var names_dropdown = $("#names_dropdown");
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -32,24 +31,11 @@ $( document ).ready(function() {
     var dataType = $("#" + category_dropdown.val() + "_dropdown").val();
     var group = group_dropdown.val();
     var aggregation = aggregation_dropdown.val();
-    var name = names_dropdown.val();
 
-    drawStudyTrendsGroup();
-    $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
+    drawWeeklyTrends();
+    $(".type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
-        if (group_dropdown.val() === "None") {
-            $("#aggregation_container").css("display", "none");
-            $("#names_container").css("display", "flex");
-            $("div.aggregation-description").css("display", "none");
-            $("div.individual-description").css("display", "block");
-            drawStudyTrendsIndividual();
-        } else {
-            $("#names_container").css("display", "none");
-            $("#aggregation_container").css("display", "flex");
-            $("div.individual-description").css("display", "none");
-            $("div.aggregation-description").css("display", "block");
-            drawStudyTrendsGroup();
-        }
+        drawWeeklyTrends();
     });
 
     category_dropdown.change(function() {
@@ -64,13 +50,9 @@ $( document ).ready(function() {
     group_dropdown.change(function() {
         group = group_dropdown.val();
     });
-    aggregation_dropdown.change(function () {
+    aggregation_dropdown.change(function() {
         aggregation = aggregation_dropdown.val();
     });
-    names_dropdown.change(function () {
-        name = names_dropdown.val();
-    });
-
     $(".category-description").hover(
         function () {
             description = $("span#description-text");
@@ -141,207 +123,16 @@ $( document ).ready(function() {
             description.css("color", "#666");
         }
     );
-    $(".individual-description").hover(
-        function () {
-            description = $("span#description-text");
-            description.text(getIndividualText(name));
-            description.css("font-style", "normal");
-            description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
-        }
-    );
 });
 
-function drawStudyTrendsIndividual() {
+
+function drawWeeklyTrends() {
     $.ajax({
-        url: "/get-study-trends-data/",
+        url: "/get-weekly-trends-data/",
         data: {
             type: $("#" + category_dropdown.val() + "_dropdown").val(),
             aggregation: aggregation_dropdown.val(),
             group: group_dropdown.val(),
-            name: names_dropdown.val(),
-        },
-        dataType: "json"
-    }).done(function(data) {
-        const type = $("#" + category_dropdown.val() + "_dropdown").val();
-        const name = names_dropdown.val();
-        if (isTwoHands.has(type)) {
-            const subject_data_left = data.subject_data["left"];
-            const subject_data_right = data.subject_data["right"];
-
-            const dates_left = [];
-            const dates_right = [];
-            subject_data_left["dates"].forEach(function(d) {
-                dates_left.push(new Date(new Date(d).toDateString()));
-            });
-            subject_data_right["dates"].forEach(function(d) {
-                dates_right.push(new Date(new Date(d).toDateString()));
-            });
-
-            const measurements_left = subject_data_left["measurements"];
-            const measurements_right = subject_data_right["measurements"];
-            const left_trace = {
-                x: dates_left,
-                y: measurements_left,
-                yaxis: 'y',
-                mode: 'lines',
-                name: name + " - Left Hand",
-                line: {
-                    width: 1.5
-                },
-                text: "Left Hand",
-                hoverinfo: "x+y+text"
-            };
-
-            const right_trace = {
-                x: dates_right,
-                y: measurements_right,
-                yaxis: 'y2',
-                mode: 'lines',
-                name: name + " - Right Hand",
-                line: {
-                    width: 1.5
-                },
-                text: "Right Hand",
-                hoverinfo: "x+y+text"
-            };
-
-            const layout = {
-                title: "<b>" + titleForTypeDaily[type] + "</b>",
-                margin: {
-                    pad: 4
-                },
-                font: {
-                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
-                    size: 16
-                },
-                titlefont: {
-                    size: 28
-                },
-                xaxis: {
-                    title: "Date",
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    }
-                },
-                yaxis: {
-                    title: unitsDaily[type],
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    },
-                    fixedrange: true,
-                    domain: [0.53, 1]
-                },
-                yaxis2: {
-                    title: unitsDaily[type],
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    },
-                    fixedrange: true,
-                    domain: [0, 0.47]
-                },
-                showlegend: true,
-                legend: {
-                    x: 1,
-                    y: 0.5
-                },
-                dragmode: "pan",
-                grid: {
-                    subplots: [['xy'], ['xy2']]
-                },
-                shapes: [{
-                    type: 'line',
-                    xref: 'paper',
-                    yref: 'paper',
-                    x0: 0,
-                    x1: 1,
-                    y0: 0.5,
-                    y1: 0.5,
-                    line: {
-                        width: 1
-                    }
-                }]
-            };
-
-            Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
-
-        } else {
-            const subject_data = data.subject_data[null];
-            const dates = [];
-            subject_data["dates"].forEach(function(d) {
-                dates.push(new Date(new Date(d).toDateString()));
-            });
-            const measurements = subject_data["measurements"];
-
-            const individual_trace = {
-                x: dates,
-                y: measurements,
-                mode: 'lines',
-                name: name,
-                line: {
-                    width: 1.5
-                }
-            };
-
-            const layout = {
-                title: "<b>" + titleForTypeDaily[type] + "</b>",
-                font: {
-                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
-                    size: 16
-                },
-                titlefont: {
-                    size: 28
-                },
-                xaxis: {
-                    title: "Date",
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    }
-                },
-                yaxis: {
-                    title: unitsDaily[type],
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    },
-                    fixedrange: true
-                },
-                showlegend: true,
-                legend: {
-                    x: 1,
-                    y: 0.5
-                },
-                dragmode: "pan",
-            };
-
-            Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
-        }
-        $("#loading").css("display", "none");
-    });
-}
-
-function drawStudyTrendsGroup() {
-    $.ajax({
-        url: "/get-study-trends-data/",
-        data: {
-            type: $("#" + category_dropdown.val() + "_dropdown").val(),
-            aggregation: aggregation_dropdown.val(),
-            group: group_dropdown.val(),
-            name: names_dropdown.val(),
         },
         dataType: "json"
     }).done(function(data) {
@@ -405,8 +196,8 @@ function drawStudyTrendsGroup() {
                     },
                     legendgroup: subgroup,
                     visible: true,
-                    text: "Left Hand",
-                    hoverinfo: "x+y+text"
+                    hoverinfo: "text+y",
+                    text: constructWeekdays("Sunday", 49, "(Left)")
                 });
                 traces.push({
                     x: group_error_left[subgroup]['x'],
@@ -421,7 +212,7 @@ function drawStudyTrendsGroup() {
                     type: "scatter",
                     legendgroup:subgroup,
                     visible: errorIsVisible,
-                    hoverinfo: "x"
+                    hoverinfo: "none"
                 });
                 traces.push({
                     y: group_data_right[subgroup],
@@ -435,8 +226,8 @@ function drawStudyTrendsGroup() {
                     },
                     legendgroup: subgroup,
                     visible: true,
-                    text: "Right Hand",
-                    hoverinfo: "x+y+text"
+                    hoverinfo: "text+y",
+                    text: constructWeekdays("Sunday", 49, "(Right)")
                 });
                 traces.push({
                     x: group_error_right[subgroup]['x'],
@@ -452,7 +243,7 @@ function drawStudyTrendsGroup() {
                     type: "scatter",
                     legendgroup: subgroup,
                     visible: errorIsVisible,
-                    hoverinfo: "x"
+                    hoverinfo: "none"
                 });
                 color_index = (color_index + 1)%10;
             }
@@ -491,12 +282,15 @@ function drawStudyTrendsGroup() {
                 },
                 updatemenus: updatemenus,
                 xaxis: {
-                    title: "Day in Study",
+                    title: "Approximate Week in Study",
                     showline: true,
                     zeroline: false,
                     titlefont: {
                         size: 20
-                    }
+                    },
+                    ticktext: constructWeekLabels(7),
+                    tickvals: constructWeekTickVals(7),
+                    tickmode: "array",
                 },
                 yaxis: {
                     title: unitsDaily[type],
@@ -538,7 +332,7 @@ function drawStudyTrendsGroup() {
                     line: {
                         width: 1
                     }
-                }]
+                }].concat(constructVerticalDividers(7,7))
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -560,7 +354,8 @@ function drawStudyTrendsGroup() {
                     },
                     legendgroup: subgroup,
                     visible: true,
-                    hoverinfo: "x+y"
+                    hoverinfo: "text+y",
+                    text: constructWeekdays("Sunday", 49)
                 });
                 traces.push({
                     x: group_error[subgroup]['x'],
@@ -575,7 +370,7 @@ function drawStudyTrendsGroup() {
                     type: "scatter",
                     legendgroup: subgroup,
                     visible: errorIsVisible,
-                    hoverinfo: "x"
+                    hoverinfo: "none"
                 });
                 color_index = (color_index+1)%10;
             }
@@ -611,12 +406,18 @@ function drawStudyTrendsGroup() {
                 },
                 updatemenus: updatemenus,
                 xaxis: {
-                    title: "Day in Study",
+                    title: "Approximate Week in Study",
                     showline: true,
                     zeroline: false,
                     titlefont: {
                         size: 20
-                    }
+                    },
+                    ticktext: constructWeekLabels(7),
+                    tickvals: constructWeekTickVals(7),
+                    tickmode: "array",
+                    ticksuffix: "hello",
+                    showticksuffix: "all"
+
                 },
                 yaxis: {
                     title: unitsDaily[type],
@@ -633,6 +434,7 @@ function drawStudyTrendsGroup() {
                     y: 0.5
                 },
                 dragmode: "pan",
+                shapes: constructVerticalDividers(7,7)
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});

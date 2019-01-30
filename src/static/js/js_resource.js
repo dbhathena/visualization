@@ -386,3 +386,62 @@ function getIndividualText(individual) {
 function getScatterTitle(x_type, y_type) {
     return x_type + " vs " + y_type;
 }
+
+const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+
+function constructWeekdays(start_day, number_of_days, suffix) {
+    const startIndex = weekdays.indexOf(start_day);
+    if (startIndex === -1) {
+        throw new Error("Invalid start day!");
+    }
+    const days_to_return = [];
+    for (var i = 0; i < number_of_days; i++) {
+        if (suffix) {
+            days_to_return.push(weekdays[(startIndex+i)%7] + " " + suffix);
+        } else {
+            days_to_return.push(weekdays[(startIndex+i)%7]);
+        }
+    }
+    return days_to_return;
+}
+
+
+function constructWeekLabels(number_of_weeks) {
+    const labels = [];
+    for (var i=1; i <= number_of_weeks; i++) {
+        labels.push("Week " + i);
+    }
+    return labels;
+}
+
+
+function constructWeekTickVals(number_of_weeks) {
+    const tick_vals = [];
+    var tick_index = 3;
+    for (var i=0; i < number_of_weeks; i++) {
+        tick_vals.push(tick_index);
+        tick_index += 7;
+    }
+    return tick_vals;
+}
+
+
+function constructVerticalDividers(spacing, num_categories) {
+    const shapes = [];
+    for (var i=1; i < num_categories; i++) {
+        shapes.push({
+            type: 'line',
+            yref: 'paper',
+            x0: spacing*i,
+            x1: spacing*i,
+            y0: 0,
+            y1: 1,
+            line: {
+                color: '#444',
+                width: 1
+            }
+        });
+    }
+    return shapes;
+}

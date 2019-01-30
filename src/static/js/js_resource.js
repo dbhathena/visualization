@@ -378,16 +378,20 @@ const aggregationTextHourly = {
     "Std Dev": "Calculate the standard deviation over the participants in each group for every hour - missing data points for any particular hour are not included in calculating that hour's standard deviation",
 };
 
+const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+const descriptionDefaultText = "Click on the options below to see more details";
+
+
 function getIndividualText(individual) {
     ind_num = parseInt(individual.slice(1));
     return "Individual " + ind_num + " of the study";
 }
 
+
 function getScatterTitle(x_type, y_type) {
     return x_type + " vs " + y_type;
 }
-
-const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 
 function constructWeekdays(start_day, number_of_days, suffix) {
@@ -444,4 +448,11 @@ function constructVerticalDividers(spacing, num_categories) {
         });
     }
     return shapes;
+}
+
+
+function resetDescriptionText(descriptionDOM) {
+    descriptionDOM.text(descriptionDefaultText);
+    descriptionDOM.css("font-style", "italic");
+    descriptionDOM.css("color", "#666");
 }

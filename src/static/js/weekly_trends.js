@@ -2,6 +2,7 @@ var category_dropdown = $("#category_dropdown");
 var group_dropdown = $("#group_dropdown");
 var aggregation_dropdown = $("#aggregation_dropdown");
 var last_request;
+const description = $("span#description-text");
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -36,6 +37,7 @@ $( document ).ready(function() {
     drawWeeklyTrends();
     $(".type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
+        resetDescriptionText(description);
         drawWeeklyTrends();
     });
 
@@ -54,74 +56,39 @@ $( document ).ready(function() {
     aggregation_dropdown.change(function() {
         aggregation = aggregation_dropdown.val();
     });
-    $(".category-description").hover(
+    $(".category-description").click(
         function () {
-            description = $("span#description-text");
             description.text(dataCategoryText[category]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".type-description").hover(
+    $(".type-description").click(
         function () {
-            description = $("span#description-text");
             description.text(dataTypeTextDaily[dataType]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".preprocess-description").hover(
+    $(".preprocess-description").click(
         function () {
-            description = $("span#description-text");
             description.text(preprocessTextDaily[dataType] || preprocessTextDefault);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".group-description").hover(
+    $(".group-description").click(
         function () {
-            description = $("span#description-text");
             description.text(groupText[group]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".aggregation-description").hover(
+    $(".aggregation-description").click(
         function () {
-            description = $("span#description-text");
             description.text(aggregationTextDaily[aggregation]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
 });

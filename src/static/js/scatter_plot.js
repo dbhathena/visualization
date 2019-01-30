@@ -2,6 +2,7 @@ var x_category_dropdown = $("#x_axis_category");
 var y_category_dropdown = $("#y_axis_category");
 var group_dropdown = $("#group_dropdown");
 var last_request;
+const description = $("span#description-text");
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -26,6 +27,7 @@ $( document ).ready(function() {
     drawScatterPlot();
     $("#x_axis_category, #y_axis_category, .x_axis_dropdown, .y_axis_dropdown, #group_dropdown").change(function() {
         $("#loading").css('display', 'flex');
+        resetDescriptionText(description);
         drawScatterPlot();
     });
     x_category_dropdown.change(function() {
@@ -50,102 +52,53 @@ $( document ).ready(function() {
         group = group_dropdown.val();
     });
 
-    $(".x-category-description").hover(
+    $(".x-category-description").click(
         function () {
-            description = $("span#description-text");
             description.text(dataCategoryText[x_category]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".y-category-description").hover(
+    $(".y-category-description").click(
         function () {
-            description = $("span#description-text");
             description.text(dataCategoryText[y_category]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".x-type-description").hover(
+    $(".x-type-description").click(
         function () {
-            description = $("span#description-text");
             description.text(dataTypeTextDaily[x_dataType]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".y-type-description").hover(
+    $(".y-type-description").click(
         function () {
-            description = $("span#description-text");
             description.text(dataTypeTextDaily[y_dataType]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".x-type-preprocessing").hover(
+    $(".x-type-preprocessing").click(
         function () {
-            description = $("span#description-text");
             description.text(preprocessTextDaily[x_dataType] || preprocessTextDefault);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".y-type-preprocessing").hover(
+    $(".y-type-preprocessing").click(
         function () {
-            description = $("span#description-text");
             description.text(preprocessTextDaily[y_dataType] || preprocessTextDefault);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
-    $(".group-description").hover(
+    $(".group-description").click(
         function () {
-            description = $("span#description-text");
             description.text(groupText[group]);
             description.css("font-style", "normal");
             description.css("color", "black");
-        },
-        function () {
-            description = $("span#description-text");
-            description.text("Hover over the options below to see more details");
-            description.css("font-style", "italic");
-            description.css("color", "#666");
         }
     );
 });

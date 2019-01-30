@@ -442,7 +442,7 @@ function constructVerticalDividers(spacing, num_categories) {
             y0: 0,
             y1: 1,
             line: {
-                color: '#444',
+                color: '#888',
                 width: 1
             }
         });

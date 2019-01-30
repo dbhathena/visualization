@@ -350,6 +350,7 @@ form {
     display: flex;
     justify-content: space-evenly;
     align-items: stretch;
+    flex-wrap: wrap;
 }
 
 .data-dropdown-container:not(#Activity_dropdown_container):not(#x_axis_Activity_container):not(#y_axis_Activity_container) {

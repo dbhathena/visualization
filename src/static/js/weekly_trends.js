@@ -305,7 +305,9 @@ function drawWeeklyTrends() {
                         size: 20
                     },
                     fixedrange: true,
-                    domain: [0.53, 1]
+                    domain: [0.53, 1],
+                    tickprefix: "   ",
+                    automargin: true
                 },
                 yaxis2: {
                     title: unitsDaily[type],
@@ -315,7 +317,9 @@ function drawWeeklyTrends() {
                         size: 20
                     },
                     fixedrange: true,
-                    domain: [0, 0.47]
+                    domain: [0, 0.47],
+                    tickprefix: "   ",
+                    automargin: true
                 },
                 showlegend: true,
                 legend: {
@@ -429,7 +433,9 @@ function drawWeeklyTrends() {
                     titlefont: {
                         size: 20
                     },
-                    fixedrange: true
+                    fixedrange: true,
+                    tickprefix: "   ",
+                    automargin: true
                 },
                 showlegend: true,
                 legend: {

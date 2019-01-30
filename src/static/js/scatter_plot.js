@@ -206,9 +206,6 @@ function drawScatterPlot() {
 
             const layout = {
                 title: "<b>" + getScatterTitle(x_type, y_type) + "</b>",
-                margin: {
-                    pad: 4
-                },
                 font: {
                     family: "Helvetica Neue, Helvetica, Arial, sans-serif",
                     size: 16

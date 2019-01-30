@@ -642,8 +642,8 @@ def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):
         data_point = subgroup_data[i]
         std_dev = subgroup_std_devs[i]
         if std_dev is not None:
-            upper_y_error.append(data_point + (std_dev/2))
-            lower_y_error.append(data_point - (std_dev/2))
+            upper_y_error.append(data_point + std_dev)
+            lower_y_error.append(data_point - std_dev)
             x_forward.append(i)
     x = x_forward + list(reversed(x_forward))
     y = upper_y_error + list(reversed(lower_y_error))

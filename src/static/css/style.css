@@ -344,7 +344,7 @@ form {
 }
 
 
-/* Chart options */
+/* Chart option selections */
 
 .options-container {
     display: flex;
@@ -411,6 +411,10 @@ form {
     max-height: none !important;
     height: 100%;
     width: 100%;
+}
+
+div.plotly-notifier {
+    visibility: hidden;
 }
 
 

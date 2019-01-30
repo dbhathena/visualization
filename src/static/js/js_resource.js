@@ -363,19 +363,19 @@ const groupText = {
 };
 
 const aggregationTextDaily = {
-    "Mean":"Calculate the arithmetic mean over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the mean",
-    "Median": "Find the median measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the median",
-    "Max": "Find the maximum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the max",
-    "Min": "Find the minimum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding the min",
-    "Std Dev": "Calculate the standard deviation over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating the standard deviation",
+    "Mean":"Calculate the arithmetic mean over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating that day's mean",
+    "Median": "Find the median measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding that day's median",
+    "Max": "Find the maximum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding that day's max",
+    "Min": "Find the minimum measurement over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in finding that day's min",
+    "Std Dev": "Calculate the standard deviation over the participants in each group for every day - if a participant has no data point for a particular day, he/she is not included in calculating that day's standard deviation",
 };
 
 const aggregationTextHourly = {
-    "Mean": "Calculate the arithmetic mean over the participants in each group for every hour - missing data points for any particular hour are not included in calculating the mean",
-    "Median": "Find the median measurement over the participants in each group for every hour -  missing data points for any particular hour are not included in finding the median",
-    "Max": "Find the maximum measurement over the participants in each group for every hour - missing data points for any particular hour are not included in finding the max",
-    "Min": "Find the minimum measurement over the participants in each group for every hour - missing data points for any particular hour are not included in finding the min",
-    "Std Dev": "Calculate the standard deviation over the participants in each group for every hour - missing data points for any particular hour are not included in calculating the standard deviation",
+    "Mean": "Calculate the arithmetic mean over the participants in each group for every hour - missing data points for any particular hour are not included in calculating that hour's mean",
+    "Median": "Find the median measurement over the participants in each group for every hour -  missing data points for any particular hour are not included in finding that hour's median",
+    "Max": "Find the maximum measurement over the participants in each group for every hour - missing data points for any particular hour are not included in finding that hour's max",
+    "Min": "Find the minimum measurement over the participants in each group for every hour - missing data points for any particular hour are not included in finding that hour's min",
+    "Std Dev": "Calculate the standard deviation over the participants in each group for every hour - missing data points for any particular hour are not included in calculating that hour's standard deviation",
 };
 
 function getIndividualText(individual) {

@@ -156,21 +156,19 @@ def get_study_trends_data(request):
         if type in SEPARATE_HANDS:
             raw_data_left = {}
             raw_data_right = {}
-            for participant in PARTICIPANTS:
-                raw_data_left[participant] = list(model.objects
-                                                  .filter(name=participant,
-                                                          category=type,
-                                                          interval="24hrs",
-                                                          hand="left")
-                                                  .order_by("date")
-                                                  .values_list("measurement", flat=True))
-                raw_data_right[participant] = list(model.objects
-                                                   .filter(name=participant,
-                                                           category=type,
-                                                           interval="24hrs",
-                                                           hand="right")
-                                                   .order_by("date")
-                                                   .values_list("measurement", flat=True))
+
+            database_query =  model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement", "hand")
+            for datum in database_query:
+                participant = datum["name"]
+                hand = datum["hand"]
+                if hand == "left":
+                    if participant not in raw_data_left:
+                        raw_data_left[participant] = []
+                    raw_data_left[participant].append(datum["measurement"])
+                else:
+                    if participant not in raw_data_right:
+                        raw_data_right[participant] = []
+                    raw_data_right[participant].append(datum["measurement"])
 
             aggregate_data = {"left": {},
                               "right": {} }
@@ -220,15 +218,12 @@ def get_study_trends_data(request):
 
         else:
             raw_data = {}
-            for participant in PARTICIPANTS:
-                participant_data = list(model.objects
-                                        .filter(name=participant,
-                                                category=type,
-                                                interval="24hrs")
-                                        .order_by("date")
-                                        .values_list("measurement", flat=True))
-                raw_data[participant] = participant_data
-
+            database_query = model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement")
+            for datum in database_query:
+                participant = datum["name"]
+                if participant not in raw_data:
+                    raw_data[participant] = []
+                raw_data[participant].append(datum["measurement"])
 
             aggregate_data = {}
             group_sizes = {}

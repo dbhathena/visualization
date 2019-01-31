@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.urls import reverse
 from django import forms
 from django.contrib.auth.decorators import login_required
-from django.db.models.functions import ExtractHour
+from django.db.models.functions import ExtractHour, ExtractWeekDay
 
 import json
 
@@ -270,46 +270,38 @@ def get_weekly_trends_data(request):
     if type in SEPARATE_HANDS:
         raw_data_left = {}
         raw_data_right = {}
-        for participant in PARTICIPANTS:
-            start_date_left = model.objects.filter(name=participant,
-                                                   category=type,
-                                                   interval="24hrs",
-                                                   hand="left",
-                                                   date__week_day=1).order_by("date").first()
-            end_date_left = model.objects.filter(name=participant,
-                                                 category=type,
-                                                 interval="24hrs",
-                                                 hand="left",
-                                                 date__week_day=7).order_by("date").last()
-            if (start_date_left and end_date_left):
-                raw_data_left[participant] = list(model.objects
-                                                  .filter(name=participant,
-                                                          category=type,
-                                                          interval="24hrs",
-                                                          hand="left",
-                                                          date__range=(start_date_left.date, end_date_left.date))
-                                                  .order_by("date")
-                                                  .values_list("measurement", flat=True))
+        database_query = model.objects.filter(category=type, interval="24hrs").order_by("hand", "name", "date").values("name", "measurement", "hand", weekday=ExtractWeekDay("date"))
+        current_participant = database_query[0]["name"]
+        isAfterFirstSunday = False
+        isBeforeLastSaturday = True
+        for i in range(len(database_query)):
+            datum = database_query[i]
+            if datum["name"] != current_participant:    # reached the next participant in the query
+                current_participant = datum["name"]
+                isAfterFirstSunday = False
+                isBeforeLastSaturday = True
 
-            start_date_right = model.objects.filter(name=participant,
-                                                   category=type,
-                                                   interval="24hrs",
-                                                   hand="right",
-                                                   date__week_day=1).order_by("date").first()
-            end_date_right = model.objects.filter(name=participant,
-                                                 category=type,
-                                                 interval="24hrs",
-                                                 hand="right",
-                                                 date__week_day=7).order_by("date").last()
-            if (start_date_right and end_date_right):
-                raw_data_right[participant] = list(model.objects
-                                                  .filter(name=participant,
-                                                          category=type,
-                                                          interval="24hrs",
-                                                          hand="right",
-                                                          date__range=(start_date_right.date, end_date_right.date))
-                                                  .order_by("date")
-                                                  .values_list("measurement", flat=True))
+            # If we reach a Sunday, we must be after the first Sunday
+            if datum["weekday"] == 1:
+                isAfterFirstSunday = True
+
+            # If the date is within the appropriate range, record the data
+            if isAfterFirstSunday and isBeforeLastSaturday:
+                hand = datum["hand"]
+                if hand == "left":
+                    if current_participant not in raw_data_left:
+                        raw_data_left[current_participant] = []
+                    raw_data_left[current_participant].append(datum["measurement"])
+                else:
+                    if current_participant not in raw_data_right:
+                        raw_data_right[current_participant] = []
+                    raw_data_right[current_participant].append(datum["measurement"])
+
+            # If this was the last Saturday for this participant, we are no longer before the last Saturday
+            if datum["weekday"] == 7:
+                if i+7 > len(database_query) or database_query[i+7]["name"] != current_participant:
+                    isBeforeLastSaturday = False
+
         aggregate_data = {"left": {},
                           "right": {} }
         error_trace_by_subgroup = {"left": {},
@@ -360,23 +352,34 @@ def get_weekly_trends_data(request):
 
     else:
         raw_data = {}
-        for participant in PARTICIPANTS:
-            start_date = model.objects.filter(name=participant,
-                                              category=type,
-                                              interval="24hrs",
-                                              date__week_day=1).order_by("date").first()
-            end_date = model.objects.filter(name=participant,
-                                            category=type,
-                                            interval="24hrs",
-                                            date__week_day=7).order_by("date").last()
-            if (start_date and end_date):
-                raw_data[participant] = list(model.objects
-                                             .filter(name=participant,
-                                                     category=type,
-                                                     interval="24hrs",
-                                                     date__range=(start_date.date, end_date.date))
-                                             .order_by("date")
-                                             .values_list("measurement", flat=True))
+        database_query = model.objects.filter(category=type, interval="24hrs").order_by("name", "date").values("name",
+                                                                                                               "measurement",
+                                                                                                               weekday=ExtractWeekDay(
+                                                                                                                   "date"))
+        current_participant = database_query[0]["name"]
+        isAfterFirstSunday = False
+        isBeforeLastSaturday = True
+        for i in range(len(database_query)):
+            datum = database_query[i]
+            if datum["name"] != current_participant:  # reached the next participant in the query
+                current_participant = datum["name"]
+                isAfterFirstSunday = False
+                isBeforeLastSaturday = True
+
+            # If we reach a Sunday, we must be after the first Sunday
+            if datum["weekday"] == 1:
+                isAfterFirstSunday = True
+
+            # If the date is within the appropriate range, record the data
+            if isAfterFirstSunday and isBeforeLastSaturday:
+                if current_participant not in raw_data:
+                    raw_data[current_participant] = []
+                raw_data[current_participant].append(datum["measurement"])
+
+            # If this was the last Saturday for this participant, we are no longer before the last Saturday
+            if datum["weekday"] == 7:  # Saturday
+                if i+7 > len(database_query) or database_query[i+7]["name"] != current_participant:
+                    isBeforeLastSaturday = False
 
         aggregate_data = {}
         group_sizes = {}

@@ -46,12 +46,12 @@ p,span,li {
 
 .text-link {
     color: #4CAf50;
-    font-weight: 500;
+    font-weight: 400;
     text-decoration: none;
 }
 
 .text-link:hover {
-    color: #1E90FF;
+    color: #20603b;
 }
 
 .list-group {
@@ -69,6 +69,16 @@ p,span,li {
 
 .row ol li {
     padding: 0;
+}
+
+#page-footer {
+    display: flex;
+    text-align: center;
+    align-self: center;
+    width: 75%;
+    color: #777;
+    font-size: 14px;
+    padding: 50px 0 30px;
 }
 
 
@@ -231,17 +241,19 @@ p,span,li {
 /* Chart index */
 
 .graph_buttons {
-    height: 200px;
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 316px);
     justify-content: space-around;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    grid-column-gap: 10px;
+    grid-row-gap: 50px;
+    padding: 10px;
 }
 
 .button_container {
     position: relative;
-    padding: 25px;
+    height: 175px;
+    display: flex;
+    justify-content: center;
 }
 
 .button_container .middle {
@@ -266,7 +278,7 @@ p,span,li {
     background-color: #4CAF50;
     color: white;
     font-size: 16px;
-    padding: 16px 32px;
+    padding: 16px 20px;
     text-align: center;
     border-radius: 2px;
 }

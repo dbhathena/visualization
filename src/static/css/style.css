@@ -64,21 +64,30 @@ p,span,li {
 }
 
 .row li {
-    padding: 5px 0px;
+    padding: 5px 0;
 }
 
 .row ol li {
     padding: 0;
 }
 
-#page-footer {
+main {
+    min-height: 90%;
+}
+
+footer {
     display: flex;
     text-align: center;
     align-self: center;
-    width: 75%;
-    color: #777;
+    width: 100%;
+    color: #666;
     font-size: 14px;
-    padding: 50px 0 30px;
+    background: #eee;
+    min-height: 10%;
+}
+
+footer p {
+    padding: 0 10%;
 }
 
 

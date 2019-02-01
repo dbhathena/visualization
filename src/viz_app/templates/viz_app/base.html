@@ -21,50 +21,53 @@
 </head>
 
 <body>
-    <nav class="topnav">
-        <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
-        <a class="button" href="{% url 'viz_app:home' %}">Home</a>
-        <a class="button" href="{% url 'viz_app:about' %}">About</a>
-        {% if request.user.is_authenticated %}
-            <div class="dropdown">
-                <a class="button dropbtn">Data Visualization</a>
-                <div class="dropdown-content">
-                    <a href="{% url 'viz_app:index' %}">Visualization Index</a>
-                    <hr>
-                    <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
-                    <a href="{% url 'viz_app:weekly_trends' %}">Weekly Trends</a>
-                    <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
-                    <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
-                    <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
-                    <a href="{% url 'viz_app:word_cloud' %}">Word Cloud</a>
-                    <a href="{% url 'viz_app:pie_chart' %}">Pie Chart</a>
-                    <a href="{% url 'viz_app:stacked_bar_chart' %}">Stacked Bar Chart</a>
-                </div>
-            </div>
-        {% endif %}
-        <a class="button" href="{% url 'viz_app:publications' %}">Publications</a>
-        <a class="button" href="{% url 'viz_app:team' %}">Team</a>
-        <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
-        <div id="login_logout_button">
+    <main>
+        <nav class="topnav">
+            <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
+            <a class="button" href="{% url 'viz_app:home' %}">Home</a>
+            <a class="button" href="{% url 'viz_app:about' %}">About</a>
             {% if request.user.is_authenticated %}
-                <span id="greeting">Hello, {{ user.first_name }}</span>
-                <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
-            {% else %}
-                <a class="button" href="{% url 'viz_app:login' %}">Log In</a>
+                <div class="dropdown">
+                    <a class="button dropbtn">Data Visualization</a>
+                    <div class="dropdown-content">
+                        <a href="{% url 'viz_app:index' %}">Visualization Index</a>
+                        <hr>
+                        <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
+                        <a href="{% url 'viz_app:weekly_trends' %}">Weekly Trends</a>
+                        <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
+                        <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
+                        <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
+                        <a href="{% url 'viz_app:word_cloud' %}">Word Cloud</a>
+                        <a href="{% url 'viz_app:pie_chart' %}">Pie Chart</a>
+                        <a href="{% url 'viz_app:stacked_bar_chart' %}">Stacked Bar Chart</a>
+                    </div>
+                </div>
             {% endif %}
-        </div>
-    </nav>
-    {% block content %}{% endblock %}
-    <div id="page-footer">
+            <a class="button" href="{% url 'viz_app:publications' %}">Publications</a>
+            <a class="button" href="{% url 'viz_app:team' %}">Team</a>
+            <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
+            <div id="login_logout_button">
+                {% if request.user.is_authenticated %}
+                    <span id="greeting">Hello, {{ user.first_name }}</span>
+                    <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
+                {% else %}
+                    <a class="button" href="{% url 'viz_app:login' %}">Log In</a>
+                {% endif %}
+            </div>
+        </nav>
+        {% block content %}{% endblock %}
+        <div class="spacer"></div>
+    </main>
+    <footer>
         <p>This project has been funded by <a class="text-link" href="https://www.nih.gov/">NIH</a>,
             <a class="text-link" href="http://imes.mit.edu/initiatives/mit-mgh/">MIT-MGH grand challenge</a> and
             <a class="text-link" href="https://ec.europa.eu/research/mariecurieactions/">EU</a>.
-            This is a collaboration between
+            It is a collaboration between
             <a class="text-link" href="https://www.media.mit.edu/groups/affective-computing/overview/">Affective Computing Group</a>
             at the MIT Media Lab and
             <a class="text-link" href="https://www.massgeneral.org/psychiatry/services/treatmentprograms.aspx?id=2091&display=research">Depression Clinical & Research Program (DCRP)</a>
             at Massachusetts General Hospital.</p>
-    </div>
+    </footer>
     {% block script %}{% endblock %}
 </body>
 </html>

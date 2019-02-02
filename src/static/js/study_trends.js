@@ -5,12 +5,6 @@ var names_dropdown = $("#names_dropdown");
 var last_request;
 const description = $("span#description-text");
 var user_type;
-$.ajax({
-    url: "/get-user-type/",
-    dataType: "json"
-}).done(function(data) {
-    user_type = data.user;
-});
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -42,11 +36,17 @@ $( document ).ready(function() {
     var group = group_dropdown.val();
     var aggregation = aggregation_dropdown.val();
     var name = names_dropdown.val();
-    if (group_dropdown.val() === "None") {
-        drawStudyTrendsIndividual();
-    } else {
-        drawStudyTrendsGroup();
-    }
+    $.ajax({
+        url: "/get-user-type/",
+        dataType: "json"
+    }).done(function(data) {
+        user_type = data.user;
+        if (group_dropdown.val() === "None") {
+            drawStudyTrendsIndividual();
+        } else {
+            drawStudyTrendsGroup();
+        }
+    });
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
         resetDescriptionText(description);

@@ -24,7 +24,7 @@ def study_trends(request):
     return render(request, 'viz_app/study_trends.html', context)
 
 
-@permission_required("viz_app.aggregation")
+@permission_required("viz_app.aggregate")
 @login_required
 def weekly_trends(request):
     context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories":sorted(CATEGORIES_DAILY.items())}
@@ -37,7 +37,6 @@ def daily_trends(request):
     return render(request, 'viz_app/daily_trends.html', context)
 
 
-@permission_required("viz_app.aggregation")
 @login_required
 def scatter_plot(request):
     context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items())}
@@ -570,98 +569,168 @@ def get_scatter_plot_data(request):
         if y_axis in DATABASE_MAPPING[m]:
             model_y = m
     assert model_y is not None
-    group = request.GET.get("group")
-    group_dictionary = GROUPINGS[group]
-    if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
-        data = {}
-        group_sizes = {}
-        for subgroup in group_dictionary:
-            group_sizes[subgroup] = max(model_x.objects.filter(category=x_axis,
-                                                               interval='24hrs',
-                                                               measurement__isnull=False,
-                                                               name__in=group_dictionary[subgroup]).distinct('name').count(),
-                                        model_y.objects.filter(category=y_axis,
-                                                               interval='24hrs',
-                                                               measurement__isnull=False,
-                                                               name__in=group_dictionary[subgroup]).distinct('name').count()
-                                        )
-            if (x_axis in SEPARATE_HANDS):
-                x_data_left = list(model_x.objects
-                                   .filter(name__in=group_dictionary[subgroup],
-                                           category=x_axis,
-                                           interval="24hrs",
-                                           hand="left")
-                                   .order_by("date", "name")
-                                   .values_list("measurement", flat=True))
-                x_data_right = list(model_x.objects
-                                   .filter(name__in=group_dictionary[subgroup],
-                                           category=x_axis,
-                                           interval="24hrs",
-                                           hand="right")
-                                   .order_by("date", "name")
-                                   .values_list("measurement", flat=True))
-                x_data = {"left": x_data_left, "right": x_data_right}
-            else:
-                x_data_both = list(model_x.objects
+    if request.user.has_perm("viz_app.aggregate"):
+        group = request.GET.get("group")
+        group_dictionary = GROUPINGS[group]
+        if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
+            data = {}
+            group_sizes = {}
+            for subgroup in group_dictionary:
+                group_sizes[subgroup] = max(model_x.objects.filter(category=x_axis,
+                                                                   interval='24hrs',
+                                                                   measurement__isnull=False,
+                                                                   name__in=group_dictionary[subgroup]).distinct('name').count(),
+                                            model_y.objects.filter(category=y_axis,
+                                                                   interval='24hrs',
+                                                                   measurement__isnull=False,
+                                                                   name__in=group_dictionary[subgroup]).distinct('name').count()
+                                            )
+                if (x_axis in SEPARATE_HANDS):
+                    x_data_left = list(model_x.objects
+                                       .filter(name__in=group_dictionary[subgroup],
+                                               category=x_axis,
+                                               interval="24hrs",
+                                               hand="left")
+                                       .order_by("date", "name")
+                                       .values_list("measurement", flat=True))
+                    x_data_right = list(model_x.objects
+                                       .filter(name__in=group_dictionary[subgroup],
+                                               category=x_axis,
+                                               interval="24hrs",
+                                               hand="right")
+                                       .order_by("date", "name")
+                                       .values_list("measurement", flat=True))
+                    x_data = {"left": x_data_left, "right": x_data_right}
+                else:
+                    x_data_both = list(model_x.objects
+                                  .filter(name__in=group_dictionary[subgroup],
+                                          category=x_axis,
+                                          interval="24hrs")
+                                  .order_by("date", "name")
+                                  .values_list("measurement", flat=True))
+                    x_data = {"left": x_data_both, "right": x_data_both}
+                if (y_axis in SEPARATE_HANDS):
+                    y_data_left = list(model_y.objects
+                                       .filter(name__in=group_dictionary[subgroup],
+                                               category=y_axis,
+                                               interval="24hrs",
+                                               hand="left")
+                                       .order_by("date", "name")
+                                       .values_list("measurement", flat=True))
+                    y_data_right = list(model_y.objects
+                                       .filter(name__in=group_dictionary[subgroup],
+                                               category=y_axis,
+                                               interval="24hrs",
+                                               hand="right")
+                                       .order_by("date", "name")
+                                       .values_list("measurement", flat=True))
+                    y_data = {"left": y_data_left, "right": y_data_right}
+                else:
+                    y_data_both = list(model_y.objects
+                                  .filter(name__in=group_dictionary[subgroup],
+                                          category=y_axis,
+                                          interval="24hrs")
+                                  .order_by("date", "name")
+                                  .values_list("measurement", flat=True))
+                    y_data = {"left": y_data_both, "right": y_data_both}
+                data[subgroup] = {"x": x_data, "y": y_data}
+            return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
+        else:
+            data = {}
+            group_sizes = {}
+            for subgroup in group_dictionary:
+                group_sizes[subgroup] = max(model_x.objects.filter(category=x_axis,
+                                                                    interval='24hrs',
+                                                                    measurement__isnull=False,
+                                                                    name__in=group_dictionary[subgroup]).distinct('name').count(),
+                                            model_y.objects.filter(category=y_axis,
+                                                                     interval='24hrs',
+                                                                     measurement__isnull=False,
+                                                                     name__in=group_dictionary[subgroup]).distinct('name').count()
+                                            )
+                x_data = list(model_x.objects
                               .filter(name__in=group_dictionary[subgroup],
                                       category=x_axis,
                                       interval="24hrs")
                               .order_by("date", "name")
                               .values_list("measurement", flat=True))
-                x_data = {"left": x_data_both, "right": x_data_both}
-            if (y_axis in SEPARATE_HANDS):
-                y_data_left = list(model_y.objects
-                                   .filter(name__in=group_dictionary[subgroup],
-                                           category=y_axis,
-                                           interval="24hrs",
-                                           hand="left")
-                                   .order_by("date", "name")
-                                   .values_list("measurement", flat=True))
-                y_data_right = list(model_y.objects
-                                   .filter(name__in=group_dictionary[subgroup],
-                                           category=y_axis,
-                                           interval="24hrs",
-                                           hand="right")
-                                   .order_by("date", "name")
-                                   .values_list("measurement", flat=True))
-                y_data = {"left": y_data_left, "right": y_data_right}
-            else:
-                y_data_both = list(model_y.objects
+                y_data = list(model_y.objects
                               .filter(name__in=group_dictionary[subgroup],
                                       category=y_axis,
                                       interval="24hrs")
                               .order_by("date", "name")
                               .values_list("measurement", flat=True))
-                y_data = {"left": y_data_both, "right": y_data_both}
-            data[subgroup] = {"x": x_data, "y": y_data}
-        return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
+                data[subgroup] = {"x": x_data, "y": y_data}
+            return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
     else:
-        data = {}
-        group_sizes = {}
-        for subgroup in group_dictionary:
-            group_sizes[subgroup] = max(model_x.objects.filter(category=x_axis,
-                                                                interval='24hrs',
-                                                                measurement__isnull=False,
-                                                                name__in=group_dictionary[subgroup]).distinct('name').count(),
-                                        model_y.objects.filter(category=y_axis,
-                                                                 interval='24hrs',
-                                                                 measurement__isnull=False,
-                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
-                                        )
+        name = request.user.first_name
+        if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
+            if x_axis in SEPARATE_HANDS:
+                x_data_left = list(model_x.objects
+                                   .filter(name=name,
+                                           category=x_axis,
+                                           interval="24hrs",
+                                           hand="left")
+                                   .order_by("date")
+                                   .values_list("measurement", flat=True))
+                x_data_right = list(model_x.objects
+                                    .filter(name=name,
+                                            category=x_axis,
+                                            interval="24hrs",
+                                            hand="right")
+                                    .order_by("date")
+                                    .values_list("measurement", flat=True))
+                x_data = {"left": x_data_left, "right": x_data_right}
+            else:
+                x_data_both = list(model_x.objects
+                                   .filter(name=name,
+                                           category=x_axis,
+                                           interval="24hrs")
+                                   .order_by("date")
+                                   .values_list("measurement", flat=True))
+                x_data = {"left": x_data_both, "right":x_data_both}
+
+            if y_axis in SEPARATE_HANDS:
+                y_data_left = list(model_y.objects
+                                 .filter(name=name,
+                                         category=y_axis,
+                                         interval="24hrs",
+                                         hand="left")
+                                 .order_by("date")
+                                 .values_list("measurement", flat=True))
+                y_data_right = list(model_y.objects
+                                    .filter(name=name,
+                                            category=y_axis,
+                                            interval="24hrs",
+                                            hand="right")
+                                    .order_by("date")
+                                    .values_list("measurement", flat=True))
+                y_data = {"left": y_data_left, "right": y_data_right}
+            else:
+                y_data_both = list(model_y.objects
+                                   .filter(name=name,
+                                           category=y_axis,
+                                           interval="24hrs")
+                                   .order_by("date")
+                                   .values_list("measurement", flat=True))
+                y_data = {"left": y_data_both, "right": y_data_both}
+            data = {"x": x_data, "y": y_data}
+            return HttpResponse(json.dumps({"scatter_data": data, "name": name}))
+        else:
             x_data = list(model_x.objects
-                          .filter(name__in=group_dictionary[subgroup],
+                          .filter(name=name,
                                   category=x_axis,
                                   interval="24hrs")
-                          .order_by("date", "name")
+                          .order_by("date")
                           .values_list("measurement", flat=True))
             y_data = list(model_y.objects
-                          .filter(name__in=group_dictionary[subgroup],
+                          .filter(name=name,
                                   category=y_axis,
                                   interval="24hrs")
-                          .order_by("date", "name")
+                          .order_by("date")
                           .values_list("measurement", flat=True))
-            data[subgroup] = {"x": x_data, "y": y_data}
-        return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
+            data = {"x": x_data, "y": y_data}
+            return HttpResponse(json.dumps({"scatter_data": data, "name": name}))
 
 
 def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):

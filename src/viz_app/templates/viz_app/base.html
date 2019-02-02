@@ -37,9 +37,7 @@
                             <a href="{% url 'viz_app:weekly_trends' %}">Weekly Trends</a>
                         {% endif %}
                         <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
-                        {% if perms.viz_app.aggregate %}
-                            <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
-                        {% endif %}
+                        <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
                         <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
                         <a href="{% url 'viz_app:word_cloud' %}">Word Cloud</a>
                         <a href="{% url 'viz_app:pie_chart' %}">Pie Chart</a>

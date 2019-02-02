@@ -3,6 +3,7 @@ var y_category_dropdown = $("#y_axis_category");
 var group_dropdown = $("#group_dropdown");
 var last_request;
 const description = $("span#description-text");
+var user_type;
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -23,8 +24,13 @@ $( document ).ready(function() {
     var x_dataType = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
     var y_dataType = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
     var group = group_dropdown.val();
-
-    drawScatterPlot();
+    $.ajax({
+        url: "/get-user-type/",
+        dataType: "json"
+    }).done(function(data) {
+        user_type = data.user;
+        drawScatterPlot();
+    });
     $("#x_axis_category, #y_axis_category, .x_axis_dropdown, .y_axis_dropdown, #group_dropdown").change(function() {
         $("#loading").css('display', 'flex');
         resetDescriptionText(description);
@@ -103,7 +109,168 @@ $( document ).ready(function() {
     );
 });
 
+
 function drawScatterPlot() {
+    if (user_type === "participant") {
+        drawScatterPlotIndividual();
+    } else {
+        drawScatterPlotGroup();
+    }
+}
+
+
+function drawScatterPlotIndividual() {
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
+        url: "/get-scatter-plot-data/",
+        data: {
+            x_axis: $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val(),
+            y_axis: $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val(),
+            group: group_dropdown.val()
+        },
+        dataType: "json"
+    }).done(function(data) {
+        const x_type = $("#x_axis_" + x_category_dropdown.val() + "_dropdown").val();
+        const y_type = $("#y_axis_" + y_category_dropdown.val() + "_dropdown").val();
+        const individual_data = data.scatter_data;
+        const name = data.name;
+        if (isTwoHands.has(x_type) || isTwoHands.has(y_type)) {
+            const trace_left = {
+                x: individual_data['x']['left'],
+                y: individual_data['y']['left'],
+                xaxis: 'x',
+                mode: 'markers',
+                name: name + " - Left Hand",
+                marker: {
+                    size: 4
+                }
+            };
+
+            const trace_right = {
+                x: individual_data['x']['right'],
+                y: individual_data['y']['right'],
+                xaxis: 'x2',
+                mode: 'markers',
+                name: name + " - Right Hand",
+                marker: {
+                    size: 4
+                }
+            };
+
+            const layout = {
+                title: "<b>" + getScatterTitle(x_type, y_type) + "</b>",
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
+                },
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: unitsDaily[x_type],
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    domain: [0, 0.47]
+                },
+                xaxis2: {
+                    title: unitsDaily[x_type],
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    domain: [0.53, 1]
+                },
+                yaxis: {
+                    title: unitsDaily[y_type],
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    }
+                },
+                showlegend: true,
+                legend: {
+                    x: 1,
+                    y: 0.5
+                },
+                dragmode: "pan",
+                hovermode: "closest",
+                grid: {
+                    subplots: [['xy', 'x2y']]
+                },
+                shapes: [{
+                    type: 'line',
+                    xref: 'paper',
+                    yref: 'paper',
+                    x0: 0.5,
+                    x1: 0.5,
+                    y0: 0,
+                    y1: 1,
+                    line: {
+                        width: 1
+                    }
+                }]
+            };
+            Plotly.newPlot("chart1", [trace_left, trace_right], layout, {displayModeBar: false, responsive: true, scrollZoom: true})
+        } else {
+            const trace = {
+                x: individual_data['x'],
+                y: individual_data['y'],
+                mode: 'markers',
+                name: name,
+                marker: {
+                    size: 4
+                }
+            };
+
+            const layout = {
+                title: "<b>" + getScatterTitle(x_type, y_type) + "</b>",
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
+                },
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: unitsDaily[x_type],
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    }
+                },
+                yaxis: {
+                    title: unitsDaily[y_type],
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    }
+                },
+                showlegend: true,
+                legend: {
+                    x: 1,
+                    y: 0.5
+                },
+                dragmode: "pan",
+                hovermode: "closest"
+            };
+
+            Plotly.newPlot("chart1", [trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true})
+        }
+        $('#loading').css('display', 'none')
+    });
+}
+
+
+function drawScatterPlotGroup() {
     if (last_request && last_request.readyState !== 4) {
         last_request.abort();
     }
@@ -218,17 +385,6 @@ function drawScatterPlot() {
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         } else {
-            const columns = [];
-            const xs = {};
-            for (const subgroup in group_data) {
-                const subgroup_data = group_data[subgroup];
-                const x_data = subgroup_data['x'];
-                const y_data = subgroup_data['y'];
-                columns.push([subgroup + '_x'].concat(x_data));
-                columns.push([subgroup + " (n = " + group_sizes[subgroup] + ")"].concat(y_data));
-                xs[subgroup + " (n = " + group_sizes[subgroup] + ")"] = subgroup + '_x';
-            }
-
             const traces = [];
             var color_index = 0;
             for (const subgroup in group_data) {

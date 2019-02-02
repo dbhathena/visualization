@@ -23,6 +23,7 @@ urlpatterns = [
     path('get-weekly-trends-data/', views.get_weekly_trends_data, name='get_weekly_trends_data'),
     path('get-daily-trends-data/', views.get_daily_trends_data, name='get_daily_trends_data'),
     path('get-scatter-plot-data/', views.get_scatter_plot_data, name='get_scatter_plot_data'),
+    path('get-user-type/', views.get_viewing_permission, name='get_viewing_permission'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout')
 ]

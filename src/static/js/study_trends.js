@@ -4,6 +4,13 @@ var aggregation_dropdown = $("#aggregation_dropdown");
 var names_dropdown = $("#names_dropdown");
 var last_request;
 const description = $("span#description-text");
+var user_type;
+$.ajax({
+    url: "/get-user-type/",
+    dataType: "json"
+}).done(function(data) {
+    user_type = data.user;
+});
 const chart_colors = [
     '#1f77b4',
     '#ff7f0e',
@@ -35,16 +42,21 @@ $( document ).ready(function() {
     var group = group_dropdown.val();
     var aggregation = aggregation_dropdown.val();
     var name = names_dropdown.val();
-
-    drawStudyTrendsGroup();
+    if (group_dropdown.val() === "None") {
+        drawStudyTrendsIndividual();
+    } else {
+        drawStudyTrendsGroup();
+    }
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
         resetDescriptionText(description);
         if (group_dropdown.val() === "None") {
-            $("#aggregation_container").css("display", "none");
-            $("#names_container").css("display", "flex");
-            $("div.aggregation-description").css("display", "none");
-            $("div.individual-description").css("display", "block");
+            if (user_type !== "participant") {
+                $("#aggregation_container").css("display", "none");
+                $("#names_container").css("display", "flex");
+                $("div.aggregation-description").css("display", "none");
+                $("div.individual-description").css("display", "block");
+            }
             drawStudyTrendsIndividual();
         } else {
             $("#names_container").css("display", "none");

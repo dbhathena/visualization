@@ -47,11 +47,13 @@
             </div>
         </div>
     {% endfor %}
-    <div class="dropdown-container">
+    <div class="dropdown-container"
+         {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>
         <h3>Select a group (or none):</h3>
         <div class="search-categories">
             <div class="select">
                 <select class="chart-dropdown" id="group_dropdown">
+                    {% if perms.viz_app.aggregate %}
                     <option value="All" selected>All</option>
                     <option value="Depression">Depression Status</option>
                     <option value="Gender">Gender</option>
@@ -64,11 +66,15 @@
                     <option value="Phobia">Social Phobia</option>
                     <option value="Anxiety">Generalized Anxiety Disorder</option>
                     <option value="Current Medication">Current Medication Status</option>
+                    {% endif %}
+                    {% if perms.viz_app.individual %}
                     <option value="None">None (Individual)</option>
+                    {% endif %}
                 </select>
             </div>
         </div>
     </div>
+    {% if perms.viz_app.aggregate %}
     <div class="dropdown-container" id="aggregation_container">
         <h3>Select an aggregation method:</h3>
         <div class="search-categories">
@@ -83,14 +89,19 @@
             </div>
         </div>
     </div>
+    {% endif %}
     <div class="dropdown-container" id="names_container" style="display: none;">
         <h3>Select an individual:</h3>
         <div class="search-categories">
             <div class="select">
                 <select id="names_dropdown">
-                    {% for name in names %}
-                        <option value="{{ name }}">{{ name }}</option>
-                    {% endfor %}
+                    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
+                        <option value="{{ user.first_name }}">{{ user.first_name }}</option>
+                    {% else %}
+                        {% for name in names %}
+                            <option value="{{ name }}">{{ name }}</option>
+                        {% endfor %}
+                    {% endif %}
                 </select>
             </div>
         </div>
@@ -101,8 +112,10 @@
     <div class="description-label category-description">Data Category</div>
     <div class="description-label type-description">Data Type</div>
     <div class="description-label preprocess-description">Preprocessing</div>
-    <div class="description-label group-description">Group</div>
-    <div class="description-label aggregation-description">Aggregation</div>
+    <div class="description-label group-description"
+         {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>Group</div>
+    <div class="description-label aggregation-description"
+         {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>Aggregation</div>
     <div class="description-label individual-description" style="display: none;">Individual</div>
 {% endblock %}
 

@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.urls import reverse
 from django import forms
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models.functions import ExtractHour, ExtractWeekDay
 
 import json
@@ -24,22 +24,25 @@ def study_trends(request):
     return render(request, 'viz_app/study_trends.html', context)
 
 
+@permission_required("viz_app.aggregation")
+@login_required
+def weekly_trends(request):
+    context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories":sorted(CATEGORIES_DAILY.items())}
+    return render(request, 'viz_app/weekly_trends.html', context)
+
+
 @login_required
 def daily_trends(request):
     context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING_HOURLY.items()), "categories": sorted(CATEGORIES_HOURLY.items())}
     return render(request, 'viz_app/daily_trends.html', context)
 
 
+@permission_required("viz_app.aggregation")
 @login_required
 def scatter_plot(request):
     context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items())}
     return render(request, 'viz_app/scatter_plot.html', context)
 
-
-@login_required
-def weekly_trends(request):
-    context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories":sorted(CATEGORIES_DAILY.items())}
-    return render(request, 'viz_app/weekly_trends.html', context)
 
 @login_required
 def radar_chart(request):
@@ -678,4 +681,17 @@ def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):
     y = upper_y_error + list(reversed(lower_y_error))
     return {'x': x, 'y': y}
 
+
+def get_viewing_permission(request):
+    user = request.user
+    if user.has_perm('viz_app.aggregate'):
+        if user.has_perm('viz_app.individual'):
+            return HttpResponse(json.dumps({"user": "researcher"}))
+        else:
+            return HttpResponse(json.dumps({"user": "viewer"}))
+    else:
+        if user.has_perm('viz_app.individual'):
+            return HttpResponse(json.dumps({"user": "participant"}))
+        else:
+            raise PermissionError('User has no data-viewing permissions!')
 

@@ -46,3 +46,15 @@ class WeatherData(models.Model):
 
     def __hash__(self):
         return hash((self.name, self.date, self.category, self.measurement))
+
+
+class SitePrivileges(models.Model):
+
+    class Meta:
+
+        managed = False;
+
+        permissions = (
+            ("aggregate", "Can view aggregate data"),
+            ("individual", "Can view specific individual data")
+        )

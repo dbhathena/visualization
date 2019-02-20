@@ -285,18 +285,18 @@ const dataTypeTextHourly = {
 const preprocessTextDefault = "There is no additional preprocessing for this data type";
 
 const preprocessTextDaily = {
-    "Accelerometer": "To calculate the instantaneous motion vector, the 3-axis raw acceleration was first rescaled to the " +
-                    "range [-2g; 2g]. Then, each second (32 samples) the acceleration data is summarized using the following " +
-                    "method: sum+= max3(abs(buffX[i] - prevX), abs(buffY[i] - prevY), abs(buffZ[i] - prevZ)). " +
-                    "The output is then filtered: avg=avg*0.9+(sum/32)*0.1. Finally the mean over 1 day is calculated.",
-    "Motion": "To estimate the time when a person is in motion, the value of the motion vector magnitude is compared" +
-            " to a predefined threshold. To calculate the instantaneous motion vector, the 3-axis raw acceleration was" +
-            " first rescaled to the range [-2g; 2g]. Then, each second (32 samples) the acceleration data is " +
-            "summarized using the following method: " +
-            "sum+= max3(abs(buffX[i] - prevX), abs(buffY[i] - prevY), abs(buffZ[i] - prevZ)). " +
-            "The output is then filtered: avg=avg*0.9+(sum/32)*0.1. Finally, the instances when the obtained value is" +
-            " greater than 0.05 (motion threshold), are counted and divided by the number of accelerometer samples in" +
-            " a day to estimate the fraction time when a participant was in motion.",
+    "Accelerometer": "To calculate the motion vector, the 3-axis raw acceleration was first rescaled to the range " +
+        "[-2g; 2g]. Then a Butterworth bandpass filter was applied (0.1 Hz - 20Hz band, 4 poles) and the maximum " +
+        "difference between two consecutive samples over the 3-axis acceleration was processed. Next, the moving " +
+        "average of the output over 1 second was processed, and finally, the mean over 1 day was calculated.",
+    "Motion": "To estimate the time when a person was in motion, the value of the motion vector magnitude is " +
+        "compared to a predefined \"motion threshold\" (0.05). To calculate the motion vector, the 3-axis raw " +
+        "acceleration was first rescaled to the range [-2g; 2g]. Then a Butterworth bandpass filter was applied " +
+        "(0.1 Hz - 20Hz band, 4 poles) and the maximum difference between two consecutive samples over the 3-axis " +
+        "acceleration was processed. Next, the moving average of the output over 1 second was processed, and " +
+        "finally, the instances when the obtained value was greater than the motion threshold were counted for " +
+        "each day and divided by the number of total accelerometer samples in the day to estimate the fraction " +
+        "of time when a participant was in motion.",
     "EDA Mean": "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
             "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer" +
             " data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +
@@ -316,18 +316,18 @@ const preprocessTextDaily = {
 };
 
 const preprocessTextHourly = {
-    "Accelerometer": "To calculate the instantaneous motion vector, the 3-axis raw acceleration was first rescaled to the " +
-            "range [-2g; 2g]. Then, each second (32 samples) the acceleration data is summarized using the following " +
-            "method: sum+= max3(abs(buffX[i] - prevX), abs(buffY[i] - prevY), abs(buffZ[i] - prevZ)). " +
-            "The output is then filtered: avg=avg*0.9+(sum/32)*0.1. Finally the mean over 1 hour is calculated.",
-    "Motion": "To estimate the time when a person is in motion, the value of the motion vector magnitude is compared" +
-            " to a predefined threshold. To calculate the instantaneous motion vector, the 3-axis raw acceleration was" +
-            " first rescaled to the range [-2g; 2g]. Then, each second (32 samples) the acceleration data is " +
-            "summarized using the following method: " +
-            "sum+= max3(abs(buffX[i] - prevX), abs(buffY[i] - prevY), abs(buffZ[i] - prevZ)). " +
-            "The output is then filtered: avg=avg*0.9+(sum/32)*0.1. Finally, the instances when the obtained value is" +
-            " greater than 0.05 (motion threshold), are counted and divided by the number of accelerometer samples in" +
-            " a day to estimate the fraction time when a participant was in motion.",
+    "Accelerometer": "To calculate the motion vector, the 3-axis raw acceleration was first rescaled to the range " +
+        "[-2g; 2g]. Then a Butterworth bandpass filter was applied (0.1 Hz - 20Hz band, 4 poles) and the maximum " +
+        "difference between two consecutive samples over the 3-axis acceleration was processed. Next, the moving " +
+        "average of the output over 1 second was processed, and finally, the mean over 1 hour was calculated.",
+    "Motion": "To estimate the time when a person was in motion, the value of the motion vector magnitude is " +
+        "compared to a predefined \"motion threshold\" (0.05). To calculate the motion vector, the 3-axis raw " +
+        "acceleration was first rescaled to the range [-2g; 2g]. Then a Butterworth bandpass filter was applied " +
+        "(0.1 Hz - 20Hz band, 4 poles) and the maximum difference between two consecutive samples over the 3-axis " +
+        "acceleration was processed. Next, the moving average of the output over 1 second was processed, and " +
+        "finally, the instances when the obtained value was greater than the motion threshold were counted for " +
+        "each hour and divided by the number of total accelerometer samples in the hour to estimate the fraction " +
+        "of time when a participant was in motion.",
     "EDA Mean": "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
             "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer" +
             " data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +

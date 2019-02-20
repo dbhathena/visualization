@@ -257,6 +257,7 @@ def get_study_trends_data(request):
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
 
 
+@permission_required("viz_app.aggregate")
 @login_required
 def get_weekly_trends_data(request):
     type = request.GET.get("type")

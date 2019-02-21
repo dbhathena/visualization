@@ -10,7 +10,7 @@ from django.db import migrations
 # Directory is a string of the path to the directory
 def get_files(directory):
     files = os.listdir(directory)
-    return [x for x in files if not (x.startswith('x'))]
+    return [x for x in files if not (x.startswith('.'))]
 
 
 def populate_motion_data(apps, schema_editor):

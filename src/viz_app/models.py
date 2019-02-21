@@ -47,12 +47,24 @@ class WeatherData(models.Model):
     def __hash__(self):
         return hash((self.name, self.date, self.category, self.measurement))
 
+class SleepData(models.Model):
+    name = models.CharField(max_length=4)
+    date = models.DateTimeField()
+    category = models.CharField(max_length=20)
+    is_asleep = models.NullBooleanField()
+
+    def __str__(self):
+        return "Participant: " + str(self.name) + "Date: " + str(self.date) + " Is asleep: " + str(self.is_asleep)
+
+    def __hash__(self):
+        return hash((self.name, self.date, self.category, self.is_asleep))
+
 
 class SitePrivileges(models.Model):
 
     class Meta:
 
-        managed = False;
+        managed = False
 
         permissions = (
             ("aggregate", "Can view aggregate data"),

@@ -1,5 +1,5 @@
 import statistics
-from .models import PhysData, PhoneData, WeatherData
+from .models import *
 
 
 PARTICIPANTS = ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
@@ -19,7 +19,8 @@ DATABASE_MAPPING = {
                 'Outgoing SMS Sum Length', 'Latitude Std', 'Latitude Stationary Std', 'Longitude Std',
                 'Longitude Stationary Std', 'Average Location Std', 'Average Stationary Std', 'Home Stay',
                 'Total Distance', 'Transition Time'},
-    WeatherData: {'Insolation Seconds', 'Precipitation Intensity', 'Apparent Temperature High'}
+    WeatherData: {'Insolation Seconds', 'Precipitation Intensity', 'Apparent Temperature High'},
+    SleepData: {'Recorded Sleep'}
 }
 
 GROUPINGS = {

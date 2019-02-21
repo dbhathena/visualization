@@ -20,7 +20,7 @@ DATABASE_MAPPING = {
                 'Longitude Stationary Std', 'Average Location Std', 'Average Stationary Std', 'Home Stay',
                 'Total Distance', 'Transition Time'},
     WeatherData: {'Insolation Seconds', 'Precipitation Intensity', 'Apparent Temperature High'},
-    SleepData: {'Recorded Sleep'}
+    SleepData: {'Recorded Sleep', 'Self-reported Sleep'}
 }
 
 GROUPINGS = {

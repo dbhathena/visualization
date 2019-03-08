@@ -5,30 +5,6 @@ var names_dropdown = $("#names_dropdown");
 var last_request;
 const description = $("span#description-text");
 var user_type;
-const chart_colors = [
-    '#1f77b4',
-    '#ff7f0e',
-    '#2ca02c',
-    '#d62728',
-    '#9467bd',
-    '#8c564b',
-    '#e377c2',
-    '#7f7f7f',
-    '#bcbd22',
-    '#17becf'
-];
-const error_colors = [
-    'rgba(31, 119, 180, 0.2)',
-    'rgba(255, 127, 14, 0.2)',
-    'rgba(44, 160, 44, 0.2)',
-    'rgba(214, 39, 40, 0.2)',
-    'rgba(148, 103, 189, 0.2)',
-    'rgba(140, 86, 75, 0.2)',
-    'rgba(227, 119, 194, 0.2)',
-    'rgba(127, 127, 127, 0.2)',
-    'rgba(188, 189, 34, 0.2)',
-    'rgba(23, 190, 207, 0.2)'
-];
 
 $( document ).ready(function() {
     var category = category_dropdown.val();
@@ -192,7 +168,8 @@ function drawDailyTrendsIndividual() {
                     zeroline: false,
                     titlefont: {
                         size: 20
-                    }
+                    },
+                    tickvals: [0,6,12,18,24]
                 },
                 yaxis: {
                     title: unitsHourly[type],
@@ -270,7 +247,8 @@ function drawDailyTrendsIndividual() {
                     zeroline: false,
                     titlefont: {
                         size: 20
-                    }
+                    },
+                    tickvals: [0,6,12,18,24]
                 },
                 yaxis: {
                     title: unitsHourly[type],
@@ -356,7 +334,7 @@ function drawDailyTrendsGroup() {
             const group_error_right = data.error_traces["right"];
 
             const traces = [];
-            var color_index = 0;
+            let color_index = 0;
             for (const subgroup in group_data_left) {
                 const group_size = group_sizes[subgroup];
                 traces.push({
@@ -422,7 +400,7 @@ function drawDailyTrendsGroup() {
                 color_index = (color_index + 1)%10;
             }
 
-            var updatemenus = [
+            const updatemenus = [
                 {
                     buttons: [
                         {
@@ -461,7 +439,8 @@ function drawDailyTrendsGroup() {
                     zeroline: false,
                     titlefont: {
                         size: 20
-                    }
+                    },
+                    tickvals: [0,6,12,18,24]
                 },
                 yaxis: {
                     title: unitsHourly[type],
@@ -517,7 +496,7 @@ function drawDailyTrendsGroup() {
             const group_error = data.error_traces;
 
             const traces = [];
-            var color_index = 0;
+            let color_index = 0;
             for (const subgroup in group_data) {
                 const group_size = group_sizes[subgroup];
                 traces.push({
@@ -550,7 +529,7 @@ function drawDailyTrendsGroup() {
                 color_index = (color_index+1)%10;
             }
 
-            var updatemenus = [
+            const updatemenus = [
                 {
                     buttons: [
                         {
@@ -586,7 +565,8 @@ function drawDailyTrendsGroup() {
                     zeroline: false,
                     titlefont: {
                         size: 20
-                    }
+                    },
+                    tickvals: [0,6,12,18,24]
                 },
                 yaxis: {
                     title: unitsHourly[type],

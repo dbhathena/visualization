@@ -781,11 +781,103 @@ def get_sleep_data(request):
                                         "recorded_data": recorded_data,
                                         "self_reported_data_none": self_reported_data_none,
                                         "recorded_data_none": recorded_data_none}))
+    else:
+        group_dictionary = GROUPINGS[group]
+        database_query = SleepData.objects.all().annotate(hour=ExtractHour('date'), minute=ExtractMinute('date')).values('name', 'is_asleep', 'category', 'hour', 'minute')
+        participant_recorded_data = {}
+        participant_reported_data = {}
+        for datum in database_query:
+            is_asleep = datum['is_asleep']
+            if is_asleep is not None:
+                participant = datum["name"]
+                time = datum['hour'] + datum['minute']/60
+                reporting_method = datum['category']
+                if reporting_method == "Recorded Sleep":
+                    dictionary_to_update = participant_recorded_data
+                elif reporting_method == "Self-reported Sleep":
+                    dictionary_to_update = participant_reported_data
+                else:
+                    raise ValueError('Invalid reporting method for sleep data!')
+
+                if participant not in dictionary_to_update:
+                    dictionary_to_update[participant] = {}
+                if time not in dictionary_to_update[participant]:
+                    dictionary_to_update[participant][time] = []
+                dictionary_to_update[participant][time].append(int(is_asleep))
+
+        subgroup_data_recorded = {}
+        subgroup_data_reported = {}
+        for participant in participant_recorded_data:
+            subgroup = None
+            for sg in group_dictionary:
+                if participant in group_dictionary[sg]:
+                    subgroup = sg
+                    break
+            if subgroup is None:
+                continue
+            if subgroup not in subgroup_data_recorded:
+                subgroup_data_recorded[subgroup] = {}
+            for time in participant_recorded_data[participant]:
+                percent = statistics.mean(participant_recorded_data[participant][time])
+                if time not in subgroup_data_recorded[subgroup]:
+                    subgroup_data_recorded[subgroup][time] = []
+                subgroup_data_recorded[subgroup][time].append(percent)
+        for participant in participant_reported_data:
+            subgroup = None
+            for sg in group_dictionary:
+                if participant in group_dictionary[sg]:
+                    subgroup = sg
+                    break
+            if subgroup is None:
+                continue
+            if subgroup not in subgroup_data_reported:
+                subgroup_data_reported[subgroup] = {}
+            for time in participant_reported_data[participant]:
+                percent = statistics.mean(participant_reported_data[participant][time])
+                if time not in subgroup_data_reported[subgroup]:
+                    subgroup_data_reported[subgroup][time] = []
+                subgroup_data_reported[subgroup][time].append(percent)
+
+        recorded_x = {}
+        recorded_y = {}
+        recorded_error = {}
+        for subgroup in subgroup_data_recorded:
+            recorded_x[subgroup] = []
+            recorded_y[subgroup] = []
+            recorded_stddevs = []
+            for time in sorted(list(subgroup_data_recorded[subgroup].keys())):
+                measurements = subgroup_data_recorded[subgroup][time]
+                recorded_x[subgroup].append(time)
+                recorded_y[subgroup].append(statistics.mean(measurements))
+                recorded_stddevs.append(statistics.pstdev(measurements))
+            recorded_error[subgroup] = get_error_trace_from_std_devs(recorded_y[subgroup], recorded_stddevs, xs=recorded_x[subgroup])
+
+        reported_x = {}
+        reported_y = {}
+        reported_error = {}
+        for subgroup in subgroup_data_reported:
+            reported_x[subgroup] = []
+            reported_y[subgroup] = []
+            reported_stddevs = []
+            for time in sorted(list(subgroup_data_reported[subgroup].keys())):
+                measurements = subgroup_data_reported[subgroup][time]
+                reported_x[subgroup].append(time)
+                reported_y[subgroup].append(statistics.mean(measurements))
+                reported_stddevs.append(statistics.pstdev(measurements))
+            reported_error[subgroup] = get_error_trace_from_std_devs(reported_y[subgroup], reported_stddevs, xs=reported_x[subgroup])
+
+        return HttpResponse(json.dumps({"recorded_x": recorded_x,
+                                        "recorded_y": recorded_y,
+                                        "recorded_error": recorded_error,
+                                        "reported_x": reported_x,
+                                        "reported_y": reported_y,
+                                        "reported_error": reported_error}))
 
 
-
-def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):
+def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs, xs=None):
     assert len(subgroup_data) == len(subgroup_std_devs)
+    if xs is None:
+        xs = [x for x in range(len(subgroup_data))]
 
     upper_y_error = []
     lower_y_error = []
@@ -796,7 +888,7 @@ def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):
         if std_dev is not None:
             upper_y_error.append(data_point + std_dev)
             lower_y_error.append(data_point - std_dev)
-            x_forward.append(i)
+            x_forward.append(xs[i])
     x = x_forward + list(reversed(x_forward))
     y = upper_y_error + list(reversed(lower_y_error))
     return {'x': x, 'y': y}

@@ -280,7 +280,7 @@ function drawSleepDataGroup() {
                 legendgroup: subgroup,
                 showlegend: false,
                 visible: true,
-                text: "Right Hand",
+                text: "Reported Sleep",
                 hoverinfo: "y+text"
             });
             traces.push({

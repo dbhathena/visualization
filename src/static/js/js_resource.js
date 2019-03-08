@@ -378,6 +378,11 @@ const aggregationTextHourly = {
     "Std Dev": "Calculate the standard deviation over the participants in each group for every hour - missing data points for any particular hour are not included in calculating that hour's standard deviation",
 };
 
+const sleepReportingText = {
+    "Recorded Sleep": "The time a participant was asleep or awake, as recorded by the E4 device",
+    "Self-reported Sleep": "The time a participant was asleep or awake, as self-reported on a daily mobile-device survey"
+};
+
 const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const descriptionDefaultText = "Click on the options below to see more details";

@@ -68,10 +68,10 @@ $( document ).ready(function() {
     });
 
     category_dropdown.change(function() {
-        $(".data-dropdown-container").css("display", "none");
-        $("#" + category_dropdown.val() + "_dropdown_container").css("display", "flex");
         category = category_dropdown.val();
         dataType = $("#" + category_dropdown.val() + "_dropdown").val();
+        $(".data-dropdown-container").css("display", "none");
+        $("#" + category + "_dropdown_container").css("display", "flex");
     });
     $(".type_dropdown").change(function () {
         dataType = $("#" + category_dropdown.val() + "_dropdown").val();
@@ -87,42 +87,42 @@ $( document ).ready(function() {
     });
 
     $(".category-description").click(
-        function () {
+        function() {
             description.text(dataCategoryText[category]);
             description.css("font-style", "normal");
             description.css("color", "black");
         }
     );
     $(".type-description").click(
-        function () {
+        function() {
             description.text(dataTypeTextHourly[dataType]);
             description.css("font-style", "normal");
             description.css("color", "black");
         }
     );
     $(".preprocess-description").click(
-        function () {
+        function() {
             description.text(preprocessTextHourly[dataType] || preprocessTextDefault);
             description.css("font-style", "normal");
             description.css("color", "black");
         }
     );
     $(".group-description").click(
-        function () {
+        function() {
             description.text(groupText[group]);
             description.css("font-style", "normal");
             description.css("color", "black");
         }
     );
     $(".aggregation-description").click(
-        function () {
+        function() {
             description.text(aggregationTextHourly[aggregation]);
             description.css("font-style", "normal");
             description.css("color", "black");
         }
     );
     $(".individual-description").click(
-        function () {
+        function() {
             description.text(getIndividualText(name));
             description.css("font-style", "normal");
             description.css("color", "black");

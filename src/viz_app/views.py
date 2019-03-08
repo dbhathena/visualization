@@ -1,15 +1,16 @@
-from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.urls import reverse
-from django import forms
-from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models.functions import ExtractHour, ExtractWeekDay
-
 import json
+import pprint
 
-from .models import PhysData, PhoneData
+from django import forms
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import login_required, permission_required
+from django.db.models.functions import ExtractMinute, ExtractHour, ExtractWeekDay, TruncDay
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
+
 from .value_mappings import *
+
 
 # Create your views here.
 
@@ -44,13 +45,14 @@ def scatter_plot(request):
 
 
 @login_required
-def radar_chart(request):
-    return render(request, 'viz_app/radar_chart.html')
+def sleep_data(request):
+    context = {"names": PARTICIPANTS}
+    return render(request, 'viz_app/sleep_data.html', context)
 
 
 @login_required
-def word_cloud(request):
-    return render(request, 'viz_app/word_cloud.html')
+def radar_chart(request):
+    return render(request, 'viz_app/radar_chart.html')
 
 
 @login_required
@@ -732,6 +734,54 @@ def get_scatter_plot_data(request):
                           .values_list("measurement", flat=True))
             data = {"x": x_data, "y": y_data}
             return HttpResponse(json.dumps({"scatter_data": data, "name": name}))
+
+
+@login_required
+def get_sleep_data(request):
+    group = request.GET.get("group")
+    if group == "None":
+        name = request.GET.get("name")
+        raw_data = SleepData.objects.filter(name=name).annotate(day=TruncDay('date'), hour=ExtractHour('date'), minute=ExtractMinute('date')).order_by('date').values('day', 'is_asleep', 'category', 'hour', 'minute')
+        self_reported_data = {'x': [],
+                              'y': []}
+        recorded_data = {'x': [],
+                         'y': []}
+        self_reported_data_none = {'x': [],
+                                   'y': []}
+        recorded_data_none = {'x': [],
+                              'y': []}
+        day_number = 0
+        current_day = None
+        for datum in raw_data:
+            day = datum['day']
+            reporting_method = datum['category']
+            value = datum['is_asleep']
+            time = datum['hour'] + datum['minute']/60
+            if day != current_day:
+                day_number += 1
+                current_day = day
+                if day_number > 56:
+                    break
+
+            if value:
+                if reporting_method == "Self-reported Sleep":
+                    self_reported_data['x'].append(time)
+                    self_reported_data['y'].append(day_number)
+                elif reporting_method == "Recorded Sleep":
+                    recorded_data['x'].append(time)
+                    recorded_data['y'].append(day_number)
+            elif value is None:
+                if reporting_method == "Self-reported Sleep":
+                    self_reported_data_none['x'].append(time)
+                    self_reported_data_none['y'].append(day_number)
+                elif reporting_method == "Recorded Sleep":
+                    recorded_data_none['x'].append(time)
+                    recorded_data_none['y'].append(day_number)
+        return HttpResponse(json.dumps({"self_reported_data": self_reported_data,
+                                        "recorded_data": recorded_data,
+                                        "self_reported_data_none": self_reported_data_none,
+                                        "recorded_data_none": recorded_data_none}))
+
 
 
 def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs):

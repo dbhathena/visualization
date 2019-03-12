@@ -95,7 +95,7 @@
             <div class="select">
                 <select id="names_dropdown">
                     {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
-                        <option value="{{ user.first_name }}">{{ user.first_name }}</option>
+                        <option value="{{ user.username }}">{{ user.username }}</option>
                     {% else %}
                         {% for name in names %}
                             <option value="{{ name }}">{{ name }}</option>

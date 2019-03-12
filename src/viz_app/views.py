@@ -666,7 +666,7 @@ def get_scatter_plot_data(request):
                 data[subgroup] = {"x": x_data, "y": y_data}
             return HttpResponse(json.dumps({"scatter_data": data, "group_sizes": group_sizes}))
     else:
-        name = request.user.first_name
+        name = request.user.username
         if x_axis in SEPARATE_HANDS or y_axis in SEPARATE_HANDS:
             if x_axis in SEPARATE_HANDS:
                 x_data_left = list(model_x.objects

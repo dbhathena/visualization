@@ -101,7 +101,7 @@ function drawSleepDataIndividual() {
             x: recorded_data["x"],
             y: recorded_data["y"],
             mode: 'markers',
-            name: 'Recorded asleep',
+            name: 'Sensor-recorded asleep',
             marker: {
                 size: 4,
                 color: '#90d8cf'
@@ -127,14 +127,14 @@ function drawSleepDataIndividual() {
             x: recorded_data_none["x"],
             y: recorded_data_none["y"],
             mode: 'markers',
-            name: 'No recorded data',
+            name: 'No sensor-recorded data',
             marker: {
                 size: 4,
                 color: '#AAA'
             },
             legendgroup: "recorded"
         };
-        traces = [reported_trace, recorded_trace, reported_trace_none, recorded_trace_none];
+        const traces = [reported_trace, recorded_trace, reported_trace_none, recorded_trace_none];
 
         const layout = {
             title: "<b>Sleep trends for " + name + " </b>",
@@ -169,8 +169,7 @@ function drawSleepDataIndividual() {
                 x: 1,
                 y: 0.5
             },
-            hovermode: false,
-            // dragmode: false
+            hovermode: 'closest',
         };
 
         Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true});
@@ -249,7 +248,7 @@ function drawSleepDataGroup() {
                 },
                 legendgroup: subgroup,
                 visible: true,
-                text: "Recorded Sleep",
+                text: "Sensor-recorded Sleep",
                 hoverinfo: "y+text"
             });
             traces.push({
@@ -280,7 +279,7 @@ function drawSleepDataGroup() {
                 legendgroup: subgroup,
                 showlegend: false,
                 visible: true,
-                text: "Reported Sleep",
+                text: "Self-reported Sleep",
                 hoverinfo: "y+text"
             });
             traces.push({
@@ -345,7 +344,7 @@ function drawSleepDataGroup() {
                 tickvals: [0,6,12,18,24]
             },
             yaxis: {
-                title: "Fraction asleep",
+                title: "Fraction asleep<br>(sensor-recorded)",
                 showline: true,
                 zeroline: false,
                 titlefont: {
@@ -355,7 +354,7 @@ function drawSleepDataGroup() {
                 domain: [0.53, 1],
             },
             yaxis2: {
-                title: "Fraction asleep",
+                title: "Fraction asleep<br>(self-reported)",
                 showline: true,
                 zeroline: false,
                 titlefont: {

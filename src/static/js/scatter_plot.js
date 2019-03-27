@@ -157,7 +157,7 @@ function drawScatterPlotIndividual() {
                     size: 28
                 },
                 xaxis: {
-                    title: unitsDaily[x_type],
+                    title: unitsDaily[x_type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -166,7 +166,7 @@ function drawScatterPlotIndividual() {
                     domain: [0, 0.47]
                 },
                 xaxis2: {
-                    title: unitsDaily[x_type],
+                    title: unitsDaily[x_type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -322,7 +322,7 @@ function drawScatterPlotGroup() {
                     size: 28
                 },
                 xaxis: {
-                    title: unitsDaily[x_type],
+                    title: unitsDaily[x_type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -331,7 +331,7 @@ function drawScatterPlotGroup() {
                     domain: [0, 0.47]
                 },
                 xaxis2: {
-                    title: unitsDaily[x_type],
+                    title: unitsDaily[x_type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {

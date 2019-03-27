@@ -241,7 +241,7 @@ function drawWeeklyTrends() {
                     showgrid: false
                 },
                 yaxis: {
-                    title: unitsDaily[type],
+                    title: unitsDaily[type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -253,7 +253,7 @@ function drawWeeklyTrends() {
                     automargin: true
                 },
                 yaxis2: {
-                    title: unitsDaily[type],
+                    title: unitsDaily[type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {

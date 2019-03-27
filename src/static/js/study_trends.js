@@ -184,7 +184,7 @@ function drawStudyTrendsIndividual() {
                     }
                 },
                 yaxis: {
-                    title: unitsDaily[type],
+                    title: unitsDaily[type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -196,7 +196,7 @@ function drawStudyTrendsIndividual() {
                     automargin: true
                 },
                 yaxis2: {
-                    title: unitsDaily[type],
+                    title: unitsDaily[type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -460,7 +460,7 @@ function drawStudyTrendsGroup() {
                     }
                 },
                 yaxis: {
-                    title: unitsDaily[type],
+                    title: unitsDaily[type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -472,7 +472,7 @@ function drawStudyTrendsGroup() {
                     automargin: true
                 },
                 yaxis2: {
-                    title: unitsDaily[type],
+                    title: unitsDaily[type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {

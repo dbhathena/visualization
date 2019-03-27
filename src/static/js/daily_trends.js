@@ -172,7 +172,7 @@ function drawDailyTrendsIndividual() {
                     tickvals: [0,6,12,18,24]
                 },
                 yaxis: {
-                    title: unitsHourly[type],
+                    title: unitsHourly[type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -184,7 +184,7 @@ function drawDailyTrendsIndividual() {
                     automargin: true
                 },
                 yaxis2: {
-                    title: unitsHourly[type],
+                    title: unitsHourly[type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -443,7 +443,7 @@ function drawDailyTrendsGroup() {
                     tickvals: [0,6,12,18,24]
                 },
                 yaxis: {
-                    title: unitsHourly[type],
+                    title: unitsHourly[type] + '<br>(Left)',
                     showline: true,
                     zeroline: false,
                     titlefont: {
@@ -455,7 +455,7 @@ function drawDailyTrendsGroup() {
                     automargin: true
                 },
                 yaxis2: {
-                    title: unitsHourly[type],
+                    title: unitsHourly[type] + '<br>(Right)',
                     showline: true,
                     zeroline: false,
                     titlefont: {

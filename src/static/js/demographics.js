@@ -67,12 +67,12 @@ function drawMentalHealthCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
             
@@ -93,12 +93,12 @@ function drawMentalHealthCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -131,28 +131,28 @@ function drawMentalHealthCharts() {
             xaxis3: {
                 title: "Number of trials (-1 if unknown)",
                 titlefont: {
-                    size: 16
+                    size: 14
                 },
                 ticks: "outside",
             },
             yaxis3: {
                 title: "Number of participants",
                 titlefont: {
-                    size: 16
+                    size: 14
                 },
                 ticks: "outside"
             },
             xaxis4: {
                 title: "Length of episode (months)",
                 titlefont: {
-                    size: 16
+                    size: 14
                 },
                 ticks: "outside"
             },
             yaxis4: {
                 title: "Number of participants",
                 titlefont: {
-                    size: 16
+                    size: 14
                 },
                 ticks: "outside"
             },
@@ -167,7 +167,7 @@ function drawMentalHealthCharts() {
                     text: 'Study Group',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -180,7 +180,7 @@ function drawMentalHealthCharts() {
                     text: 'Currently in Psychotherapy',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -193,7 +193,7 @@ function drawMentalHealthCharts() {
                     text: 'Number of Medical Trials',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -206,7 +206,7 @@ function drawMentalHealthCharts() {
                     text: 'Length of Current Episode',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 }
             ]
@@ -253,12 +253,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -276,12 +276,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -299,12 +299,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -322,12 +322,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -345,12 +345,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -368,12 +368,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -391,12 +391,12 @@ function drawRaceEthnicityCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
         });
@@ -414,7 +414,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Ethnicity',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -427,7 +427,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Race: White',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -440,7 +440,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Race: Black/African American',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -453,7 +453,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Race: Asian',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -466,7 +466,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Race: Hawaiian/Pacific Islander',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -479,7 +479,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Race: American Indian/Alaskan Native',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -492,7 +492,7 @@ function drawRaceEthnicityCharts() {
                     text: 'Race: Other',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 }
             ]
@@ -543,12 +543,12 @@ function drawAgeSexCharts() {
             },
             textinfo: 'value',
             textfont: {
-                size: 16
+                size: 14
             },
             hoverinfo: 'label',
             hoverlabel: {
                 font: {
-                    size: 16
+                    size: 14
                 }
             },
             
@@ -560,14 +560,14 @@ function drawAgeSexCharts() {
             xaxis: {
                 title: "Age (years)",
                 titlefont: {
-                    size: 16
+                    size: 14
                 },
                 ticks: "outside",
             },
             yaxis: {
                 title: "Number of participants",
                 titlefont: {
-                    size: 16
+                    size: 14
                 },
                 ticks: "outside"
             },
@@ -582,7 +582,7 @@ function drawAgeSexCharts() {
                     text: 'Age',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 },
                 {
@@ -595,7 +595,7 @@ function drawAgeSexCharts() {
                     text: 'Sex',
                     showarrow: false,
                     font: {
-                        size: 20
+                        size: 18
                     }
                 }
             ]

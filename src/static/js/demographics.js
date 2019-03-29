@@ -88,6 +88,7 @@ function drawMentalHealthCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         const psycho_labels = ['Yes', 'No', 'Missing Data'];
@@ -113,6 +114,7 @@ function drawMentalHealthCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -294,7 +296,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [0, 0.25],
-                y: [0.55, 0.98]
+                y: [0.52, 0.98]
             },
             marker: {
                 colors: colors,
@@ -309,6 +311,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -317,7 +320,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [0.25, 0.5],
-                y: [0.55, 0.98]
+                y: [0.52, 0.98]
             },
             marker: {
                 colors: colors,
@@ -332,6 +335,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -340,7 +344,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [0.5, 0.75],
-                y: [0.55, 0.98]
+                y: [0.52, 0.98]
             },
             marker: {
                 colors: colors,
@@ -355,6 +359,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -363,7 +368,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [0.75, 1],
-                y: [0.55, 0.98]
+                y: [0.52, 0.98]
             },
             marker: {
                 colors: colors,
@@ -378,6 +383,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -386,7 +392,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [.125, 0.375],
-                y: [0, 0.43]
+                y: [0.02, 0.48]
             },
             marker: {
                 colors: colors,
@@ -401,6 +407,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -409,7 +416,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [.375, 0.625],
-                y: [0, 0.43]
+                y: [0.02, 0.48]
             },
             marker: {
                 colors: colors,
@@ -424,6 +431,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         traces.push({
@@ -432,7 +440,7 @@ function drawRaceEthnicityCharts() {
             type: 'pie',
             domain: {
                 x: [.625, 0.875],
-                y: [0, 0.43]
+                y: [0.02, 0.48]
             },
             marker: {
                 colors: colors,
@@ -447,6 +455,7 @@ function drawRaceEthnicityCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         const layout = {
@@ -509,9 +518,9 @@ function drawRaceEthnicityCharts() {
                     yref: 'paper',
                     x: 0.25,
                     xanchor: 'center',
-                    y: 0.45,
-                    yanchor: 'bottom',
-                    text: 'Race: Hawaiian/Pacific Islander',
+                    y: 0,
+                    yanchor: 'top',
+                    text: 'Race: Hawaiian<br>/Pacific Islander',
                     showarrow: false,
                     font: {
                         size: 18
@@ -522,9 +531,9 @@ function drawRaceEthnicityCharts() {
                     yref: 'paper',
                     x: 0.5,
                     xanchor: 'center',
-                    y: 0.45,
-                    yanchor: 'bottom',
-                    text: 'Race: American Indian/Alaskan Native',
+                    y: 0,
+                    yanchor: 'top',
+                    text: 'Race: American Indian<br>/Alaskan Native',
                     showarrow: false,
                     font: {
                         size: 18
@@ -535,8 +544,8 @@ function drawRaceEthnicityCharts() {
                     yref: 'paper',
                     x: 0.75,
                     xanchor: 'center',
-                    y: 0.45,
-                    yanchor: 'bottom',
+                    y: 0,
+                    yanchor: 'top',
                     text: 'Race: Other',
                     showarrow: false,
                     font: {
@@ -602,6 +611,7 @@ function drawAgeSexCharts() {
                     size: 14
                 }
             },
+            textposition: 'inside'
         });
 
         const layout = {

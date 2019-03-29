@@ -75,9 +75,7 @@ function drawMentalHealthCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
+            
         });
 
         const psycho_labels = ['Yes', 'No', 'Missing Data'];
@@ -103,9 +101,6 @@ function drawMentalHealthCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -266,9 +261,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -292,9 +284,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -318,9 +307,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -344,9 +330,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -370,9 +353,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -396,9 +376,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         traces.push({
@@ -422,9 +399,6 @@ function drawRaceEthnicityCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
         });
 
         const layout = {
@@ -577,9 +551,7 @@ function drawAgeSexCharts() {
                     size: 16
                 }
             },
-            outsidetextfont: {
-                color: 'white'
-            }
+            
         });
 
         const layout = {

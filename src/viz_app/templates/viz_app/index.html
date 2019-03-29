@@ -16,14 +16,16 @@
                 </div>
             </a>
         </div>
-        <div class="button_container">
-            <a href="{% url 'viz_app:weekly_trends' %}">
-                <img class="button" src="{% static 'img/weekly_trends.png' %}">
-                <div class="middle">
-                    <div class="text">Weekly Trends</div>
-                </div>
-            </a>
-        </div>
+        {% if perms.viz_app.aggregate %}
+            <div class="button_container">
+                <a href="{% url 'viz_app:weekly_trends' %}">
+                    <img class="button" src="{% static 'img/weekly_trends.png' %}">
+                    <div class="middle">
+                        <div class="text">Weekly Trends</div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
         <div class="button_container">
             <a href="{% url 'viz_app:daily_trends' %}">
                 <img class="button" src="{% static 'img/daily_trends.png' %}">
@@ -48,30 +50,16 @@
                 </div>
             </a>
         </div>
-        <div class="button_container">
-            <a href="{% url 'viz_app:radar_chart' %}">
-                <img class="button" src="{% static 'img/graph2.png' %}">
-                <div class="middle">
-                    <div class="text">Radar Chart</div>
-                </div>
-            </a>
-        </div>
-        <div class="button_container">
-            <a href="{% url 'viz_app:demographics' %}">
-                <img class="button" src="{% static 'img/graph2.png' %}">
-                <div class="middle">
-                    <div class="text">Demographics</div>
-                </div>
-            </a>
-        </div>
-        <div class="button_container">
-            <a href="{% url 'viz_app:stacked_bar_chart' %}">
-                <img class="button" src="{% static 'img/graph2.png' %}">
-                <div class="middle">
-                    <div class="text">Stacked Bar Chart</div>
-                </div>
-            </a>
-        </div>
+        {% if perms.viz_app.aggregate %}
+            <div class="button_container">
+                <a href="{% url 'viz_app:demographics' %}">
+                    <img class="button" src="{% static 'img/demographics.png' %}">
+                    <div class="middle">
+                        <div class="text">Demographics</div>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

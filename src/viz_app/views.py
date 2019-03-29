@@ -50,19 +50,10 @@ def sleep_data(request):
     return render(request, 'viz_app/sleep_data.html', context)
 
 
-@login_required
-def radar_chart(request):
-    return render(request, 'viz_app/radar_chart.html')
-
-
+@permission_required("viz_app.aggregate")
 @login_required
 def demographics(request):
     return render(request, 'viz_app/demographics.html')
-
-
-@login_required
-def stacked_bar(request):
-    return render(request, 'viz_app/stacked_bar.html')
 
 
 def home(request):

@@ -39,9 +39,9 @@
                         <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
                         <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
                         <a href="{% url 'viz_app:sleep_data' %}">Sleep Data</a>
-                        <a href="{% url 'viz_app:radar_chart' %}">Radar Chart</a>
-                        <a href="{% url 'viz_app:demographics' %}">Demographics</a>
-                        <a href="{% url 'viz_app:stacked_bar_chart' %}">Stacked Bar Chart</a>
+                        {% if perms.viz_app.aggregate %}
+                            <a href="{% url 'viz_app:demographics' %}">Demographics</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endif %}

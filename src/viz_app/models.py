@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class PhysData(models.Model):
     name = models.CharField(null=True, max_length=4)
     date = models.DateTimeField(null=True)
@@ -33,6 +34,7 @@ class PhoneData(models.Model):
     def __hash__(self):
         return hash((self.name, self.date, self.category, self.interval, self.measurement))
 
+
 class WeatherData(models.Model):
     name = models.CharField(null=True, max_length=4)
     date = models.DateTimeField(null=True)
@@ -47,6 +49,7 @@ class WeatherData(models.Model):
     def __hash__(self):
         return hash((self.name, self.date, self.category, self.measurement))
 
+
 class SleepData(models.Model):
     name = models.CharField(max_length=4)
     date = models.DateTimeField()
@@ -59,6 +62,30 @@ class SleepData(models.Model):
 
     def __hash__(self):
         return hash((self.name, self.date, self.category, self.is_asleep))
+
+
+class DemographicData(models.Model):
+    study_group_choices = [('MDD', 'Major Depressive Disorder'),
+                           ('HC', 'Healthy Control'),
+                           ('missing', 'Missing')]
+    sex_choices = [('male', 'Male'),
+                   ('female', 'Female'),
+                   ('missing', 'Missing')]
+
+    name = models.CharField(max_length=4, null=False)
+    age = models.FloatField(null=False)
+    in_psychotherapy = models.NullBooleanField()
+    number_trials = models.FloatField(null=False)
+    ethnicity = models.CharField(max_length=50, null=False)
+    is_white = models.BooleanField(null=False)
+    is_black_african_american = models.BooleanField(null=False)
+    is_asian = models.BooleanField(null=False)
+    is_hawaiian_pacific_islander = models.BooleanField(null=False)
+    is_american_indian_alaska_native = models.BooleanField(null=False)
+    is_other_race = models.BooleanField(null=False)
+    treatment_length = models.FloatField(null=False)
+    study_group = models.CharField(null=False, max_length=7, choices=study_group_choices)
+    sex = models.CharField(null=False, max_length=7, choices=sex_choices)
 
 
 class SitePrivileges(models.Model):

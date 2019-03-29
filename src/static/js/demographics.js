@@ -75,7 +75,6 @@ function drawMentalHealthCharts() {
                     size: 14
                 }
             },
-            
         });
 
         const psycho_labels = ['Yes', 'No', 'Missing Data'];
@@ -551,7 +550,6 @@ function drawAgeSexCharts() {
                     size: 14
                 }
             },
-            
         });
 
         const layout = {

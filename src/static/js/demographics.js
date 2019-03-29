@@ -52,8 +52,8 @@ function drawMentalHealthCharts() {
         const colors = ['#1b4e7d', '#a81b1d', chart_colors[7]];
         const traces = [];
 
-        const group_labels = ['Healthy Control', 'Major Depressive Disorder', 'Missing Data'];
-        const group_values = [group_data['HC'], group_data['MDD'], group_data['missing']];
+        const group_labels = ['Healthy Control', 'Major Depressive Disorder'];
+        const group_values = [group_data['HC'], group_data['MDD']];
         traces.push({
             values: group_values,
             labels: group_labels,
@@ -142,7 +142,7 @@ function drawMentalHealthCharts() {
                 ticks: "outside"
             },
             xaxis4: {
-                title: "Length of episode (months)",
+                title: "Length of episode (months, -1 if unknown)",
                 titlefont: {
                     size: 14
                 },
@@ -530,8 +530,8 @@ function drawAgeSexCharts() {
         });
 
         traces.push({
-            values: [sex['Male'], sex['Female'], sex['missing']],
-            labels: ['Male', 'Female', 'Missing Data'],
+            values: [sex['Male'], sex['Female']],
+            labels: ['Male', 'Female'],
             type: 'pie',
             domain: {
                 x: [0.5, 1],

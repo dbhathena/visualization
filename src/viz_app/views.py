@@ -874,7 +874,7 @@ def get_demographics_data(request):
         data['psychotherapy'] = {True: 0, False: 0, 'missing': 0}
         data['trials'] = []
         data['treatment_length'] = []
-        data['study_group'] = {'HC': 0, 'MDD': 0, 'missing': 0}
+        data['study_group'] = {'HC': 0, 'MDD': 0}
         for datum in database_query:
             psychotherapy_status = datum['in_psychotherapy']
             if psychotherapy_status is None:
@@ -903,7 +903,7 @@ def get_demographics_data(request):
             data['other'][datum['is_other_race']] += 1
     elif category == 'Age and Sex':
         data['age'] = []
-        data['sex'] = {'Male': 0, 'Female': 0, 'missing': 0}
+        data['sex'] = {'Male': 0, 'Female': 0}
         for datum in database_query:
             data['age'].append(datum['age'])
             data['sex'][datum['sex']] += 1

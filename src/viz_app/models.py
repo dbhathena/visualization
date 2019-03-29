@@ -66,11 +66,9 @@ class SleepData(models.Model):
 
 class DemographicData(models.Model):
     study_group_choices = [('MDD', 'Major Depressive Disorder'),
-                           ('HC', 'Healthy Control'),
-                           ('missing', 'Missing')]
+                           ('HC', 'Healthy Control')]
     sex_choices = [('male', 'Male'),
-                   ('female', 'Female'),
-                   ('missing', 'Missing')]
+                   ('female', 'Female')]
 
     name = models.CharField(max_length=4, null=False)
     age = models.FloatField(null=False)

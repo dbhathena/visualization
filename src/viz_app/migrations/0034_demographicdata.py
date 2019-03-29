@@ -14,7 +14,7 @@ def get_files(directory):
 
 
 def populate_demographic_data(apps, schema_editor):
-    directory = '../../data/Demographics/pie_chart.csv'
+    directory = '../../../../../opt/data/Demographics/pie_chart.csv'
     participants = set(PARTICIPANTS)
     DemographicData = apps.get_model('viz_app', 'DemographicData')
     df = pd.read_csv(directory, usecols=['MIT ID:',
@@ -52,10 +52,13 @@ def populate_demographic_data(apps, schema_editor):
                 in_psychotherapy = in_psychotherapy == 'Yes'
 
             number_trials = row['Number of lifetime antidepressant medication trials']
-            if pd.isnull(number_trials) or type(number_trials) == str:
+            if pd.isnull(number_trials):
                 number_trials = -1
             else:
-                number_trials = int(number_trials)
+                try:
+                    number_trials = int(number_trials)
+                except:
+                    number_trials = -1
 
             current_episode_length = row['Length of Current Episode (months)']
             if pd.isnull(current_episode_length):

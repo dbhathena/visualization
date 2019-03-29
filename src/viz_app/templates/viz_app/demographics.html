@@ -1,0 +1,41 @@
+{% extends "viz_app/visualization_base.html" %}
+
+{% load staticfiles %}
+{% load static from staticfiles %}
+
+{% block header %}
+<h1>Demographics</h1>
+{% endblock %}
+
+{% block description%}
+    <b>
+        A group of pie charts and histograms displaying demographics across the population. For charts regarding
+        treatment, healthy controls are not included in the population shown.
+    </b>
+    <br>
+    Hover and drag on the charts to see the data in more detail.
+{% endblock %}
+
+{% block options %}
+    <div class="dropdown-container">
+        <h3>Select a data category:</h3>
+        <div class="search-categories">
+            <div class="select">
+                <select id="category_dropdown">
+                    <option value="Mental Health">Mental Health</option>
+                    <option value="Ethnicity and Race">Ethnicity and Race</option>
+                    <option value="Age and Sex">Age and Sex</option>
+                </select>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block selection_descriptions %}
+    <div class="description-label category-description">Data Category</div>
+{% endblock %}
+
+{% block script %}
+    {{ block.super }}
+    <script src="{% static 'js/demographics.js' %}"></script>
+{% endblock %}

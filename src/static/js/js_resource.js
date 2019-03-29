@@ -214,6 +214,9 @@ const dataCategoryText = {
     "Physiology": "Physiology data collected from E4 measurements",
     "Location": "Location data collected from phone GPS measurements",
     "Weather": "Weather data collected from Dark Sky API database",
+    "Mental Health": "Data about the participant population's existing mental health",
+    "Ethnicity and Race": "Data about the participant population's ethnicity and race",
+    "Age and Sex": "Data about the participant population's age and sex",
 };
 
 const dataTypeTextDaily = {

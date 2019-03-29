@@ -56,8 +56,8 @@ def radar_chart(request):
 
 
 @login_required
-def pie_chart(request):
-    return render(request, 'viz_app/pie_chart.html')
+def demographics(request):
+    return render(request, 'viz_app/demographics.html')
 
 
 @login_required
@@ -872,6 +872,53 @@ def get_sleep_data(request):
                                         "reported_x": reported_x,
                                         "reported_y": reported_y,
                                         "reported_error": reported_error}))
+
+
+@login_required
+def get_demographics_data(request):
+    category = request.GET.get('category')
+    database_query = DemographicData.objects.all().values()
+    data = {}
+    if category == 'Mental Health':
+        data['psychotherapy'] = {True: 0, False: 0, 'missing': 0}
+        data['trials'] = []
+        data['treatment_length'] = []
+        data['study_group'] = {'HC': 0, 'MDD': 0, 'missing': 0}
+        for datum in database_query:
+            psychotherapy_status = datum['in_psychotherapy']
+            if psychotherapy_status is None:
+                data['psychotherapy']['missing'] += 1
+            else:
+                data['psychotherapy'][psychotherapy_status] += 1
+
+            data['trials'].append(datum['number_trials'])
+            data['treatment_length'].append(datum['treatment_length'])
+            data['study_group'][datum['study_group']] += 1
+    elif category == 'Ethnicity and Race':
+        data['ethnicity'] = {'Non-Hispanic or Latino': 0, 'Hispanic or Latino': 0}
+        data['white'] = {True: 0, False: 0}
+        data['black'] = {True: 0, False: 0}
+        data['asian'] = {True: 0, False: 0}
+        data['pacific'] = {True: 0, False: 0}
+        data['native'] = {True: 0, False: 0}
+        data['other'] = {True: 0, False: 0}
+        for datum in database_query:
+            data['ethnicity'][datum['ethnicity']] += 1
+            data['white'][datum['is_white']] += 1
+            data['black'][datum['is_black_african_american']] += 1
+            data['asian'][datum['is_asian']] += 1
+            data['pacific'][datum['is_hawaiian_pacific_islander']] += 1
+            data['native'][datum['is_american_indian_alaska_native']] += 1
+            data['other'][datum['is_other_race']] += 1
+    elif category == 'Age and Sex':
+        data['age'] = []
+        data['sex'] = {'Male': 0, 'Female': 0, 'missing': 0}
+        for datum in database_query:
+            data['age'].append(datum['age'])
+            data['sex'][datum['sex']] += 1
+    else:
+        raise ValueError('Invalid Demographics Category!')
+    return HttpResponse(json.dumps({'data': data}))
 
 
 def get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs, xs=None):

@@ -52,6 +52,19 @@ function drawMentalHealthCharts() {
         const colors = ['#1b4e7d', '#a81b1d', chart_colors[7]];
         const traces = [];
 
+        var missing_trials = 0;
+        num_trials_data.forEach(function(entry) {
+            if (entry === -1) {
+                missing_trials++;
+            }
+        });
+        var missing_length = 0;
+        length_data.forEach(function(entry) {
+            if (entry === -1) {
+                missing_length++;
+            }
+        });
+
         const group_labels = ['Healthy Control', 'Major Depressive Disorder'];
         const group_values = [group_data['HC'], group_data['MDD']];
         traces.push({
@@ -110,7 +123,10 @@ function drawMentalHealthCharts() {
             marker: {
                 color: '#6d4a90'
             },
-            hoverinfo: 'x+y'
+            hoverinfo: 'x+y',
+            xbins: {
+                size: 1
+            }
         });
 
         traces.push({
@@ -121,7 +137,10 @@ function drawMentalHealthCharts() {
             marker: {
                 color: '#6d4a90'
             },
-            hoverinfo: 'x+y'
+            hoverinfo: 'x+y',
+            xbins: {
+                size: 20
+            }
         });
 
         const layout = {
@@ -146,7 +165,7 @@ function drawMentalHealthCharts() {
                 titlefont: {
                     size: 14
                 },
-                ticks: "outside"
+                ticks: "outside",
             },
             yaxis4: {
                 title: "Number of participants",
@@ -155,6 +174,36 @@ function drawMentalHealthCharts() {
                 },
                 ticks: "outside"
             },
+            shapes: [
+                {
+                    type: 'rect',
+                    xref: 'x3',
+                    yref: 'y3',
+                    x0: -1.5,
+                    x1: -0.5,
+                    y0: 0,
+                    y1: missing_trials,
+                    layer: 'above',
+                    fillcolor: chart_colors[7],
+                    line: {
+                        width: 0
+                    }
+                },
+                {
+                    type: 'rect',
+                    xref: 'x4',
+                    yref: 'y4',
+                    x0: -20.5,
+                    x1: -0.5,
+                    y0: 0,
+                    y1: missing_length,
+                    layer: 'above',
+                    fillcolor: chart_colors[7],
+                    line: {
+                        width: 0
+                    }
+                },
+            ],
             annotations: [
                 {
                     xref: 'paper',
@@ -526,7 +575,10 @@ function drawAgeSexCharts() {
             marker: {
                 color: '#6d4a90'
             },
-            hoverinfo: 'x+y'
+            hoverinfo: 'x+y',
+            xbins: {
+                size: 10
+            },
         });
 
         traces.push({

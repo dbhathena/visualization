@@ -65,6 +65,8 @@ class SleepData(models.Model):
 
 
 class DemographicData(models.Model):
+    ethnicity_choices = [('hispanic', 'Hispanic or Latino'),
+                         ('non-hispanic', 'Non-Hispanic or Latino')]
     study_group_choices = [('MDD', 'Major Depressive Disorder'),
                            ('HC', 'Healthy Control')]
     sex_choices = [('male', 'Male'),
@@ -74,7 +76,7 @@ class DemographicData(models.Model):
     age = models.FloatField(null=False)
     in_psychotherapy = models.NullBooleanField()
     number_trials = models.FloatField(null=False)
-    ethnicity = models.CharField(max_length=50, null=False)
+    ethnicity = models.CharField(max_length=50, null=False, choices=ethnicity_choices)
     is_white = models.BooleanField(null=False)
     is_black_african_american = models.BooleanField(null=False)
     is_asian = models.BooleanField(null=False)

@@ -27,7 +27,7 @@ var common_unit;
 const unitsDaily = {
     "Accelerometer": (common_unit = "Vector Magnitude of Motion"),
     "Heart Rate": (common_unit = "BPM"),
-    "Motion": (common_unit = "Fraction of Day in Motion"),
+    "Motion": (common_unit = "Minutes of Day in Motion"),
     "Temperature": (common_unit = "°Celsius"),
     "EDA Mean Difference": (common_unit = "Microsiemens (µS)"),
     "EDA Mean": common_unit,
@@ -74,7 +74,7 @@ const unitsDaily = {
 const unitsHourly = {
     "Accelerometer": (common_unit = "Vector Magnitude of Motion"),
     "Heart Rate": (common_unit = "BPM"),
-    "Motion": (common_unit = "Fraction of Hour in Motion"),
+    "Motion": (common_unit = "Minutes of Hour in Motion"),
     "Temperature": (common_unit = "°Celsius"),
     "EDA Mean Difference": (common_unit = "Microsiemens (µS)"),
     "EDA Mean": common_unit,
@@ -222,7 +222,7 @@ const dataCategoryText = {
 const dataTypeTextDaily = {
     "Accelerometer": "The daily average of the magnitude of motion vectors combining 3-axis accelerometer measurements",
     "Heart Rate": "The daily average heart rate, measured in beats per minute",
-    "Motion": "The decimal percentage of the day when the individual was in motion (estimated using actigraphy)",
+    "Motion": "The total number of minutes of the day when the individual was in motion (estimated using actigraphy)",
     "Temperature": "The daily average skin temperature measured from each hand",
     "EDA Mean Difference": "The daily average of the difference between right and left hand Skin Conductance Level signals (Right - Left)",
     "EDA Mean": "The daily average amplitude of Skin Conductance Response measured from each hand",
@@ -269,7 +269,7 @@ const dataTypeTextDaily = {
 const dataTypeTextHourly = {
     "Accelerometer": "The hourly average of the magnitude of motion vectors combining 3-axis accelerometer measurements",
     "Heart Rate": "The hourly average heart rate, measured in beats per minute",
-    "Motion": "The decimal percentage of the hour when the individual was in motion (estimated using actigraphy)",
+    "Motion": "The the total number of minutes of the hour when the individual was in motion (estimated using actigraphy)",
     "Temperature": "The hourly average skin temperature measured from each hand",
     "EDA Mean Difference": "The hourly average of the difference between right and left hand Skin Conductance Level signals (Right - Left)",
     "EDA Mean": "The hourly average amplitude of Skin Conductance Response measured from each hand",
@@ -324,7 +324,8 @@ const preprocessTextDaily = {
         "acceleration was processed. Next, the moving average of the output over 1 second was processed, and " +
         "finally, the instances when the obtained value was greater than the motion threshold were counted for " +
         "each day and divided by the number of total accelerometer samples in the day to estimate the fraction " +
-        "of time when a participant was in motion.",
+        "of time when a participant was in motion, which was then multiplied by 1440 (the number of minutes in a day) " +
+        "to get the total minutes of the day when a participant was in motion.",
     "EDA Mean": "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
             "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer" +
             " data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +
@@ -355,7 +356,8 @@ const preprocessTextHourly = {
         "acceleration was processed. Next, the moving average of the output over 1 second was processed, and " +
         "finally, the instances when the obtained value was greater than the motion threshold were counted for " +
         "each hour and divided by the number of total accelerometer samples in the hour to estimate the fraction " +
-        "of time when a participant was in motion.",
+        "of time when a participant was in motion. This was then multiplied by 60 (number of minutes in an hour) to " +
+        "get the total minutes of the hour when a participant was in motion.",
     "EDA Mean": "The EDA signal is first selected when the measured skin temperature > 30 degree Celsius (sensor is " +
             "worn on the wrist). Then the EDA signal when the participant is in motion (based on the accelerometer" +
             " data) is filtered out. Next, the low-pass Butterworth filter (1Hz cutoff) is applied. Finally the " +

@@ -877,14 +877,15 @@ def get_demographics_data(request):
         data['study_group'] = {'HC': 0, 'MDD': 0}
         for datum in database_query:
             psychotherapy_status = datum['in_psychotherapy']
-            if psychotherapy_status is None:
-                data['psychotherapy']['missing'] += 1
-            else:
-                data['psychotherapy'][psychotherapy_status] += 1
-
-            data['trials'].append(datum['number_trials'])
-            data['treatment_length'].append(datum['treatment_length'])
-            data['study_group'][datum['study_group']] += 1
+            study_group = datum['study_group']
+            data['study_group'][study_group] += 1
+            if study_group == 'MDD':
+                if psychotherapy_status is None:
+                    data['psychotherapy']['missing'] += 1
+                else:
+                    data['psychotherapy'][psychotherapy_status] += 1
+                data['trials'].append(datum['number_trials'])
+                data['treatment_length'].append(datum['treatment_length'])
     elif category == 'Ethnicity and Race':
         data['ethnicity'] = {'Non-Hispanic or Latino': 0, 'Hispanic or Latino': 0}
         data['white'] = {True: 0, False: 0}

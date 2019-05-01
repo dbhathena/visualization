@@ -142,11 +142,12 @@ function drawTotalPlot() {
                 titlefont: {
                     size: 20
                 },
+                fixedrange: true
             },
             dragmode: "pan",
         };
 
-        Plotly.newPlot("chart1", [recorded_trace, self_reported_trace], layout, {displayModeBar: false, responsive: true});
+        Plotly.newPlot("chart1", [recorded_trace, self_reported_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         $("#loading").css("display", "none");
     });
 }
@@ -197,12 +198,13 @@ function drawRegularityPlot() {
                 titlefont: {
                     size: 20
                 },
-                range: [0,1]
+                range: [0,1],
+                fixedrange: true
             },
             dragmode: "pan",
         };
 
-        Plotly.newPlot("chart1", [trace], layout, {displayModeBar: false, responsive: true});
+        Plotly.newPlot("chart1", [trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         $("#loading").css("display", "none");
     });
 }
@@ -317,7 +319,7 @@ function drawRasterPlot() {
             hovermode: 'closest',
         };
 
-        Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true});
+        Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         $("#loading").css("display", "none");
     });
 }

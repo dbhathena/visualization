@@ -47,6 +47,18 @@
             </div>
         </div>
     </div>
+    <div class="dropdown-container" id="type_container" style="display: none;">
+        <h3>Select a chart type:</h3>
+        <div class="search-categories">
+            <div class="select">
+                <select id="type_dropdown">
+                    <option value="total" selected>Total Sleep</option>
+                    <option value="regularity">Sleep Regularity</option>
+                    <option value="raster">Sleep Raster Plot</option>
+                </select>
+            </div>
+        </div>
+    </div>
     <div class="dropdown-container" id="names_container" style="display: none;">
         <h3>Select an individual:</h3>
         <div class="search-categories">
@@ -70,6 +82,7 @@
     <div class="description-label preprocess-description">Preprocessing</div>
     <div class="description-label group-description"
          {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>Group</div>
+    <div class="description-label type-description">Chart Type</div>
     <div class="description-label individual-description" style="display: none;">Individual</div>
 {%  endblock %}
 

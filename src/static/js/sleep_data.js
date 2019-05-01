@@ -1,5 +1,6 @@
-var group_dropdown = $("#group_dropdown");
-var names_dropdown = $("#names_dropdown");
+const group_dropdown = $("#group_dropdown");
+const names_dropdown = $("#names_dropdown");
+const type_dropdown = $("#type_dropdown");
 var last_request;
 const description = $("span#description-text");
 var user_type;
@@ -7,29 +8,39 @@ var user_type;
 $( document ).ready(function() {
     var group = group_dropdown.val();
     var name = names_dropdown.val();
+    var chart_type = type_dropdown.val();
     $.ajax( {
         url: "/get-user-type/",
-        dataType: "json"
+        dataType: "json",
     }).done(function(data) {
         user_type = data.user;
         if (group_dropdown.val() === "None") {
-            drawSleepDataIndividual();
+            drawRasterPlot();
         } else {
             drawSleepDataGroup();
         }
     });
-    $("#group_dropdown, #names_dropdown").change(function() {
+    $("#group_dropdown, #names_dropdown, #type_dropdown").change(function() {
         $("#loading").css("display", "flex");
         resetDescriptionText(description);
         if (group_dropdown.val() === "None") {
             if (user_type !== "participant") {
                 $("#names_container").css("display", "flex");
+                $("#type_container").css("display","flex");
                 $("div.individual-description").css("display", "block");
             }
-            drawSleepDataIndividual();
+            const plot_type = type_dropdown.val();
+            if (plot_type === 'raster') {
+                drawRasterPlot();
+            } else if (plot_type === 'total') {
+                drawTotalPlot();
+            } else {
+                drawRegularityPlot();
+            }
         } else {
             $("#names_container").css("display", "none");
-            $("div.individual-description").css("display", "none")
+            $("#type_container").css("display","none");
+            $("div.individual-description").css("display", "none");
             drawSleepDataGroup();
         }
     });
@@ -39,6 +50,9 @@ $( document ).ready(function() {
     });
     names_dropdown.change(function() {
         name = names_dropdown.val();
+    });
+    type_dropdown.change(function() {
+        chart_type = type_dropdown.val();
     });
 
     $(".preprocess-description").click(
@@ -55,6 +69,17 @@ $( document ).ready(function() {
             description.css("color", "black");
         }
     );
+    $(".type-description").click(
+        function() {
+            if (group === "None") {
+                description.text(sleepChartTypeText[chart_type]);
+            } else {
+                description.text(sleepChartTypeText["aggregated"]);
+            }
+            description.css("font-style", "normal");
+            description.css("color", "black");
+        }
+    );
     $(".individual-description").click(
         function() {
             description.text(getIndividualText(name));
@@ -64,7 +89,126 @@ $( document ).ready(function() {
     );
 });
 
-function drawSleepDataIndividual() {
+
+function drawTotalPlot() {
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
+        url: "/get-sleep-data/",
+        data: {
+            group: group_dropdown.val(),
+            name: names_dropdown.val(),
+            chart_type: type_dropdown.val(),
+        },
+        dataType: "json"
+    }).done(function(data) {
+        const name = names_dropdown.val();
+
+        const recorded_trace = {
+            x: data.recorded_x,
+            y: data.recorded_y,
+            type: 'bar',
+            name: 'Sensor-recorded asleep'
+        };
+        const self_reported_trace = {
+            x: data.self_reported_x,
+            y: data.self_reported_y,
+            type: 'bar',
+            name: 'Self-reported asleep'
+        };
+
+        const layout = {
+            title: "<b>Total Sleep per Day for " + name + " </b>",
+            font: {
+                family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                size: 16
+            },
+            titlefont: {
+                size: 28
+            },
+            xaxis: {
+                title: "Date",
+                showline: true,
+                zeroline: false,
+                titlefont: {
+                    size: 20
+                }
+            },
+            yaxis: {
+                title: "Time spent asleep (hours)",
+                showline: true,
+                zeroline: false,
+                titlefont: {
+                    size: 20
+                },
+            },
+            dragmode: "pan",
+        };
+
+        Plotly.newPlot("chart1", [recorded_trace, self_reported_trace], layout, {displayModeBar: false, responsive: true});
+        $("#loading").css("display", "none");
+    });
+}
+
+
+function drawRegularityPlot() {
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
+        url: "/get-sleep-data/",
+        data: {
+            group: group_dropdown.val(),
+            name: names_dropdown.val(),
+            chart_type: type_dropdown.val(),
+        },
+        dataType: "json"
+    }).done(function(data) {
+        const name = names_dropdown.val();
+
+        const trace = {
+            x: data.x,
+            y: data.y,
+            type: 'bar'
+        };
+
+        const layout = {
+            title: "<b>Sleep Regularity for " + name + " </b>",
+            font: {
+                family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                size: 16
+            },
+            titlefont: {
+                size: 28
+            },
+            xaxis: {
+                title: "Date",
+                showline: true,
+                zeroline: false,
+                titlefont: {
+                    size: 20
+                }
+            },
+            yaxis: {
+                title: "Sleep Regularity",
+                showline: true,
+                zeroline: false,
+                titlefont: {
+                    size: 20
+                },
+                range: [0,1]
+            },
+            dragmode: "pan",
+        };
+
+        Plotly.newPlot("chart1", [trace], layout, {displayModeBar: false, responsive: true});
+        $("#loading").css("display", "none");
+    });
+}
+
+
+function drawRasterPlot() {
     if (last_request && last_request.readyState !== 4) {
         last_request.abort();
     }
@@ -73,6 +217,7 @@ function drawSleepDataIndividual() {
         data: {
             group: group_dropdown.val(),
             name: names_dropdown.val(),
+            chart_type: type_dropdown.val(),
         },
         dataType: "json"
     }).done(function(data) {
@@ -137,7 +282,7 @@ function drawSleepDataIndividual() {
         const traces = [reported_trace, recorded_trace, reported_trace_none, recorded_trace_none];
 
         const layout = {
-            title: "<b>Sleep trends for " + name + " </b>",
+            title: "<b>Sleep Trends for " + name + " </b>",
             font: {
                 family: "Helvetica Neue, Helvetica, Arial, sans-serif",
                 size: 16

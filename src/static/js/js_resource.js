@@ -413,6 +413,13 @@ const sleepReportingText = {
     "Self-reported Sleep": "The time a participant was asleep or awake, as self-reported on a daily mobile-device survey"
 };
 
+const sleepChartTypeText = {
+    "raster": "A raster plot showing all times over the course of the study when the participant was asleep (both sensor-recorded and self-reported)",
+    "total": "A bar chart showing the total amount of time a participant was asleep for each day of the study (both sensor-recorded and self-reported)",
+    "regularity": "A bar chart showing a participant's sleep regularity for each day of the study",
+    "aggregated": "A time series trend representing the average fraction of days in the study when participants in each group were asleep at any given time of day"
+};
+
 const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 const descriptionDefaultText = "Click on the options below to see more details";

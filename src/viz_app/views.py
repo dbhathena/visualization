@@ -1,5 +1,6 @@
 import json
 import pprint
+import math
 
 from django import forms
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -731,47 +732,123 @@ def get_scatter_plot_data(request):
 def get_sleep_data(request):
     group = request.GET.get("group")
     if group == "None":
+        chart_type = request.GET.get("chart_type")
         name = request.GET.get("name")
-        raw_data = SleepData.objects.filter(name=name).annotate(day=TruncDay('date'), hour=ExtractHour('date'), minute=ExtractMinute('date')).order_by('date').values('day', 'is_asleep', 'category', 'hour', 'minute')
-        self_reported_data = {'x': [],
-                              'y': []}
-        recorded_data = {'x': [],
-                         'y': []}
-        self_reported_data_none = {'x': [],
-                                   'y': []}
-        recorded_data_none = {'x': [],
-                              'y': []}
-        day_number = 0
-        current_day = None
-        for datum in raw_data:
-            day = datum['day']
-            reporting_method = datum['category']
-            value = datum['is_asleep']
-            time = datum['hour'] + datum['minute']/60
-            if day != current_day:
-                day_number += 1
-                current_day = day
-                if day_number > 56:
-                    break
+        if chart_type == 'raster':
+            raw_data = SleepData.objects.filter(name=name,
+                                                category__in=['Self-reported Sleep', 'Recorded Sleep'])\
+                                        .annotate(day=TruncDay('date'),
+                                                  hour=ExtractHour('date'),
+                                                  minute=ExtractMinute('date'))\
+                                        .order_by('date')\
+                                        .values('day',
+                                                'is_asleep',
+                                                'category',
+                                                'hour',
+                                                'minute')
+            self_reported_data = {'x': [],
+                                  'y': []}
+            recorded_data = {'x': [],
+                             'y': []}
+            self_reported_data_none = {'x': [],
+                                       'y': []}
+            recorded_data_none = {'x': [],
+                                  'y': []}
+            day_number = 0
+            current_day = None
+            for datum in raw_data:
+                day = datum['day']
+                reporting_method = datum['category']
+                value = datum['is_asleep']
+                time = datum['hour'] + datum['minute']/60
+                if day != current_day:
+                    day_number += 1
+                    current_day = day
+                    if day_number > 56:
+                        break
 
-            if value:
-                if reporting_method == "Self-reported Sleep":
-                    self_reported_data['x'].append(time)
-                    self_reported_data['y'].append(day_number)
-                elif reporting_method == "Recorded Sleep":
-                    recorded_data['x'].append(time)
-                    recorded_data['y'].append(day_number)
-            elif value is None:
-                if reporting_method == "Self-reported Sleep":
-                    self_reported_data_none['x'].append(time)
-                    self_reported_data_none['y'].append(day_number)
-                elif reporting_method == "Recorded Sleep":
-                    recorded_data_none['x'].append(time)
-                    recorded_data_none['y'].append(day_number)
-        return HttpResponse(json.dumps({"self_reported_data": self_reported_data,
-                                        "recorded_data": recorded_data,
-                                        "self_reported_data_none": self_reported_data_none,
-                                        "recorded_data_none": recorded_data_none}))
+                if value:
+                    if reporting_method == "Self-reported Sleep":
+                        self_reported_data['x'].append(time)
+                        self_reported_data['y'].append(day_number)
+                    elif reporting_method == "Recorded Sleep":
+                        recorded_data['x'].append(time)
+                        recorded_data['y'].append(day_number)
+                elif value is None:
+                    if reporting_method == "Self-reported Sleep":
+                        self_reported_data_none['x'].append(time)
+                        self_reported_data_none['y'].append(day_number)
+                    elif reporting_method == "Recorded Sleep":
+                        recorded_data_none['x'].append(time)
+                        recorded_data_none['y'].append(day_number)
+            return HttpResponse(json.dumps({"self_reported_data": self_reported_data,
+                                            "recorded_data": recorded_data,
+                                            "self_reported_data_none": self_reported_data_none,
+                                            "recorded_data_none": recorded_data_none}))
+        elif chart_type == 'regularity':
+            raw_data = SleepData.objects.filter(name=name,
+                                                category='Sleep Regularity') \
+                                        .annotate(day=TruncDay('date')) \
+                                        .order_by('date') \
+                                        .values('day',
+                                                'regularity')
+            x = []
+            y = []
+            for datum in raw_data:
+                x.append(str(datum['day']))
+                regularity = datum['regularity']
+                if math.isnan(regularity):
+                    y.append(None)
+                else:
+                    y.append(regularity)
+            return HttpResponse(json.dumps({"x": x,
+                                            "y": y}))
+        elif chart_type == 'total':
+            raw_data = SleepData.objects.filter(name=name,
+                                                category__in=['Self-reported Sleep', 'Recorded Sleep']) \
+                                        .annotate(day=TruncDay('date')) \
+                                        .values('day',
+                                                'is_asleep',
+                                                'category',
+                                                'interval')
+            recorded_data = {}
+            self_reported_data = {}
+            for datum in raw_data:
+                if datum['is_asleep'] is None:
+                    continue
+                day = str(datum['day'])
+                category = datum['category']
+                if category == 'Recorded Sleep':
+                    assert datum['interval'] == '10mins'
+                    if day not in recorded_data:
+                        recorded_data[day] = 0
+                    if datum['is_asleep']:
+                        recorded_data[day] += 10
+                elif category == 'Self-reported Sleep':
+                    assert datum['interval'] == '1hr'
+                    if day not in self_reported_data:
+                        self_reported_data[day] = 0
+                    if datum['is_asleep']:
+                        self_reported_data[day] += 60
+                else:
+                    raise ValueError('Invalid reporting method for sleep data!')
+
+            recorded_x = []
+            recorded_y = []
+            for day in recorded_data:
+                recorded_x.append(day)
+                recorded_y.append(recorded_data[day]/60)
+
+            self_reported_x = []
+            self_reported_y = []
+            for day in self_reported_data:
+                self_reported_x.append(day)
+                self_reported_y.append(self_reported_data[day]/60)
+
+            return HttpResponse(json.dumps({"recorded_x": recorded_x,
+                                            "recorded_y": recorded_y,
+                                            "self_reported_x": self_reported_x,
+                                            "self_reported_y": self_reported_y}))
     else:
         group_dictionary = GROUPINGS[group]
         database_query = SleepData.objects.all().annotate(hour=ExtractHour('date'), minute=ExtractMinute('date')).values('name', 'is_asleep', 'category', 'hour', 'minute')

@@ -56,6 +56,7 @@ class SleepData(models.Model):
     category = models.CharField(max_length=20)
     is_asleep = models.NullBooleanField()
     interval = models.CharField(default='10mins', max_length=10)
+    regularity = models.FloatField(null=True)
 
     def __str__(self):
         return "Participant: " + str(self.name) + "Date: " + str(self.date) + " Is asleep: " + str(self.is_asleep)

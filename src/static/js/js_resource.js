@@ -341,7 +341,15 @@ const preprocessTextDaily = {
             " calculated over 1 day.",
     "Heart Rate": "Heart rate is computed by detecting peaks (beats) from the PPG and computing the lengths of the" +
             " intervals between adjacent beats.  The inter-beat-interval (IBI) timing is used to estimate the" +
-            " instantaneous heart rate. The average of the instantaneous HR is calculated over 1 day."
+            " instantaneous heart rate. The average of the instantaneous HR is calculated over 1 day.",
+    "Sleep Regularity": "Sleep intervals are calculated using the same accelerometer method used to calculate all other" +
+            " sleep metrics. Then the same 10-minute intervals from consecutive days are compared and if they have" +
+            " identical sleep state (asleep vs awake), the sleep regularity metric is incremented. The metric" +
+            " is then scaled to range between 0 (highly irregular sleep) and 1 (consistent sleep every night).",
+    "Sleep": "First, accelerometer signal (measured from the E4 wrist sensor) is selected when the measured skin" +
+            " temperature is greater than 30°C. Next, a low-pass Butterworth filter (0.1Hz - 20Hz bandpass, 4 pole)" +
+            " is applied. The signal is divided into 1-second intervals, which are characterized as sleep intervals" +
+            " when the standard deviation of the z-axis accelerometer measurement is below 1."
 };
 
 const preprocessTextHourly = {

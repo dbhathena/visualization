@@ -57,7 +57,11 @@ $( document ).ready(function() {
 
     $(".preprocess-description").click(
         function() {
-        //    TODO: add preprocess text
+            if (type_dropdown.val() === "regularity") {
+                description.text(preprocessTextDaily["Sleep Regularity"]);
+            } else {
+                description.text(preprocessTextDaily["Sleep"]);
+            }
             description.css("font-style", "normal");
             description.css("color", "black");
         }

@@ -97,5 +97,7 @@ class SitePrivileges(models.Model):
 
         permissions = (
             ("aggregate", "Can view aggregate data"),
-            ("individual", "Can view specific individual data")
+            ("individual", "Can view specific individual data"),
+            ("study1", "Can view GCS study data"),
+            ("study2", "Can view followup study data")
         )

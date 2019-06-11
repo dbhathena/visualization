@@ -725,8 +725,7 @@ def get_scatter_plot_data(request):
                           .values_list("measurement", flat=True))
             data = {"x": x_data, "y": y_data}
             return HttpResponse(json.dumps({"scatter_data": data, "name": name}))
-
-
+        
 @login_required
 def get_sleep_data(request):
     group = request.GET.get("group")
@@ -785,12 +784,16 @@ def get_sleep_data(request):
                                             "self_reported_data_none": self_reported_data_none,
                                             "recorded_data_none": recorded_data_none}))
         elif chart_type == 'regularity':
+            print("i'm hereeee")
+            print(name)
+            print(SleepData.objects)
             raw_data = SleepData.objects.filter(name=name,
                                                 category='Sleep Regularity') \
                                         .annotate(day=TruncDay('date')) \
                                         .order_by('date') \
                                         .values('day',
                                                 'regularity')
+            print(raw_data)
             x = []
             y = []
             for datum in raw_data:
@@ -802,6 +805,38 @@ def get_sleep_data(request):
                     y.append(regularity)
             return HttpResponse(json.dumps({"x": x,
                                             "y": y}))
+        elif chart_type == 'reported':
+            raw_data = SleepData.objects.filter(name=name,
+                                                category='Reported Sleep') \
+                                        .annotate(day=TruncDay('date')) \
+                                        .values('day',
+                                                'is_asleep',
+                                                'category')
+            reported_data = {}
+            try:
+                for datum in raw_data:
+                    if datum['is_asleep'] is None:
+                        continue
+                    day = str(datum['day'])
+                    category = datum['category']
+                    if category == 'Reported Sleep':
+                        #assert datum['interval'] == '10mins'
+                        if day not in reported_data:
+                            reported_data[day] = 0
+                        if datum['is_asleep']:
+                            reported_data[day] += 10
+                    else:
+                        raise ValueError('Invalid reporting method for sleep data!')
+            except Exception as e:
+                print(e)
+            recorded_x = []
+            recorded_y = []
+            for day in reported_data:
+                recorded_x.append(day)
+                recorded_y.append(reported_data[day]/60)
+
+            return HttpResponse(json.dumps({"reported_x": recorded_x,
+                                            "reported_y": recorded_y}))
         elif chart_type == 'total':
             raw_data = SleepData.objects.filter(name=name,
                                                 category__in=['Self-reported Sleep', 'Recorded Sleep']) \
@@ -854,24 +889,27 @@ def get_sleep_data(request):
         participant_recorded_data = {}
         participant_reported_data = {}
         for datum in database_query:
-            is_asleep = datum['is_asleep']
-            if is_asleep is not None:
-                participant = datum["name"]
-                time = datum['hour'] + datum['minute']/60
-                reporting_method = datum['category']
-                if reporting_method == "Recorded Sleep":
-                    dictionary_to_update = participant_recorded_data
-                elif reporting_method == "Self-reported Sleep":
-                    dictionary_to_update = participant_reported_data
-                else:
-                    raise ValueError('Invalid reporting method for sleep data!')
+            try:
+                is_asleep = datum['is_asleep']
+                if is_asleep is not None:
+                    participant = datum["name"]
+                    time = datum['hour'] + datum['minute']/60
+                    reporting_method = datum['category']
+                    if reporting_method == "Recorded Sleep":
+                        dictionary_to_update = participant_recorded_data
+                    elif reporting_method == "Self-reported Sleep":
+                        dictionary_to_update = participant_reported_data
+                    else:
+                        raise ValueError('Invalid reporting method for sleep data!')
 
-                if participant not in dictionary_to_update:
-                    dictionary_to_update[participant] = {}
-                if time not in dictionary_to_update[participant]:
-                    dictionary_to_update[participant][time] = []
-                dictionary_to_update[participant][time].append(int(is_asleep))
-
+                    if participant not in dictionary_to_update:
+                        dictionary_to_update[participant] = {}
+                    if time not in dictionary_to_update[participant]:
+                        dictionary_to_update[participant][time] = []
+                    dictionary_to_update[participant][time].append(int(is_asleep))
+            except Exception as e:
+                print(e)
+                
         subgroup_data_recorded = {}
         subgroup_data_reported = {}
         for participant in participant_recorded_data:

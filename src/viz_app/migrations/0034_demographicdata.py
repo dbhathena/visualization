@@ -14,7 +14,7 @@ def get_files(directory):
 
 
 def populate_demographic_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Demographics/pie_chart.csv'
+    directory = 'data/Demographics/pie_chart.csv'
     participants = set(PARTICIPANTS)
     DemographicData = apps.get_model('viz_app', 'DemographicData')
     df = pd.read_csv(directory, usecols=['MIT ID:',

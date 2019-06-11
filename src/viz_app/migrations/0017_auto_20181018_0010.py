@@ -16,7 +16,7 @@ def get_files(directory):
 
 
 def populate_eda_data(apps, schema_editor):
-    directory = '../../../../../opt/data/E4/EDA'
+    directory = 'data/E4/EDA'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for edaFile in files:

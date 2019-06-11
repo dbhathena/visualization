@@ -61,8 +61,8 @@ def get_files(directory):
 
 
 def populate_call_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_usage/calls'
-    # directory = '../../data/Phone/phone_usage/calls'
+    directory = 'data/Phone/phone_usage/calls'
+    # directory = 'data/Phone/phone_usage/calls'
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for callFile in files:
@@ -109,8 +109,8 @@ def populate_call_data(apps, schema_editor):
 
 
 def populate_display_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_usage/display'
-    # directory = '../../data/Phone/phone_usage/display'
+    directory = 'data/Phone/phone_usage/display'
+    # directory = 'data/Phone/phone_usage/display'
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for displayFile in files:
@@ -157,8 +157,8 @@ def populate_display_data(apps, schema_editor):
 
 
 def populate_sms_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_usage/sms'
-    # directory = '../../data/Phone/phone_usage/sms'
+    directory = 'data/Phone/phone_usage/sms'
+    # directory = 'data/Phone/phone_usage/sms'
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for smsFile in files:
@@ -205,8 +205,8 @@ def populate_sms_data(apps, schema_editor):
 
 
 def populate_location_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_usage/location'
-    # directory = '../../data/Phone/phone_usage/location'
+    directory = 'data/Phone/phone_usage/location'
+    # directory = 'data/Phone/phone_usage/location'
     files = get_files(directory)
     PhoneData = apps.get_model('viz_app', 'PhoneData')
     for locationFile in files:

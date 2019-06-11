@@ -31,7 +31,7 @@ def get_files(directory):
 
 
 def populate_sms_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_usage/sms'
+    directory = 'data/Phone/phone_usage/sms'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for smsFile in files:
@@ -48,7 +48,7 @@ def populate_sms_data(apps, schema_editor):
                     date = timezone.make_aware(naive_date, tz.gettz('America/New_York'))
 
                     final_key = hour_id_string+measurement_key
-                    measurement = day_data[final_key]
+                    measurement = day_data[final_key] if final_key in day_data else 0
                     frequency = '1hr'
                     group = "Phone_Usage"
                     line = PhysData(name=participant,

@@ -32,7 +32,7 @@ def get_files(directory):
 
 
 def populate_phone_call_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_usage/calls'
+    directory = 'data/Phone/phone_usage/calls'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for callFile in files:
@@ -49,7 +49,7 @@ def populate_phone_call_data(apps, schema_editor):
                     date = timezone.make_aware(naive_date, tz.gettz('America/New_York'))
 
                     final_key = hour_id_string+measurement_key
-                    measurement = day_data[final_key]
+                    measurement = day_data[final_key] if final_key in day_data else 0
                     frequency = '1hr'
                     group = "Phone Usage"
                     line = PhysData(name=participant,

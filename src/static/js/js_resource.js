@@ -117,8 +117,10 @@ const unitsHourly = {
 
 const titleForTypeDaily = {
     "Accelerometer": "Acceleration",
+    "New Accelerometer": "New Acceleration",
     "Heart Rate": "Heart Rate",
     "Motion": "Motion",
+    "New Motion": "New Motion",
     "Temperature": "Temperature",
     "EDA Mean Difference": "EDA: Mean Difference",
     "EDA Mean": "EDA: Mean",
@@ -318,6 +320,19 @@ const preprocessTextDaily = {
         "difference between two consecutive samples over the 3-axis acceleration was processed. Next, the moving " +
         "average of the output over 1 second was processed, and finally, the mean over 1 day was calculated.",
     "Motion": "To estimate the time when a person was in motion, the value of the motion vector magnitude is " +
+        "compared to a predefined \"motion threshold\" (0.05). To calculate the motion vector, the 3-axis raw " +
+        "acceleration was first rescaled to the range [-2g; 2g]. Then a Butterworth bandpass filter was applied " +
+        "(0.1 Hz - 20Hz band, 4 poles) and the maximum difference between two consecutive samples over the 3-axis " +
+        "acceleration was processed. Next, the moving average of the output over 1 second was processed, and " +
+        "finally, the instances when the obtained value was greater than the motion threshold were counted for " +
+        "each day and divided by the number of total accelerometer samples in the day to estimate the fraction " +
+        "of time when a participant was in motion, which was then multiplied by 1440 (the number of minutes in a day) " +
+        "to get the total minutes of the day when a participant was in motion.",
+    "New Accelerometer": "To calculate the motion vector, the 3-axis raw acceleration was first rescaled to the range " +
+        "[-2g; 2g]. Then a Butterworth bandpass filter was applied (0.1 Hz - 20Hz band, 4 poles) and the maximum " +
+        "difference between two consecutive samples over the 3-axis acceleration was processed. Next, the moving " +
+        "average of the output over 1 second was processed, and finally, the mean over 1 day was calculated.",
+    "New Motion": "To estimate the time when a person was in motion, the value of the motion vector magnitude is " +
         "compared to a predefined \"motion threshold\" (0.05). To calculate the motion vector, the 3-axis raw " +
         "acceleration was first rescaled to the range [-2g; 2g]. Then a Butterworth bandpass filter was applied " +
         "(0.1 Hz - 20Hz band, 4 poles) and the maximum difference between two consecutive samples over the 3-axis " +

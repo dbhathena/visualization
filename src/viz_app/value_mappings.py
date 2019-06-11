@@ -4,11 +4,11 @@ from .models import *
 
 PARTICIPANTS = ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
                 'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042', 'M045', 'M047', 'M048',
-                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
+                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060', 'N001']
 
 DATABASE_MAPPING = {
     PhysData: {'Accelerometer', 'Motion', 'Heart Rate', 'Temperature', 'EDA Mean Difference', 'EDA Mean',
-               'Skin Conductance Response'},
+               'Skin Conductance Response', 'New Motion', 'New Accelerometer'},
     PhoneData: {'Incoming Call Count', 'Incoming Call Mean Duration', 'Incoming Call Median Duration',
                 'Incoming Call Std Duration', 'Incoming Call Sum Duration', 'Outgoing Call Count',
                 'Outgoing Call Mean Duration', 'Outgoing Call Median Duration', 'Outgoing Call Std Duration',
@@ -20,7 +20,7 @@ DATABASE_MAPPING = {
                 'Longitude Stationary Std', 'Average Location Std', 'Average Stationary Std', 'Home Stay',
                 'Total Distance', 'Transition Time'},
     WeatherData: {'Insolation Seconds', 'Precipitation Intensity', 'Apparent Temperature High'},
-    SleepData: {'Recorded Sleep', 'Self-reported Sleep'}
+    SleepData: {'Recorded Sleep', 'Self-reported Sleep', 'Reported Sleep'}
 }
 
 GROUPINGS = {

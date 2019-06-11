@@ -18,8 +18,8 @@ def get_files(directory):
 
 
 def populate_weather_data(apps, schema_editor):
-    directory = '../../../../../opt/data/Weather'
-    # directory = '../../data/Weather'
+    directory = 'data/Weather'
+    # directory = 'data/Weather'
     files = get_files(directory)
     WeatherData = apps.get_model('viz_app', 'WeatherData')
     for weatherFile in files:

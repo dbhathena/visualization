@@ -7,8 +7,8 @@ from ..value_mappings import PARTICIPANTS
 
 
 def populate_sleep_regularity_data(apps, schema_editor):
-    # file = '../../data/Sleep/daily_sleep.csv'
-    file = '../../../../../opt/data/Sleep/daily_sleep.csv'
+    # file = 'data/Sleep/daily_sleep.csv'
+    file = 'data/Sleep/daily_sleep.csv'
     participants = set(PARTICIPANTS)
     SleepData = apps.get_model('viz_app', 'SleepData')
     df = pd.read_csv(file, usecols=['date',

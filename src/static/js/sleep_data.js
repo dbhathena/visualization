@@ -15,7 +15,7 @@ $( document ).ready(function() {
     }).done(function(data) {
         user_type = data.user;
         if (group_dropdown.val() === "None") {
-            drawRasterPlot();
+            drawTotalPlot();
         } else {
             drawSleepDataGroup();
         }
@@ -34,7 +34,10 @@ $( document ).ready(function() {
                 drawRasterPlot();
             } else if (plot_type === 'total') {
                 drawTotalPlot();
-            } else {
+            } else if (plot_type === 'reported') {
+                drawReportedPlot();
+            }
+            else {
                 drawRegularityPlot();
             }
         } else {
@@ -93,6 +96,61 @@ $( document ).ready(function() {
     );
 });
 
+function drawReportedPlot() {
+    if (last_request && last_request.readyState !== 4) {
+        last_request.abort();
+    }
+    last_request = $.ajax({
+        url: "/get-sleep-data/",
+        data: {
+            group: group_dropdown.val(),
+            name: names_dropdown.val(),
+            chart_type: type_dropdown.val(),
+        },
+        dataType: "json"
+    }).done(function(data) {
+        const name = names_dropdown.val();
+
+        const reported_trace = {
+            x: data.reported_x,
+            y: data.reported_y,
+            type: 'bar',
+            name: 'Reported asleep'
+        };
+
+        const layout = {
+            title: "<b>Total Reported Sleep per Day for " + name + " </b>",
+            font: {
+                family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                size: 16
+            },
+            titlefont: {
+                size: 28
+            },
+            xaxis: {
+                title: "Date",
+                showline: true,
+                zeroline: false,
+                titlefont: {
+                    size: 20
+                }
+            },
+            yaxis: {
+                title: "Time spent asleep (hours)",
+                showline: true,
+                zeroline: false,
+                titlefont: {
+                    size: 20
+                },
+                fixedrange: true
+            },
+            dragmode: "pan",
+        };
+
+        Plotly.newPlot("chart1", [reported_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+        $("#loading").css("display", "none");
+    });
+}
 
 function drawTotalPlot() {
     if (last_request && last_request.readyState !== 4) {

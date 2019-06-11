@@ -19,7 +19,7 @@ def get_files(directory):
 
 
 def populate_sleep_data_reported(apps, schema_editor):
-    directory = '../../../../../opt/data/Phone/phone_survey'
+    directory = 'data/Phone/phone_survey'
     files = get_files(directory)
     SleepData = apps.get_model('viz_app', 'SleepData')
     for sleepFile in files:

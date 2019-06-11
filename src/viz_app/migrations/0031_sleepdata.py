@@ -18,7 +18,7 @@ def get_files(directory):
 
 
 def populate_sleep_data(apps, schema_editor):
-    directory = '../../../../../opt/data/E4/SLEEP'
+    directory = 'data/E4/SLEEP'
     files = get_files(directory)
     SleepData = apps.get_model('viz_app', 'SleepData')
     for sleepFile in files:

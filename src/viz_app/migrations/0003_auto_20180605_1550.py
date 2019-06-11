@@ -12,7 +12,7 @@ def get_files(directory):
     return [x for x in files if not (x.startswith('.'))]
 
 def populate_hr_data(apps, schema_editor):
-    directory = '../../data/E4/HR'
+    directory = 'data/E4/HR'
     files = get_files(directory)
     PhysData = apps.get_model('viz_app', 'PhysData')
     for hrFile in files:

@@ -24,14 +24,36 @@
         <div class="search-categories">
             <div class="select">
                 <select id="category_dropdown">
-                    {%  for category_value, category_label in categories %}
-                        <option value="{{ category_value }}">{{ category_label }}</option>
-                    {% endfor %}
+                    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
+                        {%  for category_value, category_label in new_categories %}
+                            <option value="{{ category_value }}">{{ category_label }}</option>
+                        {% endfor %}
+                    {% else %}
+                        {%  for category_value, category_label in categories %}
+                            <option value="{{ category_value }}">{{ category_label }}</option>
+                        {% endfor %}
+                    {% endif %}
                 </select>
             </div>
         </div>
     </div>
-    {% for category, types in category_mapping %}
+    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
+        {% for category, types in new_category_mapping %}
+            <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
+                <h3>Select a data type:</h3>
+                <div class="search-categories">
+                    <div class="select">
+                        <select class="type_dropdown" id="{{ category }}_dropdown">
+                            {% for type in types %}
+                                <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        {% for category, types in category_mapping %}
         <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
             <h3>Select a data type:</h3>
             <div class="search-categories">
@@ -44,7 +66,8 @@
                 </div>
             </div>
         </div>
-    {% endfor %}
+        {% endfor %}
+    {% endif %} 
     <div class="dropdown-container"
          {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>
         <h3>Select a group (or none):</h3>

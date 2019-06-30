@@ -120,8 +120,7 @@ MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Heart Rate": (0, 160),
                           "Motion": (0, 1),
                           "Temperature": (20, 40),
-                          }
-
+                          }    
 CATEGORY_MAPPING_DAILY = {
     'Activity': ['Accelerometer',
                  'Motion'],
@@ -167,6 +166,37 @@ CATEGORY_MAPPING_DAILY = {
     "Weather": ['Insolation Seconds',
                 'Precipitation Intensity',
                 'Apparent Temperature High']
+}
+
+NEW_CATEGORY_MAPPING_DAILY = {
+    'Activity': ['Accelerometer',
+                 'Motion'],
+    'Phone_Usage': ['Incoming Call Count',
+                    'Incoming Call Mean Duration',
+                    'Incoming Call Median Duration',
+                    'Incoming Call Std Duration',
+                    'Incoming Call Sum Duration',
+                    'Outgoing Call Count',
+                    'Outgoing Call Mean Duration',
+                    'Outgoing Call Median Duration',
+                    'Outgoing Call Std Duration',
+                    'Outgoing Call Sum Duration',
+                    'Screen On Count',
+                    'Screen On Mean Duration',
+                    'Screen On Median Duration',
+                    'Screen On Std Duration',
+                    'Screen On Sum Duration',
+                    'Incoming SMS Count',
+                    'Incoming SMS Mean Length',
+                    'Incoming SMS Median Length',
+                    'Incoming SMS Std Length',
+                    'Incoming SMS Sum Length',
+                    'Outgoing SMS Count',
+                    'Outgoing SMS Mean Length',
+                    'Outgoing SMS Median Length',
+                    'Outgoing SMS Std Length',
+                    'Outgoing SMS Sum Length'],
+    "Location": ['Home Stay']
 }
 
 CATEGORY_MAPPING_HOURLY = {
@@ -219,6 +249,12 @@ CATEGORIES_DAILY = {
     'Phone_Usage': 'Phone Usage',
     'Location': 'Location',
     'Weather': 'Weather'
+}
+
+NEW_CATEGORIES = {
+    'Activity': 'Activity',
+    'Phone_Usage': 'Phone Usage',
+    'Location': 'Location',
 }
 
 CATEGORIES_HOURLY = {

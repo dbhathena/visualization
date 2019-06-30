@@ -54,7 +54,7 @@
                 <select id="type_dropdown">
                     <option value="total" selected>Total Sleep</option>
                     <option value="regularity">Sleep Regularity</option>
-                    <option value="raster">Sleep Raster Plot</option>
+                    <option value="raster" {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>Sleep Raster Plot</option>
                 </select>
             </div>
         </div>

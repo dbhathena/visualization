@@ -18,63 +18,126 @@
 {% endblock %}
 
 {% block options %}
-    <div class="axis-selections">
-        <div class="dropdown-container">
-            <h3>Select X axis category:</h3>
-            <div class="search-categories">
-                <div class="select">
-                    <select id="x_axis_category">
-                        {% for category_value, category_label in categories %}
-                            <option value="{{ category_value }}">{{ category_label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
-        {% for category, types in category_mapping %}
-            <div class="dropdown-container data-dropdown-container x_axis" id="x_axis_{{ category }}_container">
-                <h3>Select X axis data type:</h3>
-                <div class="search-categories">
-                    <div class="select">
-                        <select class="x_axis_dropdown" id="x_axis_{{ category }}_dropdown">
-                            {% for type in types %}
-                                <option value="{{ type }}">{{ type }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
 
-    <div class="axis-selections">
-        <div class="dropdown-container">
-            <h3>Select Y axis category:</h3>
-            <div class="search-categories">
-                <div class="select">
-                    <select id="y_axis_category">
-                        {% for category_value, category_label in categories %}
-                            <option value="{{ category_value }}">{{ category_label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
-        {% for category, types in category_mapping %}
-            <div class="dropdown-container data-dropdown-container y_axis" id="y_axis_{{ category }}_container">
-                <h3>Select Y axis data type:</h3>
+    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
+        <div class="axis-selections">
+            <div class="dropdown-container">
+                <h3>Select X axis category:</h3>
                 <div class="search-categories">
                     <div class="select">
-                        <select class="y_axis_dropdown" id="y_axis_{{ category }}_dropdown">
-                            {% for type in types %}
-                                <option value="{{ type }}">{{ type }}</option>
+                        <select id="x_axis_category">
+                            {% for category_value, category_label in new_categories %}
+                                <option value="{{ category_value }}">{{ category_label }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 </div>
             </div>
-        {% endfor %}
-    </div>
+            {% for category, types in new_category_mapping %}
+                <div class="dropdown-container data-dropdown-container x_axis" id="x_axis_{{ category }}_container">
+                    <h3>Select X axis data type:</h3>
+                    <div class="search-categories">
+                        <div class="select">
+                            <select class="x_axis_dropdown" id="x_axis_{{ category }}_dropdown">
+                                {% for type in types %}
+                                    <option value="{{ type }}">{{ type }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="axis-selections">
+                <div class="dropdown-container">
+                    <h3>Select X axis category:</h3>
+                    <div class="search-categories">
+                        <div class="select">
+                            <select id="x_axis_category">
+                                {% for category_value, category_label in categories %}
+                                    <option value="{{ category_value }}">{{ category_label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {% for category, types in category_mapping %}
+                    <div class="dropdown-container data-dropdown-container x_axis" id="x_axis_{{ category }}_container">
+                        <h3>Select X axis data type:</h3>
+                        <div class="search-categories">
+                            <div class="select">
+                                <select class="x_axis_dropdown" id="x_axis_{{ category }}_dropdown">
+                                    {% for type in types %}
+                                        <option value="{{ type }}">{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+    {% endif %}
+
+    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
+        <div class="axis-selections">
+                <div class="dropdown-container">
+                    <h3>Select Y axis category:</h3>
+                    <div class="search-categories">
+                        <div class="select">
+                            <select id="y_axis_category">
+                                {% for category_value, category_label in new_categories %}
+                                    <option value="{{ category_value }}">{{ category_label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {% for category, types in new_category_mapping %}
+                    <div class="dropdown-container data-dropdown-container y_axis" id="y_axis_{{ category }}_container">
+                        <h3>Select Y axis data type:</h3>
+                        <div class="search-categories">
+                            <div class="select">
+                                <select class="y_axis_dropdown" id="y_axis_{{ category }}_dropdown">
+                                    {% for type in types %}
+                                        <option value="{{ type }}">{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+    {% else %}
+        <div class="axis-selections">
+                <div class="dropdown-container">
+                    <h3>Select Y axis category:</h3>
+                    <div class="search-categories">
+                        <div class="select">
+                            <select id="y_axis_category">
+                                {% for category_value, category_label in categories %}
+                                    <option value="{{ category_value }}">{{ category_label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                {% for category, types in category_mapping %}
+                    <div class="dropdown-container data-dropdown-container y_axis" id="y_axis_{{ category }}_container">
+                        <h3>Select Y axis data type:</h3>
+                        <div class="search-categories">
+                            <div class="select">
+                                <select class="y_axis_dropdown" id="y_axis_{{ category }}_dropdown">
+                                    {% for type in types %}
+                                        <option value="{{ type }}">{{ type }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+    {% endif %}
 
     {% if perms.viz_app.aggregate %}
         <div class="dropdown-container">

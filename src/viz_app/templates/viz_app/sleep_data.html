@@ -47,24 +47,24 @@
             </div>
         </div>
     </div>
-    <div class="dropdown-container" id="type_container">
+    <div class="dropdown-container" id="type_container" {% if perms.viz_app.aggregate %} style="display: none" {% endif %}>>
         <h3>Select a chart type:</h3>
         <div class="search-categories">
             <div class="select">
                 <select id="type_dropdown">
-                    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}s
-                        <option value="total" selected>Total Sleep</option>
-                        <option value="regularity">Sleep Regularity</option>
-                    {% else %}
-                        <option value="total" selected>Total Sleep</option>
-                        <option value="regularity">Sleep Regularity</option>
-                        <option value="raster">Sleep Raster Plot</option>
+                        {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
+                            <option value="total" selected>Total Sleep</option>
+                            <option value="regularity">Sleep Regularity</option>                                            
+                        {% else %}
+                            <option value="total" selected>Total Sleep</option>
+                            <option value="regularity">Sleep Regularity</option>
+                            <option value="raster">Sleep Raster Plot</option>
                     {% endif %}
                 </select>
             </div>
         </div>
     </div>
-    <div class="dropdown-container" id="names_container">
+    <div class="dropdown-container" id="names_container" {% if perms.viz_app.aggregate %} style="display: none" {% endif %}>
         <h3>Select an individual:</h3>
         <div class="search-categories">
             <div class="select">

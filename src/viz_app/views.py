@@ -783,16 +783,12 @@ def get_sleep_data(request):
                                             "self_reported_data_none": self_reported_data_none,
                                             "recorded_data_none": recorded_data_none}))
         elif chart_type == 'regularity':
-            print("i'm hereeee")
-            print(name)
-            print(SleepData.objects)
             raw_data = SleepData.objects.filter(name=name,
                                                 category='Sleep Regularity') \
                                         .annotate(day=TruncDay('date')) \
                                         .order_by('date') \
                                         .values('day',
                                                 'regularity')
-            print(raw_data)
             x = []
             y = []
             for datum in raw_data:
@@ -824,8 +820,6 @@ def get_sleep_data(request):
                             reported_data[day] = 0
                         if datum['is_asleep']:
                             reported_data[day] += 10
-                    else:
-                        raise ValueError('Invalid reporting method for sleep data!')
             except Exception as e:
                 print(e)
             recorded_x = []
@@ -889,23 +883,24 @@ def get_sleep_data(request):
         participant_reported_data = {}
         for datum in database_query:
             try:
-                is_asleep = datum['is_asleep']
-                if is_asleep is not None:
-                    participant = datum["name"]
-                    time = datum['hour'] + datum['minute']/60
-                    reporting_method = datum['category']
-                    if reporting_method == "Recorded Sleep":
-                        dictionary_to_update = participant_recorded_data
-                    elif reporting_method == "Self-reported Sleep":
-                        dictionary_to_update = participant_reported_data
-                    else:
-                        raise ValueError('Invalid reporting method for sleep data!')
-
-                    if participant not in dictionary_to_update:
-                        dictionary_to_update[participant] = {}
-                    if time not in dictionary_to_update[participant]:
-                        dictionary_to_update[participant][time] = []
-                    dictionary_to_update[participant][time].append(int(is_asleep))
+                if "is_asleep" in datum:
+                    is_asleep = datum['is_asleep']
+                    if is_asleep is not None:
+                        participant = datum["name"]
+                        time = datum['hour'] + datum['minute']/60
+                        reporting_method = datum['category']
+                        if reporting_method == "Recorded Sleep":
+                            dictionary_to_update = participant_recorded_data
+                        elif reporting_method == "Self-reported Sleep":
+                            dictionary_to_update = participant_reported_data
+                        else:
+                            raise ValueError("Invalid reporting")
+                        
+                        if participant not in dictionary_to_update:
+                            dictionary_to_update[participant] = {}
+                        if time not in dictionary_to_update[participant]:
+                            dictionary_to_update[participant][time] = []
+                        dictionary_to_update[participant][time].append(int(is_asleep))
             except Exception as e:
                 print(e)
                 

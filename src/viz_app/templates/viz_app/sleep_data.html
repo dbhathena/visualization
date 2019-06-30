@@ -52,9 +52,12 @@
         <div class="search-categories">
             <div class="select">
                 <select id="type_dropdown">
-                    <option value="total" selected>Total Sleep</option>
-                    <option value="regularity">Sleep Regularity</option>
-                    {% if not perms.viz_app.individual %}
+                    {% if perms.viz_app.individual and not perms.viz_app.aggregate %}s
+                        <option value="total" selected>Total Sleep</option>
+                        <option value="regularity">Sleep Regularity</option>
+                    {% else %}
+                        <option value="total" selected>Total Sleep</option>
+                        <option value="regularity">Sleep Regularity</option>
                         <option value="raster">Sleep Raster Plot</option>
                     {% endif %}
                 </select>

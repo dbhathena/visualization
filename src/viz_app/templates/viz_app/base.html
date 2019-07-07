@@ -22,8 +22,26 @@
 
 <body>
     <main>
-        <nav class="topnav">
-            <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
+        <nav class="topnav"
+        {% if perms.viz_app.study1 %}
+            style="background-color: indigo";
+        {% endif %}>
+            {% if request.user.is_authenticated %}
+                {% if perms.viz_app.study_2 %}    
+                    <div class="dropdown">
+                            <a class="first_button">Study 1</a>
+                            <div class="dropdown-content">
+                                <a href="{% url 'viz_app:home' %}">Study 1</a>
+                                <hr>
+                                <a href="{% url 'viz_app:home2' %}">Study 2</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a class="first_button" href="{% url 'viz_app:home' %}">Study 1</a>
+                {% endif %}
+            {% else %}
+                <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
+            {% endif %}
             <a class="button" href="{% url 'viz_app:home' %}">Home</a>
             <a class="button" href="{% url 'viz_app:about' %}">About</a>
             {% if request.user.is_authenticated %}

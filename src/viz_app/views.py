@@ -13,6 +13,7 @@ from .value_mappings import *
 
 
 # Create your views here.
+STUDY2_KEY = "2"
 
 @login_required
 def index(request):
@@ -56,24 +57,31 @@ def demographics(request):
 
 
 def home(request):
-    return render(request, 'viz_app/home.html')
-
+    name = request.resolver_match.view_name
+    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
+    value = "2" if STUDY2_KEY in name else "1"
+    return render(request, 'viz_app/home.html', {"parent" : parent, "value" : value})
 
 def about(request):
-    return render(request, 'viz_app/about.html')
-
+    name = request.resolver_match.view_name
+    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
+    return render(request, 'viz_app/about.html', {"parent" : parent})
 
 def publications(request):
-    return render(request, 'viz_app/publications.html')
-
+    name = request.resolver_match.view_name
+    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
+    return render(request, 'viz_app/publications.html', {"parent" : parent})
 
 def team(request):
-    return render(request, 'viz_app/team.html')
+    name = request.resolver_match.view_name
+    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
+    return render(request, 'viz_app/team.html', {"parent" : parent})
 
 
 def faq(request):
-    return render(request, 'viz_app/faq.html')
-
+    name = request.resolver_match.view_name
+    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
+    return render(request, 'viz_app/faq.html', {"parent" : parent})
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'form-input', 'id': 'id_username'}))
@@ -83,7 +91,10 @@ class LoginForm(forms.Form):
 def login(request):
     if request.user.is_authenticated:
         print("User is authenticated")
-        return HttpResponseRedirect(reverse('viz_app:home'))
+        if request.user.has_perm('viz_app.study1'):
+            return HttpResponseRedirect(reverse('viz_app:home'))
+        elif request.user.has_perm('viz_app.study2'):
+            return HttpResponseRedirect(reverse('viz_app:home2'))
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -92,7 +103,10 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
-                return HttpResponseRedirect(reverse('viz_app:home'))
+                if user.has_perm('viz_app.study1'):
+                    return HttpResponseRedirect(reverse('viz_app:home'))
+                elif user.has_perm('viz_app.study2'):
+                    return HttpResponseRedirect(reverse('viz_app:home2'))
             else:
                 form.add_error('username', 'invalid auth')
     else:
@@ -132,6 +146,7 @@ def get_study_trends_data(request):
                 subject_data[x["hand"]]["measurements"].append(x["measurement"])
             return HttpResponse(json.dumps({"subject_data": subject_data}))
         else:
+            val = 60 if type in PHONES else 1
             subject_data = {None: {"dates": [], "measurements": []},
                             }
             raw_data = list(model.objects
@@ -142,7 +157,9 @@ def get_study_trends_data(request):
                             .values("date", "measurement"))
             for x in raw_data:
                 subject_data[None]["dates"].append(x["date"].isoformat())
-                subject_data[None]["measurements"].append(x["measurement"])
+                value = x["measurement"]
+                ans = value/val if value else None
+                subject_data[None]["measurements"].append(ans)
             return HttpResponse(json.dumps({"subject_data": subject_data}))
     else:
         aggregation = request.GET.get("aggregation")
@@ -212,13 +229,16 @@ def get_study_trends_data(request):
             return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
 
         else:
+            val = 60 if type in PHONES else 1
             raw_data = {}
             database_query = model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement")
             for datum in database_query:
                 participant = datum["name"]
                 if participant not in raw_data:
                     raw_data[participant] = []
-                raw_data[participant].append(datum["measurement"])
+                value = datum["measurement"]
+                ans = value/val if value else None
+                raw_data[participant].append(ans)
 
             aggregate_data = {}
             group_sizes = {}
@@ -252,239 +272,289 @@ def get_study_trends_data(request):
 @permission_required("viz_app.aggregate")
 @login_required
 def get_weekly_trends_data(request):
-    type = request.GET.get("type")
-    group = request.GET.get("group")
-    model = None
-    for m in DATABASE_MAPPING:
-        if type in DATABASE_MAPPING[m]:
-            model = m
-    assert model is not None
-    aggregation = request.GET.get("aggregation")
-    aggregation_method = AGGREGATION_METHODS[aggregation]
-    group_dictionary = GROUPINGS[group]
-    if type in SEPARATE_HANDS:
-        raw_data_left = {}
-        raw_data_right = {}
-        database_query = model.objects.filter(category=type, interval="24hrs").order_by("hand", "name", "date").values("name", "measurement", "hand", weekday=ExtractWeekDay("date"))
-        current_participant = database_query[0]["name"]
-        isAfterFirstSunday = False
-        isBeforeLastSaturday = True
-        for i in range(len(database_query)):
-            datum = database_query[i]
-            if datum["name"] != current_participant:    # reached the next participant in the query
-                current_participant = datum["name"]
-                isAfterFirstSunday = False
-                isBeforeLastSaturday = True
-
-            # If we reach a Sunday, we must be after the first Sunday
-            if datum["weekday"] == 1:
-                isAfterFirstSunday = True
-
-            # If the date is within the appropriate range, record the data
-            if isAfterFirstSunday and isBeforeLastSaturday:
-                hand = datum["hand"]
-                if hand == "left":
-                    if current_participant not in raw_data_left:
-                        raw_data_left[current_participant] = []
-                    raw_data_left[current_participant].append(datum["measurement"])
-                else:
-                    if current_participant not in raw_data_right:
-                        raw_data_right[current_participant] = []
-                    raw_data_right[current_participant].append(datum["measurement"])
-
-            # If this was the last Saturday for this participant, we are no longer before the last Saturday
-            if datum["weekday"] == 7:
-                if i+7 > len(database_query) or database_query[i+7]["name"] != current_participant:
-                    isBeforeLastSaturday = False
-
-        aggregate_data = {"left": {},
-                          "right": {} }
-        error_trace_by_subgroup = {"left": {},
-                                   "right": {} }
-        group_sizes = {}
-        for subgroup in group_dictionary:
-            group_sizes[subgroup] = model.objects.filter(category=type,
-                                                         interval="24hrs",
-                                                         measurement__isnull=False,
-                                                         name__in=group_dictionary[subgroup]).distinct('name').count()
-            subgroup_data_left = []
-            subgroup_data_right = []
-            subgroup_error_left = []
-            subgroup_error_right = []
-            for day in range(0, 49):
-                day_data_left = []
-                day_data_right = []
-                for participant in group_dictionary[subgroup]:
-                    if (participant in raw_data_left
-                            and day < len(raw_data_left[participant])
-                            and raw_data_left[participant][day] is not None):
-                        day_data_left.append(raw_data_left[participant][day])
-                    if (participant in raw_data_right
-                            and day < len(raw_data_right[participant])
-                            and raw_data_right[participant][day] is not None):
-                        day_data_right.append(raw_data_right[participant][day])
-
-                if not day_data_left:
-                    subgroup_data_left.append(None)
-                    subgroup_error_left.append(None)
-                else:
-                    subgroup_data_left.append(aggregation_method(day_data_left))
-                    subgroup_error_left.append(statistics.pstdev(day_data_left))
-
-                if not day_data_right:
-                    subgroup_data_right.append(None)
-                    subgroup_error_right.append(None)
-                else:
-                    subgroup_data_right.append(aggregation_method(day_data_right))
-                    subgroup_error_right.append(statistics.pstdev(day_data_right))
-
-            aggregate_data["left"][subgroup] = subgroup_data_left
-            aggregate_data["right"][subgroup] = subgroup_data_right
-            error_trace_by_subgroup["left"][subgroup] = get_error_trace_from_std_devs(subgroup_data_left, subgroup_error_left)
-            error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
-
-        return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
-
-    else:
-        raw_data = {}
-        database_query = model.objects.filter(category=type, interval="24hrs").order_by("name", "date").values("name",
-                                                                                                               "measurement",
-                                                                                                               weekday=ExtractWeekDay(
-                                                                                                                   "date"))
-        current_participant = database_query[0]["name"]
-        isAfterFirstSunday = False
-        isBeforeLastSaturday = True
-        for i in range(len(database_query)):
-            datum = database_query[i]
-            if datum["name"] != current_participant:  # reached the next participant in the query
-                current_participant = datum["name"]
-                isAfterFirstSunday = False
-                isBeforeLastSaturday = True
-
-            # If we reach a Sunday, we must be after the first Sunday
-            if datum["weekday"] == 1:
-                isAfterFirstSunday = True
-
-            # If the date is within the appropriate range, record the data
-            if isAfterFirstSunday and isBeforeLastSaturday:
-                if current_participant not in raw_data:
-                    raw_data[current_participant] = []
-                raw_data[current_participant].append(datum["measurement"])
-
-            # If this was the last Saturday for this participant, we are no longer before the last Saturday
-            if datum["weekday"] == 7:  # Saturday
-                if i+7 > len(database_query) or database_query[i+7]["name"] != current_participant:
-                    isBeforeLastSaturday = False
-
-        aggregate_data = {}
-        group_sizes = {}
-        error_trace_by_subgroup = {}
-        for subgroup in group_dictionary:
-            group_sizes[subgroup] = model.objects.filter(category=type,
-                                                         interval='24hrs',
-                                                         measurement__isnull=False,
-                                                         name__in=group_dictionary[subgroup]).distinct("name").count()
-            subgroup_data = []
-            subgroup_std_devs = []
-            for day in range(0, 49):
-                day_data = []
-                for participant in group_dictionary[subgroup]:
-                    if (participant in raw_data
-                            and day < len(raw_data[participant])
-                            and raw_data[participant][day] is not None):
-                        day_data.append(raw_data[participant][day])
-                if not day_data:
-                    subgroup_data.append(None)
-                    subgroup_std_devs.append(None)
-                else:
-                    subgroup_data.append(aggregation_method(day_data))
-                    subgroup_std_devs.append(statistics.pstdev(day_data))
-            aggregate_data[subgroup] = subgroup_data
-            error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
-
-        return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
-
-
-@login_required
-def get_daily_trends_data(request):
-    type = request.GET.get("type")
-    model = None
-    for m in DATABASE_MAPPING:
-        if type in DATABASE_MAPPING[m]:
-            model = m
-    assert model is not None
-    group = request.GET.get("group")
-    if group == "None":
-        name = request.GET.get("name")
-        if type in SEPARATE_HANDS:
-            subject_data = {"left": [], "right": []}
-            for hour in range(0, 24):
-                for hand in subject_data:
-                    hour_data = list(model.objects
-                                     .filter(name=name,
-                                             category=type,
-                                             interval="1hr",
-                                             hand=hand,
-                                             date__hour=hour,
-                                             measurement__isnull=False)
-                                     .values_list("measurement", flat=True))
-                    if hour_data:
-                        subject_data[hand].append(statistics.mean(hour_data))
-                    else:
-                        subject_data[hand].append(None)
-        else:
-            subject_data = {"both": []}
-            for hour in range(0, 24):
-                hour_data = list(model.objects
-                                 .filter(name=name,
-                                         category=type,
-                                         interval="1hr",
-                                         date__hour=hour,
-                                         measurement__isnull=False)
-                                 .values_list("measurement", flat=True))
-                if hour_data:
-                    subject_data["both"].append(statistics.mean(hour_data))
-                else:
-                    subject_data["both"].append(None)
-
-        return HttpResponse(json.dumps({"subject_data": subject_data}))
-
-    else:
+    try:
+        type = request.GET.get("type")
+        group = request.GET.get("group")
+        model = None
+        for m in DATABASE_MAPPING:
+            if type in DATABASE_MAPPING[m]:
+                model = m
+        assert model is not None
         aggregation = request.GET.get("aggregation")
         aggregation_method = AGGREGATION_METHODS[aggregation]
         group_dictionary = GROUPINGS[group]
-
         if type in SEPARATE_HANDS:
+            raw_data_left = {}
+            raw_data_right = {}
+            database_query = model.objects.filter(category=type, interval="24hrs").order_by("hand", "name", "date").values("name", "measurement", "hand", weekday=ExtractWeekDay("date"))
+            current_participant = database_query[0]["name"]
+            isAfterFirstSunday = False
+            isBeforeLastSaturday = True
+            for i in range(len(database_query)):
+                datum = database_query[i]
+                if datum["name"] != current_participant:    # reached the next participant in the query
+                    current_participant = datum["name"]
+                    isAfterFirstSunday = False
+                    isBeforeLastSaturday = True
 
-            raw_data = {"left": {},
-                        "right": {}}
-            database_query = model.objects.filter(category=type,
-                                                  interval="1hr",
-                                                  measurement__isnull=False).values("name", "measurement", "hand", hour=ExtractHour("date"))
-            for datum in database_query:
-                participant = datum["name"]
-                subgroup = None
-                for sg in group_dictionary:
-                    if participant in group_dictionary[sg]:
-                        subgroup=sg
-                        break
-                if subgroup is None:
-                    continue
-                hour = datum["hour"]
-                hand = datum["hand"]
-                if subgroup not in raw_data[hand]:
-                    raw_data[hand][subgroup] = {}
-                if hour not in raw_data[hand][subgroup]:
-                    raw_data[hand][subgroup][hour] = []
-                raw_data[hand][subgroup][hour].append(datum["measurement"])
+                # If we reach a Sunday, we must be after the first Sunday
+                if datum["weekday"] == 1:
+                    isAfterFirstSunday = True
+
+                # If the date is within the appropriate range, record the data
+                if isAfterFirstSunday and isBeforeLastSaturday:
+                    hand = datum["hand"]
+                    if hand == "left":
+                        if current_participant not in raw_data_left:
+                            raw_data_left[current_participant] = []
+                        raw_data_left[current_participant].append(datum["measurement"])
+                    else:
+                        if current_participant not in raw_data_right:
+                            raw_data_right[current_participant] = []
+                        raw_data_right[current_participant].append(datum["measurement"])
+
+                # If this was the last Saturday for this participant, we are no longer before the last Saturday
+                if datum["weekday"] == 7:
+                    if i+7 > len(database_query) or database_query[i+7]["name"] != current_participant:
+                        isBeforeLastSaturday = False
 
             aggregate_data = {"left": {},
                               "right": {} }
             error_trace_by_subgroup = {"left": {},
                                        "right": {} }
             group_sizes = {}
-            for hand in {"left", "right"}:
-                for subgroup in raw_data[hand]:
+            for subgroup in group_dictionary:
+                group_sizes[subgroup] = model.objects.filter(category=type,
+                                                             interval="24hrs",
+                                                             measurement__isnull=False,
+                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
+                subgroup_data_left = []
+                subgroup_data_right = []
+                subgroup_error_left = []
+                subgroup_error_right = []
+                for day in range(0, 49):
+                    day_data_left = []
+                    day_data_right = []
+                    for participant in group_dictionary[subgroup]:
+                        if (participant in raw_data_left
+                                and day < len(raw_data_left[participant])
+                                and raw_data_left[participant][day] is not None):
+                            day_data_left.append(raw_data_left[participant][day])
+                        if (participant in raw_data_right
+                                and day < len(raw_data_right[participant])
+                                and raw_data_right[participant][day] is not None):
+                            day_data_right.append(raw_data_right[participant][day])
+
+                    if not day_data_left:
+                        subgroup_data_left.append(None)
+                        subgroup_error_left.append(None)
+                    else:
+                        subgroup_data_left.append(aggregation_method(day_data_left))
+                        subgroup_error_left.append(statistics.pstdev(day_data_left))
+
+                    if not day_data_right:
+                        subgroup_data_right.append(None)
+                        subgroup_error_right.append(None)
+                    else:
+                        subgroup_data_right.append(aggregation_method(day_data_right))
+                        subgroup_error_right.append(statistics.pstdev(day_data_right))
+
+                aggregate_data["left"][subgroup] = subgroup_data_left
+                aggregate_data["right"][subgroup] = subgroup_data_right
+                error_trace_by_subgroup["left"][subgroup] = get_error_trace_from_std_devs(subgroup_data_left, subgroup_error_left)
+                error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
+
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+
+        else:
+            val = 60 if type in PHONES else 1
+            raw_data = {}
+            database_query = model.objects.filter(category=type, interval="24hrs").order_by("name", "date").values("name",
+                                                                                                                   "measurement",
+                                                                                                                   weekday=ExtractWeekDay(
+                                                                                                                       "date"))
+            current_participant = database_query[0]["name"]
+            isAfterFirstSunday = False
+            isBeforeLastSaturday = True
+            for i in range(len(database_query)):
+                datum = database_query[i]
+                if datum["name"] != current_participant:  # reached the next participant in the query
+                    current_participant = datum["name"]
+                    isAfterFirstSunday = False
+                    isBeforeLastSaturday = True
+
+                # If we reach a Sunday, we must be after the first Sunday
+                if datum["weekday"] == 1:
+                    isAfterFirstSunday = True
+
+                # If the date is within the appropriate range, record the data
+                if isAfterFirstSunday and isBeforeLastSaturday:
+                    if current_participant not in raw_data:
+                        raw_data[current_participant] = []
+                    value = datum["measurement"]
+                    ans = value/val if value else None
+                    raw_data[current_participant].append(ans)
+                # If this was the last Saturday for this participant, we are no longer before the last Saturday
+                if datum["weekday"] == 7:  # Saturday
+                    if i+7 > len(database_query) or database_query[i+7]["name"] != current_participant:
+                        isBeforeLastSaturday = False
+
+            aggregate_data = {}
+            group_sizes = {}
+            error_trace_by_subgroup = {}
+            for subgroup in group_dictionary:
+                group_sizes[subgroup] = model.objects.filter(category=type,
+                                                             interval='24hrs',
+                                                             measurement__isnull=False,
+                                                             name__in=group_dictionary[subgroup]).distinct("name").count()
+                subgroup_data = []
+                subgroup_std_devs = []
+                for day in range(0, 49):
+                    day_data = []
+                    for participant in group_dictionary[subgroup]:
+                        if (participant in raw_data
+                                and day < len(raw_data[participant])
+                                and raw_data[participant][day] is not None):
+                            day_data.append(raw_data[participant][day])
+                    if not day_data:
+                        subgroup_data.append(None)
+                        subgroup_std_devs.append(None)
+                    else:
+                        subgroup_data.append(aggregation_method(day_data))
+                        subgroup_std_devs.append(statistics.pstdev(day_data))
+                aggregate_data[subgroup] = subgroup_data
+                error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+    except Exception as e:
+        print(e)
+
+@login_required
+def get_daily_trends_data(request):
+    try:
+        type = request.GET.get("type")
+        model = None
+        for m in DATABASE_MAPPING:
+            if type in DATABASE_MAPPING[m]:
+                model = m
+        assert model is not None
+        group = request.GET.get("group")
+        if group == "None":
+            name = request.GET.get("name")
+            if type in SEPARATE_HANDS:
+                subject_data = {"left": [], "right": []}
+                for hour in range(0, 24):
+                    for hand in subject_data:
+                        hour_data = list(model.objects
+                                         .filter(name=name,
+                                                 category=type,
+                                                 interval="1hr",
+                                                 hand=hand,
+                                                 date__hour=hour,
+                                                 measurement__isnull=False)
+                                         .values_list("measurement", flat=True))
+                        if hour_data:
+                            subject_data[hand].append(statistics.mean(hour_data))
+                        else:
+                            subject_data[hand].append(None)
+            else:
+                val = 60 if type in PHONES else 1
+                subject_data = {"both": []}
+                for hour in range(0, 24):
+                    hour_data = list(model.objects
+                                     .filter(name=name,
+                                             category=type,
+                                             interval="1hr",
+                                             date__hour=hour,
+                                             measurement__isnull=False)
+                                     .values_list("measurement", flat=True))
+                    if hour_data:
+                        subject_data["both"].append(statistics.mean(hour_data/val))
+                    else:
+                        subject_data["both"].append(None)
+
+            return HttpResponse(json.dumps({"subject_data": subject_data}))
+
+        else:
+            aggregation = request.GET.get("aggregation")
+            aggregation_method = AGGREGATION_METHODS[aggregation]
+            group_dictionary = GROUPINGS[group]
+
+            if type in SEPARATE_HANDS:
+
+                raw_data = {"left": {},
+                            "right": {}}
+                database_query = model.objects.filter(category=type,
+                                                      interval="1hr",
+                                                      measurement__isnull=False).values("name", "measurement", "hand", hour=ExtractHour("date"))
+                for datum in database_query:
+                    participant = datum["name"]
+                    subgroup = None
+                    for sg in group_dictionary:
+                        if participant in group_dictionary[sg]:
+                            subgroup=sg
+                            break
+                    if subgroup is None:
+                        continue
+                    hour = datum["hour"]
+                    hand = datum["hand"]
+                    if subgroup not in raw_data[hand]:
+                        raw_data[hand][subgroup] = {}
+                    if hour not in raw_data[hand][subgroup]:
+                        raw_data[hand][subgroup][hour] = []
+                    raw_data[hand][subgroup][hour].append(datum["measurement"])
+
+                aggregate_data = {"left": {},
+                                  "right": {} }
+                error_trace_by_subgroup = {"left": {},
+                                           "right": {} }
+                group_sizes = {}
+                for hand in {"left", "right"}:
+                    for subgroup in raw_data[hand]:
+                        group_sizes[subgroup] = model.objects.filter(category=type,
+                                                                     interval='1hr',
+                                                                     measurement__isnull=False,
+                                                                     name__in=group_dictionary[subgroup]).distinct('name').count()
+                        subgroup_data = []
+                        subgroup_std_devs = []
+                        for hour in range(0, 24):
+                            hour_data = raw_data[hand][subgroup][hour]
+                            if hour_data:
+                                subgroup_data.append(aggregation_method(hour_data))
+                                subgroup_std_devs.append(statistics.pstdev(hour_data))
+                            else:
+                                subgroup_data.append(None)
+                                subgroup_std_devs.append(None)
+                        aggregate_data[hand][subgroup] = subgroup_data
+                        error_trace_by_subgroup[hand][subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+
+                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+            else:
+                val = 60 if type in PHONES else 1
+                raw_data = {}
+                database_query = model.objects.filter(category=type,
+                                                      interval="1hr",
+                                                      measurement__isnull=False).values("name", "measurement", hour=ExtractHour("date"))
+                for datum in database_query:
+                    participant = datum["name"]
+                    subgroup = None
+                    for sg in group_dictionary:
+                        if participant in group_dictionary[sg]:
+                            subgroup = sg
+                            break
+                    if subgroup is None:
+                        continue
+                    hour = datum["hour"]
+                    if subgroup not in raw_data:
+                        raw_data[subgroup] = {}
+                    if hour not in raw_data[subgroup]:
+                        raw_data[subgroup][hour] = []
+                    raw_data[subgroup][hour].append(datum["measurement"]/val)
+                    
+                aggregate_data = {}
+                error_trace_by_subgroup = {}
+                group_sizes = {}
+                for subgroup in raw_data:
                     group_sizes[subgroup] = model.objects.filter(category=type,
                                                                  interval='1hr',
                                                                  measurement__isnull=False,
@@ -492,61 +562,19 @@ def get_daily_trends_data(request):
                     subgroup_data = []
                     subgroup_std_devs = []
                     for hour in range(0, 24):
-                        hour_data = raw_data[hand][subgroup][hour]
+                        hour_data = raw_data[subgroup][hour]
                         if hour_data:
                             subgroup_data.append(aggregation_method(hour_data))
                             subgroup_std_devs.append(statistics.pstdev(hour_data))
                         else:
                             subgroup_data.append(None)
                             subgroup_std_devs.append(None)
-                    aggregate_data[hand][subgroup] = subgroup_data
-                    error_trace_by_subgroup[hand][subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+                    aggregate_data[subgroup] = subgroup_data
+                    error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
-        else:
-            raw_data = {}
-            database_query = model.objects.filter(category=type,
-                                                  interval="1hr",
-                                                  measurement__isnull=False).values("name", "measurement", hour=ExtractHour("date"))
-            for datum in database_query:
-                participant = datum["name"]
-                subgroup = None
-                for sg in group_dictionary:
-                    if participant in group_dictionary[sg]:
-                        subgroup = sg
-                        break
-                if subgroup is None:
-                    continue
-                hour = datum["hour"]
-                if subgroup not in raw_data:
-                    raw_data[subgroup] = {}
-                if hour not in raw_data[subgroup]:
-                    raw_data[subgroup][hour] = []
-                raw_data[subgroup][hour].append(datum["measurement"])
-
-            aggregate_data = {}
-            error_trace_by_subgroup = {}
-            group_sizes = {}
-            for subgroup in raw_data:
-                group_sizes[subgroup] = model.objects.filter(category=type,
-                                                             interval='1hr',
-                                                             measurement__isnull=False,
-                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
-                subgroup_data = []
-                subgroup_std_devs = []
-                for hour in range(0, 24):
-                    hour_data = raw_data[subgroup][hour]
-                    if hour_data:
-                        subgroup_data.append(aggregation_method(hour_data))
-                        subgroup_std_devs.append(statistics.pstdev(hour_data))
-                    else:
-                        subgroup_data.append(None)
-                        subgroup_std_devs.append(None)
-                aggregate_data[subgroup] = subgroup_data
-                error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
-
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
-
+                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+    except Exception as e:
+        print(e)
 
 @login_required
 def get_scatter_plot_data(request):

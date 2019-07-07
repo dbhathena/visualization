@@ -4,7 +4,7 @@ from .models import *
 
 PARTICIPANTS = ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
                 'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042', 'M045', 'M047', 'M048',
-                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060', 'N001']
+                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
 
 DATABASE_MAPPING = {
     PhysData: {'Accelerometer', 'Motion', 'Heart Rate', 'Temperature', 'EDA Mean Difference', 'EDA Mean',
@@ -115,6 +115,18 @@ SEPARATE_HANDS = {"Temperature",
                   'EDA Mean',
                   'Skin Conductance Response'}
 
+PHONES = {"Incoming Call Mean Duration",
+    "Incoming Call Median Duration",
+    "Incoming Call Std Duration",
+    "Incoming Call Sum Duration",
+    "Outgoing Call Mean Duration",
+    "Outgoing Call Median Duration", 
+    "Outgoing Call Std Duration",
+    "Outgoing Call Sum Duration",
+    "Screen On Mean Duration",
+    "Screen On Median Duration",
+    "Screen On Std Duration",
+    "Screen On Sum Duration"}
 
 MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Heart Rate": (0, 160),
@@ -173,28 +185,16 @@ NEW_CATEGORY_MAPPING_DAILY = {
                  'Motion'],
     'Phone_Usage': ['Incoming Call Count',
                     'Incoming Call Mean Duration',
-                    'Incoming Call Median Duration',
-                    'Incoming Call Std Duration',
                     'Incoming Call Sum Duration',
                     'Outgoing Call Count',
                     'Outgoing Call Mean Duration',
-                    'Outgoing Call Median Duration',
-                    'Outgoing Call Std Duration',
                     'Outgoing Call Sum Duration',
                     'Screen On Count',
                     'Screen On Mean Duration',
-                    'Screen On Median Duration',
-                    'Screen On Std Duration',
                     'Screen On Sum Duration',
                     'Incoming SMS Count',
-                    'Incoming SMS Mean Length',
-                    'Incoming SMS Median Length',
-                    'Incoming SMS Std Length',
                     'Incoming SMS Sum Length',
                     'Outgoing SMS Count',
-                    'Outgoing SMS Mean Length',
-                    'Outgoing SMS Median Length',
-                    'Outgoing SMS Std Length',
                     'Outgoing SMS Sum Length'],
     "Location": ['Home Stay']
 }

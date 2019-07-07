@@ -45,13 +45,13 @@ p,span,li {
 }
 
 .text-link {
-    color: #4CAf50;
+    color: darkslateblue;
     font-weight: 400;
     text-decoration: none;
 }
 
 .text-link:hover {
-    color: #20603b;
+    color: darkgray;
 }
 
 .list-group {
@@ -230,7 +230,9 @@ footer p {
     padding: 10px 12px;
     text-decoration: none;
     display: flex;
-    color: #4CAf50;
+    color: indigo;
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .dropdown-content a:hover {
@@ -445,7 +447,7 @@ div.plotly-notifier {
 /* "Learn More" button */
 
 #learn-more {
-    background-color: rgba(76, 175, 80, 0.5);
+    background-color: lightgray;
     font-family: inherit;
     color: #444;
     font-size: 20px;

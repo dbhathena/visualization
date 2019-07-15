@@ -1,4 +1,4 @@
-{% extends "viz_app/visualization_base.html" %}
+{% extends parent %}
 
 {% load staticfiles %}
 {% load static from staticfiles %}
@@ -19,6 +19,7 @@
 
 {% block options %}
 
+    <meta id="study" data-value="{{ value }}">
     <div class="dropdown-container">
         <h3>Select a data category:</h3>
         <div class="search-categories">

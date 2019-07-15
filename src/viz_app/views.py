@@ -15,73 +15,72 @@ from .value_mappings import *
 # Create your views here.
 STUDY2_KEY = "2"
 
+def get_dict(request, visualization=False):
+    name = request.resolver_match.view_name
+    if visualization:
+        parent = 'viz_app/visualization_base2.html' if STUDY2_KEY in name else 'viz_app/visualization_base.html'
+    else:
+        parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
+    value = "2" if STUDY2_KEY in name else "1"
+    return {"parent":parent, "value":value}
+
 @login_required
 def index(request):
-    return render(request, 'viz_app/index.html')
-
+    return render(request, 'viz_app/index.html', get_dict(request))
 
 @login_required
 def study_trends(request):
     context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    context.update(get_dict(request, True))
     return render(request, 'viz_app/study_trends.html', context)
-
 
 @permission_required("viz_app.aggregate")
 @login_required
 def weekly_trends(request):
     context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "categories":sorted(CATEGORIES_DAILY.items())}
+    context.update(get_dict(request, True))
     return render(request, 'viz_app/weekly_trends.html', context)
-
 
 @login_required
 def daily_trends(request):
     context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING_HOURLY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_HOURLY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    context.update(get_dict(request, True))
     return render(request, 'viz_app/daily_trends.html', context)
 
 @login_required
 def scatter_plot(request):
     context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    context.update(get_dict(request, True))
     return render(request, 'viz_app/scatter_plot.html', context)
-
 
 @login_required
 def sleep_data(request):
     context = {"names": PARTICIPANTS}
+    context.update(get_dict(request, True))    
     return render(request, 'viz_app/sleep_data.html', context)
 
 
 @permission_required("viz_app.aggregate")
 @login_required
 def demographics(request):
-    return render(request, 'viz_app/demographics.html')
 
+    return render(request, 'viz_app/demographics.html', get_dict(request, True))
 
 def home(request):
-    name = request.resolver_match.view_name
-    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
-    value = "2" if STUDY2_KEY in name else "1"
-    return render(request, 'viz_app/home.html', {"parent" : parent, "value" : value})
+    return render(request, 'viz_app/home.html', get_dict(request))
 
 def about(request):
-    name = request.resolver_match.view_name
-    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
-    return render(request, 'viz_app/about.html', {"parent" : parent})
+    return render(request, 'viz_app/about.html', get_dict(request))
 
 def publications(request):
-    name = request.resolver_match.view_name
-    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
-    return render(request, 'viz_app/publications.html', {"parent" : parent})
+    return render(request, 'viz_app/publications.html', get_dict(request))
 
 def team(request):
-    name = request.resolver_match.view_name
-    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
-    return render(request, 'viz_app/team.html', {"parent" : parent})
+    return render(request, 'viz_app/team.html', get_dict(request))
 
 
 def faq(request):
-    name = request.resolver_match.view_name
-    parent = 'viz_app/base2.html' if STUDY2_KEY in name else 'viz_app/base.html'
-    return render(request, 'viz_app/faq.html', {"parent" : parent})
+    return render(request, 'viz_app/faq.html', get_dict(request))
 
 class LoginForm(forms.Form):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs={'class': 'form-input', 'id': 'id_username'}))
@@ -124,6 +123,9 @@ def logout(request):
 def get_study_trends_data(request):
     type = request.GET.get("type")
     group = request.GET.get("group")
+    number = request.GET.get("number")
+    print("GOT NUMBER")
+    print(number)
     model = None
     for m in DATABASE_MAPPING:
         if type in DATABASE_MAPPING[m]:
@@ -135,6 +137,8 @@ def get_study_trends_data(request):
             subject_data = {"left": {"dates": [], "measurements": []},
                             "right": {"dates": [], "measurements": []},
                             }
+            if int(number) != 1:
+                return HttpResponse(json.dumps({"subject_data": subject_data}))
             raw_data = list(model.objects
                             .filter(name=name,
                                     category=type,
@@ -149,6 +153,8 @@ def get_study_trends_data(request):
             val = 60 if type in PHONES else 1
             subject_data = {None: {"dates": [], "measurements": []},
                             }
+            if int(number) != 1:
+                return HttpResponse(json.dumps({"subject_data": subject_data}))
             raw_data = list(model.objects
                             .filter(name=name,
                                     category=type,
@@ -186,6 +192,8 @@ def get_study_trends_data(request):
                               "right": {} }
             error_trace_by_subgroup = {"left": {},
                                        "right": {} }
+            if int(number) != 1:
+                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
             group_sizes = {}
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
@@ -243,6 +251,9 @@ def get_study_trends_data(request):
             aggregate_data = {}
             group_sizes = {}
             error_trace_by_subgroup = {}
+            if int(number) != 1:
+                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
                                                              interval='24hrs',

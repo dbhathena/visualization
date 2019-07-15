@@ -45,10 +45,13 @@
             <a class="button" href="{% url 'viz_app:home2' %}">Home</a>
             <a class="button" href="{% url 'viz_app:about2' %}">About</a>
             {% if request.user.is_authenticated %}
-                <div class="dropdown">
-                    <a class="button dropbtn">Data Visualization</a>
+            <div class="dropdown">
+                <a class="button dropbtn">Data Visualization</a>
+                <div class="dropdown-content">
+                    <a href="{% url 'viz_app:study_trends2' %}">Study Trends</a>
                 </div>
-            {% endif %}
+            </div>
+        {% endif %}
             <a class="button" href="{% url 'viz_app:publications2' %}">Publications</a>
             <a class="button" href="{% url 'viz_app:team2' %}">Team</a>
             <a class="button" href="{% url 'viz_app:faq2' %}">FAQ</a>

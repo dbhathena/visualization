@@ -5,6 +5,7 @@ var names_dropdown = $("#names_dropdown");
 var last_request;
 const description = $("span#description-text");
 var user_type;
+var study = $("#study").data("value");
 
 $( document ).ready(function() {
     var category = category_dropdown.val();
@@ -117,6 +118,7 @@ function drawStudyTrendsIndividual() {
             aggregation: aggregation_dropdown.val(),
             group: group_dropdown.val(),
             name: names_dropdown.val(),
+            number: study,
         },
         dataType: "json"
     }).done(function(data) {
@@ -303,6 +305,7 @@ function drawStudyTrendsGroup() {
             aggregation: aggregation_dropdown.val(),
             group: group_dropdown.val(),
             name: names_dropdown.val(),
+            number: study,
         },
         dataType: "json"
     }).done(function(data) {

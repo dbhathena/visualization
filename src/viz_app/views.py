@@ -125,7 +125,6 @@ def get_study_trends_data(request):
     group = request.GET.get("group")
     number = request.GET.get("number")
     print("GOT NUMBER")
-    print(number)
     model = None
     for m in DATABASE_MAPPING:
         if type in DATABASE_MAPPING[m]:
@@ -136,9 +135,7 @@ def get_study_trends_data(request):
         if type in SEPARATE_HANDS:
             subject_data = {"left": {"dates": [], "measurements": []},
                             "right": {"dates": [], "measurements": []},
-                            }
-            if int(number) != 1:
-                return HttpResponse(json.dumps({"subject_data": subject_data}))
+                            }            
             raw_data = list(model.objects
                             .filter(name=name,
                                     category=type,
@@ -153,8 +150,6 @@ def get_study_trends_data(request):
             val = 60 if type in PHONES else 1
             subject_data = {None: {"dates": [], "measurements": []},
                             }
-            if int(number) != 1:
-                return HttpResponse(json.dumps({"subject_data": subject_data}))
             raw_data = list(model.objects
                             .filter(name=name,
                                     category=type,
@@ -192,8 +187,6 @@ def get_study_trends_data(request):
                               "right": {} }
             error_trace_by_subgroup = {"left": {},
                                        "right": {} }
-            if int(number) != 1:
-                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
             group_sizes = {}
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
@@ -251,9 +244,6 @@ def get_study_trends_data(request):
             aggregate_data = {}
             group_sizes = {}
             error_trace_by_subgroup = {}
-            if int(number) != 1:
-                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
-
             for subgroup in group_dictionary:
                 group_sizes[subgroup] = model.objects.filter(category=type,
                                                              interval='24hrs',

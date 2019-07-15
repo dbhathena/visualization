@@ -1,0 +1,38 @@
+{% extends "viz_app/base2.html"  %}
+
+{% load staticfiles %}
+{% load static from staticfiles %}
+
+{% block content %}
+<div class="content">
+    {% block header %}INSERT HEADER{% endblock %}
+    <p style="text-align: center;">
+        {% block description %}INSERT DESCRIPTION{% endblock %}
+    </p>
+    <hr class="horizontal-bar">
+    <div class="options-container">
+        {% block options %} {% endblock %}
+    </div>
+    <div style="position: relative;">
+        <div class="chart-container">
+            <div class="chart" id="chart1"></div>
+        </div>
+        <div id="loading">
+            <div id="loading-image"></div>
+        </div>
+    </div>
+    <div class="description-container">
+        <div class="description">
+            <span id="description-text">Click on the options below to see more details</span>
+        </div>
+        <hr class="horizontal-bar" style="width: 95%;">
+        <div class="description-label-container">
+            {% block selection_descriptions %}INSERT DESCRIPTIONS{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/js_resource.js' %}"></script>
+{% endblock %}

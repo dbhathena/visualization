@@ -23,11 +23,11 @@
 <body>
     <main>
         <nav class="topnav"
-        {% if perms.viz_app.study1 %}
+        {% if perms.viz_app.aggregate %}
             style="background-color: indigo";
         {% endif %}>
             {% if request.user.is_authenticated %}
-                {% if perms.viz_app.study_2 %}    
+                {% if perms.viz_app.aggregate %}    
                     <div class="dropdown">
                             <a class="first_button">Study 1</a>
                             <div class="dropdown-content">
@@ -36,15 +36,17 @@
                                 <a href="{% url 'viz_app:home2' %}">Study 2</a>
                         </div>
                     </div>
-                {% else %}
+                {% elif perms.viz_app.study1 %}
                     <a class="first_button" href="{% url 'viz_app:home' %}">Study 1</a>
+                {% else  %}
+                    <a class="first_button" href="{% url 'viz_app:incomplete' %}">GCS</a>
                 {% endif %}
             {% else %}
                 <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
             {% endif %}
             <a class="button" href="{% url 'viz_app:home' %}">Home</a>
             <a class="button" href="{% url 'viz_app:about' %}">About</a>
-            {% if request.user.is_authenticated %}
+            {% if perms.viz_app.study1 or perms.viz_app.study2 or perms.viz_app.aggregate %}    
                 <div class="dropdown">
                     <a class="button dropbtn">Data Visualization</a>
                     <div class="dropdown-content">

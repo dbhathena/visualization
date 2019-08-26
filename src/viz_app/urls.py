@@ -21,6 +21,7 @@ urlpatterns = [
     path('chart/sleep-data-2/', views.sleep_data, name='sleep_data2'),
     path('chart/demographics/', views.demographics, name='demographics'),
     path('chart/demographics-2/', views.demographics, name='demographics2'),
+    path('incomplete_login', views.incomplete, name='incomplete'),
     path('index/', views.index, name='index'),
     path('other_index/', views.index, name='index2'),
     path('publications/', views.publications, name='publications'),

@@ -69,6 +69,9 @@ def demographics(request):
 def home(request):
     return render(request, 'viz_app/home.html', get_dict(request))
 
+def incomplete(request):
+    return render(request, 'viz_app/incomplete.html')
+
 def about(request):
     return render(request, 'viz_app/about.html', get_dict(request))
 
@@ -90,10 +93,12 @@ class LoginForm(forms.Form):
 def login(request):
     if request.user.is_authenticated:
         print("User is authenticated")
-        if request.user.has_perm('viz_app.study1'):
+        if request.user.has_perm('viz_app.study1') or request.user.has_perm('viz_app.aggregate'):
             return HttpResponseRedirect(reverse('viz_app:home'))
         elif request.user.has_perm('viz_app.study2'):
             return HttpResponseRedirect(reverse('viz_app:home2'))
+        else:
+            return HttpResponseRedirect(reverse('viz_app:incomplete'))
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -102,10 +107,12 @@ def login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 auth_login(request, user)
-                if user.has_perm('viz_app.study1'):
+                if user.has_perm('viz_app.study1') or request.user.has_perm('viz_app.aggregate'):
                     return HttpResponseRedirect(reverse('viz_app:home'))
                 elif user.has_perm('viz_app.study2'):
                     return HttpResponseRedirect(reverse('viz_app:home2'))
+                else:
+                    return HttpResponseRedirect(reverse('viz_app:incomplete'))
             else:
                 form.add_error('username', 'invalid auth')
     else:
@@ -121,154 +128,156 @@ def logout(request):
 
 @login_required
 def get_study_trends_data(request):
-    type = request.GET.get("type")
-    group = request.GET.get("group")
-    number = request.GET.get("number")
-    print("GOT NUMBER")
-    model = None
-    for m in DATABASE_MAPPING:
-        if type in DATABASE_MAPPING[m]:
-            model = m
-    assert model is not None
-    if group == "None":
-        name = request.GET.get("name")
-        if type in SEPARATE_HANDS:
-            subject_data = {"left": {"dates": [], "measurements": []},
-                            "right": {"dates": [], "measurements": []},
-                            }            
-            raw_data = list(model.objects
-                            .filter(name=name,
-                                    category=type,
-                                    interval="24hrs")
-                            .order_by("date")
-                            .values("date", "measurement", "hand"))
-            for x in raw_data:
-                subject_data[x["hand"]]["dates"].append(x["date"].isoformat())
-                subject_data[x["hand"]]["measurements"].append(x["measurement"])
-            return HttpResponse(json.dumps({"subject_data": subject_data}))
+    try:
+        type = request.GET.get("type")
+        group = request.GET.get("group")
+        number = request.GET.get("number")
+        model = None
+        for m in DATABASE_MAPPING:
+            if type in DATABASE_MAPPING[m]:
+                model = m
+        assert model is not None
+        if group == "None":
+            name = request.GET.get("name")
+            if type in SEPARATE_HANDS:
+                subject_data = {"left": {"dates": [], "measurements": []},
+                                "right": {"dates": [], "measurements": []},
+                                }            
+                raw_data = list(model.objects
+                                .filter(name=name,
+                                        category=type,
+                                        interval="24hrs")
+                                .order_by("date")
+                                .values("date", "measurement", "hand"))
+                for x in raw_data:
+                    subject_data[x["hand"]]["dates"].append(x["date"].isoformat())
+                    subject_data[x["hand"]]["measurements"].append(x["measurement"])
+                return HttpResponse(json.dumps({"subject_data": subject_data}))
+            else:
+                val = 60 if type in PHONES else 1
+                subject_data = {None: {"dates": [], "measurements": []},
+                                }
+                raw_data = list(model.objects
+                                .filter(name=name,
+                                        category=type,
+                                        interval="24hrs")
+                                .order_by("date")
+                                .values("date", "measurement"))
+                for x in raw_data:
+                    subject_data[None]["dates"].append(x["date"].isoformat())
+                    value = x["measurement"]
+                    ans = value/val if value else None
+                    subject_data[None]["measurements"].append(ans)
+                return HttpResponse(json.dumps({"subject_data": subject_data}))
         else:
-            val = 60 if type in PHONES else 1
-            subject_data = {None: {"dates": [], "measurements": []},
-                            }
-            raw_data = list(model.objects
-                            .filter(name=name,
-                                    category=type,
-                                    interval="24hrs")
-                            .order_by("date")
-                            .values("date", "measurement"))
-            for x in raw_data:
-                subject_data[None]["dates"].append(x["date"].isoformat())
-                value = x["measurement"]
-                ans = value/val if value else None
-                subject_data[None]["measurements"].append(ans)
-            return HttpResponse(json.dumps({"subject_data": subject_data}))
-    else:
-        aggregation = request.GET.get("aggregation")
-        aggregation_method = AGGREGATION_METHODS[aggregation]
-        group_dictionary = GROUPINGS[group]
-        if type in SEPARATE_HANDS:
-            raw_data_left = {}
-            raw_data_right = {}
+            aggregation = request.GET.get("aggregation")
+            aggregation_method = AGGREGATION_METHODS[aggregation]
+            group_dictionary = GROUPINGS[group]
+            if type in SEPARATE_HANDS:
+                raw_data_left = {}
+                raw_data_right = {}
 
-            database_query =  model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement", "hand")
-            for datum in database_query:
-                participant = datum["name"]
-                hand = datum["hand"]
-                if hand == "left":
-                    if participant not in raw_data_left:
-                        raw_data_left[participant] = []
-                    raw_data_left[participant].append(datum["measurement"])
-                else:
-                    if participant not in raw_data_right:
-                        raw_data_right[participant] = []
-                    raw_data_right[participant].append(datum["measurement"])
-
-            aggregate_data = {"left": {},
-                              "right": {} }
-            error_trace_by_subgroup = {"left": {},
-                                       "right": {} }
-            group_sizes = {}
-            for subgroup in group_dictionary:
-                group_sizes[subgroup] = model.objects.filter(category=type,
-                                                             interval='24hrs',
-                                                             measurement__isnull=False,
-                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
-                subgroup_data_left = []
-                subgroup_data_right = []
-                subgroup_error_left = []
-                subgroup_error_right = []
-                for day in range(0, 56):
-                    day_data_left = []
-                    day_data_right = []
-                    for participant in group_dictionary[subgroup]:
-                        if (participant in raw_data_left
-                                and day < len(raw_data_left[participant])
-                                and raw_data_left[participant][day] is not None):
-                            day_data_left.append(raw_data_left[participant][day])
-                        if (participant in raw_data_right
-                                and day < len(raw_data_right[participant])
-                                and raw_data_right[participant][day] is not None):
-                            day_data_right.append(raw_data_right[participant][day])
-                    if not day_data_left:
-                        subgroup_data_left.append(None)
-                        subgroup_error_left.append(None)
+                database_query =  model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement", "hand")
+                for datum in database_query:
+                    participant = datum["name"]
+                    hand = datum["hand"]
+                    if hand == "left":
+                        if participant not in raw_data_left:
+                            raw_data_left[participant] = []
+                        raw_data_left[participant].append(datum["measurement"])
                     else:
-                        subgroup_data_left.append(aggregation_method(day_data_left))
-                        subgroup_error_left.append(statistics.pstdev(day_data_left))
-                    if not day_data_right:
-                        subgroup_data_right.append(None)
-                        subgroup_error_right.append(None)
-                    else:
-                        subgroup_data_right.append(aggregation_method(day_data_right))
-                        subgroup_error_right.append(statistics.pstdev(day_data_right))
+                        if participant not in raw_data_right:
+                            raw_data_right[participant] = []
+                        raw_data_right[participant].append(datum["measurement"])
 
-                aggregate_data["left"][subgroup] = subgroup_data_left
-                aggregate_data["right"][subgroup] = subgroup_data_right
-                error_trace_by_subgroup["left"][subgroup] = get_error_trace_from_std_devs(subgroup_data_left, subgroup_error_left)
-                error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
+                aggregate_data = {"left": {},
+                                  "right": {} }
+                error_trace_by_subgroup = {"left": {},
+                                           "right": {} }
+                group_sizes = {}
+                for subgroup in group_dictionary:
+                    group_sizes[subgroup] = model.objects.filter(category=type,
+                                                                 interval='24hrs',
+                                                                 measurement__isnull=False,
+                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
+                    subgroup_data_left = []
+                    subgroup_data_right = []
+                    subgroup_error_left = []
+                    subgroup_error_right = []
+                    for day in range(0, 56):
+                        day_data_left = []
+                        day_data_right = []
+                        for participant in group_dictionary[subgroup]:
+                            if (participant in raw_data_left
+                                    and day < len(raw_data_left[participant])
+                                    and raw_data_left[participant][day] is not None):
+                                day_data_left.append(raw_data_left[participant][day])
+                            if (participant in raw_data_right
+                                    and day < len(raw_data_right[participant])
+                                    and raw_data_right[participant][day] is not None):
+                                day_data_right.append(raw_data_right[participant][day])
+                        if not day_data_left:
+                            subgroup_data_left.append(None)
+                            subgroup_error_left.append(None)
+                        else:
+                            subgroup_data_left.append(aggregation_method(day_data_left))
+                            subgroup_error_left.append(statistics.pstdev(day_data_left))
+                        if not day_data_right:
+                            subgroup_data_right.append(None)
+                            subgroup_error_right.append(None)
+                        else:
+                            subgroup_data_right.append(aggregation_method(day_data_right))
+                            subgroup_error_right.append(statistics.pstdev(day_data_right))
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+                    aggregate_data["left"][subgroup] = subgroup_data_left
+                    aggregate_data["right"][subgroup] = subgroup_data_right
+                    error_trace_by_subgroup["left"][subgroup] = get_error_trace_from_std_devs(subgroup_data_left, subgroup_error_left)
+                    error_trace_by_subgroup["right"][subgroup] = get_error_trace_from_std_devs(subgroup_data_right, subgroup_error_right)
 
-        else:
-            val = 60 if type in PHONES else 1
-            raw_data = {}
-            database_query = model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement")
-            for datum in database_query:
-                participant = datum["name"]
-                if participant not in raw_data:
-                    raw_data[participant] = []
-                value = datum["measurement"]
-                ans = value/val if value else None
-                raw_data[participant].append(ans)
+                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
 
-            aggregate_data = {}
-            group_sizes = {}
-            error_trace_by_subgroup = {}
-            for subgroup in group_dictionary:
-                group_sizes[subgroup] = model.objects.filter(category=type,
-                                                             interval='24hrs',
-                                                             measurement__isnull=False,
-                                                             name__in=group_dictionary[subgroup]).distinct('name').count()
-                subgroup_data = []
-                subgroup_std_devs = []
-                for day in range(0, 56):
-                    day_data = []
-                    for participant in group_dictionary[subgroup]:
-                        if (participant in raw_data
-                                and day < len(raw_data[participant])
-                                and raw_data[participant][day] is not None):
-                            day_data.append(raw_data[participant][day])
-                    if not day_data:
-                        subgroup_data.append(None)
-                        subgroup_std_devs.append(None)
-                    else:
-                        subgroup_data.append(aggregation_method(day_data))
-                        subgroup_std_devs.append(statistics.pstdev(day_data))
-                aggregate_data[subgroup] = subgroup_data
-                error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+            else:
+                val = 60 if type in PHONES else 1
+                raw_data = {}
+                database_query = model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement")
+                for datum in database_query:
+                    participant = datum["name"]
+                    if participant not in raw_data:
+                        raw_data[participant] = []
+                    value = datum["measurement"]
+                    ans = value/val if value else None
+                    raw_data[participant].append(ans)
 
-            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+                aggregate_data = {}
+                group_sizes = {}
+                error_trace_by_subgroup = {}
+                for subgroup in group_dictionary:
+                    group_sizes[subgroup] = model.objects.filter(category=type,
+                                                                 interval='24hrs',
+                                                                 measurement__isnull=False,
+                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
+                    subgroup_data = []
+                    subgroup_std_devs = []
+                    for day in range(0, 56):
+                        day_data = []
+                        for participant in group_dictionary[subgroup]:
+                            if (participant in raw_data
+                                    and day < len(raw_data[participant])
+                                    and raw_data[participant][day] is not None):
+                                day_data.append(raw_data[participant][day])
+                        if not day_data:
+                            subgroup_data.append(None)
+                            subgroup_std_devs.append(None)
+                        else:
+                            subgroup_data.append(aggregation_method(day_data))
+                            subgroup_std_devs.append(statistics.pstdev(day_data))
+                    aggregate_data[subgroup] = subgroup_data
+                    error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
 
+                return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+    except Exception as e:
+        print(e)
+        return HttpResponse(json.dumps({"unavailable": "data"}))
 
 @permission_required("viz_app.aggregate")
 @login_required
@@ -1078,7 +1087,7 @@ def get_viewing_permission(request):
         else:
             return HttpResponse(json.dumps({"user": "viewer"}))
     else:
-        if user.has_perm('viz_app.individual'):
+        if user.has_perm('viz_app.study1') or user.has_perm('viz_app.study2'):
             return HttpResponse(json.dumps({"user": "participant"}))
         else:
             raise PermissionError('User has no data-viewing permissions!')

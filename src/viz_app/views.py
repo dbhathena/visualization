@@ -479,10 +479,9 @@ def get_daily_trends_data(request):
                                              measurement__isnull=False)
                                      .values_list("measurement", flat=True))
                     if hour_data:
-                        subject_data["both"].append(statistics.mean(hour_data/val))
+                        subject_data["both"].append(statistics.mean([datapoint/val for datapoint in hour_data]))
                     else:
                         subject_data["both"].append(None)
-
             return HttpResponse(json.dumps({"subject_data": subject_data}))
 
         else:

@@ -30,7 +30,11 @@ def index(request):
 
 @login_required
 def study_trends(request):
-    context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    name = request.resolver_match.view_name
+    patients = PARTICIPANTS
+    if STUDY2_KEY in name:
+        patients = PARTICIPANTS2
+    context = {"names": patients, "category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
     context.update(get_dict(request, True))
     return render(request, 'viz_app/study_trends.html', context)
 
@@ -43,7 +47,11 @@ def weekly_trends(request):
 
 @login_required
 def daily_trends(request):
-    context = {"names": PARTICIPANTS, "category_mapping": sorted(CATEGORY_MAPPING_HOURLY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_HOURLY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    name = request.resolver_match.view_name
+    patients = PARTICIPANTS
+    if STUDY2_KEY in name:
+        patients = PARTICIPANTS2
+    context = {"names": patients, "category_mapping": sorted(CATEGORY_MAPPING_HOURLY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_HOURLY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
     context.update(get_dict(request, True))
     return render(request, 'viz_app/daily_trends.html', context)
 
@@ -55,7 +63,11 @@ def scatter_plot(request):
 
 @login_required
 def sleep_data(request):
-    context = {"names": PARTICIPANTS}
+    name = request.resolver_match.view_name
+    patients = PARTICIPANTS
+    if STUDY2_KEY in name:
+        patients = PARTICIPANTS2
+    context = {"names": patients}
     context.update(get_dict(request, True))    
     return render(request, 'viz_app/sleep_data.html', context)
 

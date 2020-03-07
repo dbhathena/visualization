@@ -48,7 +48,18 @@
             <div class="dropdown">
                 <a class="button dropbtn">Data Visualization</a>
                 <div class="dropdown-content">
+                    <a href="{% url 'viz_app:index2' %}">Visualization Index</a>
+                    <hr>
                     <a href="{% url 'viz_app:study_trends2' %}">Study Trends</a>
+                    {% if perms.viz_app.aggregate %}
+                        <a href="{% url 'viz_app:weekly_trends2' %}">Weekly Trends</a>
+                    {% endif %}
+                    <a href="{% url 'viz_app:daily_trends2' %}">Daily Trends</a>
+                    <a href="{% url 'viz_app:scatter_plot2' %}">Scatter Plot</a>
+                    <a href="{% url 'viz_app:sleep_data2' %}">Sleep Data</a>
+                    {% if perms.viz_app.aggregate %}
+                        <a href="{% url 'viz_app:demographics2' %}">Demographics</a>
+                    {% endif %}
                 </div>
             </div>
         {% endif %}

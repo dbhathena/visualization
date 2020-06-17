@@ -3,6 +3,7 @@
 
 <html>
 <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>
         {% block title %}GCS Visualization{% endblock %}
     </title>
@@ -27,7 +28,7 @@
             style="background-color: indigo";
         {% endif %}>
             {% if request.user.is_authenticated %}
-                {% if perms.viz_app.aggregate %}    
+                {% if perms.viz_app.aggregate %}
                     <div class="dropdown">
                             <a class="first_button">Study 1</a>
                             <div class="dropdown-content">
@@ -46,7 +47,7 @@
             {% endif %}
             <a class="button" href="{% url 'viz_app:home' %}">Home</a>
             <a class="button" href="{% url 'viz_app:about' %}">About</a>
-            {% if perms.viz_app.study1 or perms.viz_app.study2 or perms.viz_app.aggregate %}    
+            {% if perms.viz_app.study1 or perms.viz_app.study2 or perms.viz_app.aggregate %}
                 <div class="dropdown">
                     <a class="button dropbtn">Data Visualization</a>
                     <div class="dropdown-content">

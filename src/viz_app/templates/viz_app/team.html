@@ -1,79 +1,158 @@
-{% extends parent %}
-
-{% load staticfiles %}
-
-{% block content %}
+{% extends parent %} {% load staticfiles %} {% block content %}
 <div class="content">
-    <h1>Team</h1>
-    <div class="spacer"></div>
-    <div class="row">
-        <h2>Current MIT Members</h2>
-        <ul style="list-style: none;">
-            <li>
-                <span style="font-weight: bold;">Rosalind Picard</span>
-                <i>(Principal Investigator)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold;">Szymon Fedor</span>
-                <i>(Research Scientist)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold;">Asma Ghandeharioun</span>
-                <i>(Graduate Student)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold">Darian Bhathena</span>
-                <i>(UROP student)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold">Sarbari Sarkar</span>
-                <i>(UROP student)</i>
-            </li>
-        </ul>
+  <h1>Team</h1>
+  <div class="spacer"></div>
+  <div class="row">
+    <h2>Current MIT Members</h2>
+    <div class="member-row">
+      <div class="member">
+        <img src="{% static "img/picard.jpg" %}" alt="Rosalind Picard"
+        class="personalimage left">
+        <div class="name-text">
+          <span style="font-weight: bold;">Rosalind Picard</span>
+          <br />
+          <i>(Principal Investigator)</i>
+        </div>
+      </div>
+      <div class="member">
+        <img src="{% static "img/szymon.jpg" %}" alt="Szymon Fedor"
+        class="personalimage right">
+        <div class="name-text">
+          <span style="font-weight: bold;">Szymon Fedor</span>
+          <br />
+          <i>(Research Scientist)</i>
+        </div>
+      </div>
     </div>
-    <div class="spacer"></div>
-    <div class="row">
-        <h2>Current MGH Members</h2>
-        <ul style="list-style: none;">
-            <li>
-                <span style="font-weight: bold;">David Mischoulon</span>
-                <i>(Principal Investigator)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold;">Paola Pedrelli</span>
-                <i>(Investigator)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold;">Cayla O'Hair</span>
-                <i>(Research Assistant)</i>
-            </li>
-        </ul>
+    <div class="member-row">
+      <div class="member">
+        <img src="{% static "img/asma.jpg" %}" alt="Asma Ghandeharioun"
+        class="personalimage left">
+        <div class="name-text">
+          <span style="font-weight: bold;">Asma Ghandeharioun</span>
+          <br />
+          <i>(Graduate Student)</i>
+        </div>
+      </div>
+      <div class="member">
+        <img src="{% static "img/darian.jpg" %}" alt="Darian Bhathena"
+        class="personalimage right">
+        <div class="name-text">
+          <span style="font-weight: bold;">Darian Bhathena</span>
+          <br />
+          <i>(UROP Student)</i>
+        </div>
+      </div>
     </div>
-    <div class="spacer"></div>
-    <div class="row">
-        <h2>Former Members</h2>
-        <ul style="list-style: none;">
-            <li>
-                <span style="font-weight: bold;">Jonathan Alpert</span>
-                <i>(Principal Investigator)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold;">Dawn Ionescu</span>
-                <i>(Investigator)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold;">Marek Subernat</span>
-                <i>(UROP Student)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold">Chelsea Dale</span>
-                <i>(Research Assistant)</i>
-            </li>
-            <li>
-                <span style="font-weight: bold">Esther Howe</span>
-                <i>(Research Assistant)</i>
-            </li>
-        </ul>
+    <div class="member-row">
+      <div class="member">
+        <img src="{% static "img/noah.jpg" %}" alt="Noah Faro"
+        class="personalimage left">
+        <div class="name-text">
+          <span style="font-weight: bold;">Noah Faro</span>
+          <br />
+          <i>(UROP Student)</i>
+        </div>
+      </div>
+      <div class="member">
+        <img src="{% static "img/olivia.jpg" %}" alt="Olivia Valle"
+        class="personalimage right">
+        <div class="name-text">
+          <span style="font-weight: bold;">Olivia Valle</span>
+          <br />
+          <i>(UROP Student)</i>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="row">
+    <h2>Current MGH Members</h2>
+    <div class="member-row">
+      <div class="member">
+        <img src="{% static "img/paola.jpg" %}" alt="Paola Pedrelli"
+        class="personalimage left">
+        <div class="name-text">
+          <span style="font-weight: bold;">Paola Pedrelli</span>
+          <br />
+          <i>(Principal Investigator)</i>
+        </div>
+      </div>
+      <div class="member">
+        <img src="{% static "img/david.jpg" %}" alt="David Mischoulon"
+        class="personalimage right">
+        <div class="name-text">
+          <span style="font-weight: bold;">David Mischoulon</span>
+          <br />
+          <i>(Investigator)</i>
+        </div>
+      </div>
+    </div>
+    <div class="member-row">
+      <div class="member" style="align-items: right;">
+        <img src="{% static "img/emma.jpg" %}" alt="Emma Hayden"
+        class="personalimage left">
+        <div class="name-text">
+          <span style="font-weight: bold;">Emma Hayden</span>
+          <br />
+          <i>(Research Assistant)</i>
+        </div>
+      </div>
+      <div class="member">
+        <img src="{% static "img/bridget.jpg" %}" alt="Bridget Wallace"
+        class="personalimage right">
+        <div class="name-text">
+          <span style="font-weight: bold;">Bridget Wallace</span>
+          <br />
+          <i>(Research Assistant)</i>
+        </div>
+      </div>
+    </div>
+    <div class="member-row">
+      <div class="member">
+        <img src="{% static "img/michael.jpg" %}" alt="Michael Pittman"
+        class="personalimage left">
+        <div class="name-text">
+          <span style="font-weight: bold;">Michael Pittman</span>
+          <br />
+          <i>(Research Assistant)</i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <div class="row">
+    <h2>Former Members</h2>
+    <ul style="list-style: none;" class="former-members">
+      <li>
+        <span style="font-weight: bold;">Jonathan Alpert</span>
+        <i>(Principal Investigator)</i>
+      </li>
+      <li>
+        <span style="font-weight: bold;">Dawn Ionescu</span>
+        <i>(Investigator)</i>
+      </li>
+      <li>
+        <span style="font-weight: bold;">Marek Subernat</span>
+        <i>(UROP Student)</i>
+      </li>
+      <li>
+        <span style="font-weight: bold;">Chelsea Dale</span>
+        <i>(Research Assistant)</i>
+      </li>
+      <li>
+        <span style="font-weight: bold;">Esther Howe</span>
+        <i>(Research Assistant)</i>
+      </li>
+      <li>
+        <span style="font-weight: bold;">John Lin</span>
+        <i>(Research Assistant)</i>
+      </li>
+      <li>
+        <span style="font-weight: bold;">Sabari Sarkar</span>
+        <i>(UROP Student)</i>
+      </li>
+    </ul>
+  </div>
 </div>
 {% endblock %}

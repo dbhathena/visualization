@@ -558,20 +558,9 @@ div.plotly-notifier {
 }
 
 .personalimage {
-  position: relative;
   height: 40vh;
   width: 40vh;
-}
-
-.personalimage.left {
-  padding-left: 0vw;
   border-radius: 50%;
-}
-
-.personalimage.right {
-  padding-left: 0vw;
-  border-radius: 50%;
-
 }
 
 .members {

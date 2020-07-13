@@ -1,0 +1,7 @@
+passwords.*
+venv
+env
+activate
+keys
+*.pyc
+*.DS_Store

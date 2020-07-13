@@ -2,7 +2,9 @@ from fabric.api import run, cd, sudo, get, put, env, local
 from fabric.contrib.files import exists
 import time, re
 import tempfile
+import os, sys
 
+sys.path.append("/Users/noahfaro/Documents/SzymonUROP/visualization/")
 from src.viz_platform import settings
 from src import passwords
 

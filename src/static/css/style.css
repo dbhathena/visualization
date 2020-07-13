@@ -6,7 +6,6 @@ body {
   display: flex;
   flex-direction: column;
   margin: 0;
-  /* background-color: rgb(245,245,245); */
 }
 
 hr {
@@ -25,7 +24,6 @@ hr.horizontal-bar {
   display: flex;
   flex-direction: column;
   margin: 20px 20px;
-  /* background-color: rgb(245,245,245) */
 }
 
 h1,
@@ -457,7 +455,7 @@ form {
   position: absolute;
   top: 24.5%;
   left: 120px;
-  display: none
+  display: none;
 }
 
 #PHQ9-colors{
@@ -465,7 +463,7 @@ form {
   height: 55.2%; position:
   absolute; top: 24.5%;
   left: 120px;
-  display:none
+  display:none;
 }
 
 #depression-legend-HDRS{
@@ -606,13 +604,13 @@ div.plotly-notifier {
 }
 
 .study-name{
-  color: rgba(36, 135, 40, 1)
+  color: rgba(36, 135, 40, 1);
 }
 
 .subheader{
   text-align: left;
   margin-left: 0;
-  color: rgba(36, 135, 40, 1)
+  color: rgba(36, 135, 40, 1);
 }
 .basic-information{
   text-align: center;

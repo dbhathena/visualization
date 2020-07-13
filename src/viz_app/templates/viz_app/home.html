@@ -1,15 +1,28 @@
 {% extends parent %} {% load staticfiles %} {% load static from staticfiles %}
 {% block content %}
 <div class="content">
-  <h1>Home</h1>
-  <h2>
-    The Grand Challenge Study of depression diagnosis from Multimodal,
-    Longitudinal Data
-  </h2>
-  <h3>
-    We have collected data from wearables, surveys, and a passive smartphone app
-    from over 30 people with Major Depression Disorder undergoing a therapy
-  </h3>
+  <div class="home-section">
+    <h1 class="study-name" style='margin-left:0; margin-right:0;'>Welcome to The Sensor-Based Characterization of Depression Study!<br>(SENSCODE)</h1>
+    <h3>
+      Presented by the MGH-MIT Alliance and as a follow up to the previous Grand Challenge Study, SENSCODE employs smartphone applications and wristband sensors to monitor phone usage, physical activity, physiological sensors, sleep patterns, and vocal characteristics in patients with depression who are undergoing treatment.
+    </h3>
+  </div>
+  <div class="img-container-home">
+    <img style='margin:0;'src="{% static "img/mghlogo.png" %}" alt="The Empatica E4 Wristband">
+    <div style="position:relative;height:15vh;width:60vh;overflow:hidden">
+      <img style='margin-top:2.5vh;margin-left:-15vh;' src="{% static "img/mgh-logo.png" %}" alt="The Empatica E4 Wristband">
+    </div>
+    <div style="margin: 0 0 0 5vh;position:relative;height:15vh;width:32.5vh;overflow:hidden">
+      <img style='margin-top:-3vh;margin-left:-3.5vh;height:21vh; width: auto' src="{% static "img/affective_computing.png" %}" alt="The Empatica E4 Wristband">
+    </div>
+    <img style='margin: 0 0 0 5vh' src="{% static "img/mitmedialab.png" %}" alt="The Empatica E4 Wristband">
+  </div>
+  <div class="study-section">
+    <h2 class='study-name'>More on The MGH-MIT Alliance</h2>
+    <div class="basic-information">
+      <p>In 2015, the <a href="http://www.depressionmgh.org/about-us">Depression Clinical and Research Program</a> at Massachusetts General Hospital (MGH) and the Massachusetts Institute of Technology Media Lab’s <a href="https://affect.media.mit.edu/index.php">Affective Computing Group</a> joined forces to establish the MGH-MIT Alliance. The goal of this collaboration is to employ machine learning and artificial intelligence to digitally phenotype depression, which refers to exploring people’s interactions with various devices, including smartphones, to assess their well-being. This has led to the birth of two studies: the Grand Challenge Study and Sensor-Based Characterization of Depression (SENSCODE).</p>
+    </div>
+  </div>
   <div class="spacer"></div>
   <a id="learn-more" href="{% url 'viz_app:about' %}">Learn More!</a>
 </div>

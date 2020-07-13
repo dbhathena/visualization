@@ -5,72 +5,115 @@
 
 {% block content %}
 <div class="content">
-    <h1>About the Study</h1>
-    <p style="text-align: center;">
-        This study aims to use wearable sensors for monitoring physiological signals, sleep patterns,
-        vocal characteristics, and phone usage in patients with depression while undergoing standard therapies.
-        Over thirty patients were enrolled during a period of 2 years from primary care and psychiatry clinics at
-        Massachusetts General Hospital. They were monitored for 8-weeks. Clinical measures for depression were also
-        simultaneously collected.
-    </p>
-    <div class="spacer"></div>
-    <div class="row">
-        <h2>Goals</h2>
-        <p>The project has the following aims:</p>
-        <ol>
-            <li>
-                <span style="font-weight: bold;">To assess the acceptability and feasibility of wearing non-invasive,
-                    ambulatory, physiological monitoring devices in patients with major depression.
-                </span>
-                We collected surveys from the participants about the comfort of using different devices for the study.
-                Also, we measured adherence and compared it with other similar depression studies where wearable
-                devices are not used. Finally, we asked participants who decided to leave the study if their decision
-                was due to the monitoring technology and sensors used during the study.
-            </li>
-            <li>
-                <span style="font-weight: bold;">To examine the relationship between continuous physiologic measures,
-                    sleep measures, and vocal data with traditional measurements of depression (i.e., clinical rating
-                    scales).
-                </span>
-                We analyzed how the collected measures co-vary with the measured therapeutic effects (i.e., changes in
-                standardized clinical measures of depression). We also explored other predictive relationships between
-                the objective continuously measured variables and treatment outcomes.
-            </li>
-            <li>
-                <span style="font-weight: bold;">To assess the utility of physiologic sensors and vocal data to: a)
-                    provide an objective diagnosis of depression; b) predict early treatment response; c) anticipate signs
-                    of relapse.
-                </span>
-                On the basis of aforementioned analysis, we identified most relevant biomarkers of depression to
-                diagnose depression.
-            </li>
-        </ol>
-        <p>We hope that the data we collect can be used to guide interventions to improve depression.</p>
+    <div class="study-section">
+      <h1 class='study-name'>The MGH-MIT Alliance</h1>
+      <div class="basic-information">
+        <p>In 2015, the <a href="http://www.depressionmgh.org/about-us">Depression Clinical and Research Program</a> at Massachusetts General Hospital (MGH) and the Massachusetts Institute of Technology Media Lab’s <a href="https://affect.media.mit.edu/index.php">Affective Computing Group</a> joined forces to establish the MGH-MIT Alliance. The goal of this collaboration is to employ machine learning and artificial intelligence to digitally phenotype depression, which refers to exploring people’s interactions with various devices, including smartphones, to assess their well-being. This has led to the birth of two studies: the Grand Challenge Study and Sensor-Based Characterization of Depression (SENSCODE).</p>
+      </div>
     </div>
     <div class="spacer"></div>
-    <div class="row">
-        <h2>Data</h2>
-        <p>
-            Starting in the Spring of 2016, we have been recruiting people diagnosed with Major Depression Disorder from
-            MGH clinics to join an 8 weeks study. In total we have collected data from over 30 participants. We have
-            measured physiological, behavioral, and social data using mobile phones, wearable sensors, surveys and
-            clinical data.
-        </p>
-        <p>During the study we collect:</p>
-        <ul style="margin-bottom: 0;">
-            <li>Standardized survey PANAS (Positive and Negative Affect Schedule)</li>
-            <li>Self-reported surveys of timing and duration of activities (including sleep), medication, alcohol consumption</li>
-            <li>Actigraphy, skin temperature, Heart Rate/Heart Rate Variability and electrodermal activity</li>
-            <li>Meta-data from calls, SMS messages, and emails, phone usage, location on Android phones</li>
-            <li>Weekly diary recording</li>
-        </ul>
+    <div class="study-section">
+      <h1 class='study-name'>The Grand Challenge Study</h1>
+      <div class="basic-information">
+        <p>From 2016 to 2018, the MGH-MIT Alliance conducted the Grand Challenge Study, a pilot study that analyzed various physiological data and smartphone activity in patients with depression via wristband sensors and smartphone applications.</p>
+      </div>
+      <div class="sub-information">
+        <h2 class='subheader'>Primary Aims</h2>
+        <div class="sub-text">
+          <p>The study had three main aims:</p>
+          <ol>
+            <li><p><strong>To assess the acceptability and feasibility of wearing non-invasive, ambulatory, physiological monitoring devices in patients with major depression. </strong></p> We collected surveys from the participants about the comfort of using different devices for the study. Also, we measured adherence and compared it with other similar depression studies where wearable devices are not used. Finally, we asked participants who decided to leave the study if their decision was due to the monitoring technology and sensors used during the study.</li>
+            <li><p><strong>To examine the relationship between continuous physiologic measures, sleep measures, and vocal data with traditional measurements of depression (i.e., clinical rating scales). </strong></p> We analyzed how the collected measures co-vary with the measured therapeutic effects (i.e., changes in standardized clinical measures of depression). We also explored other predictive relationships between the objective continuously measured variables and treatment outcomes. </li>
+            <li><p><strong>To assess the utility of physiologic sensors and vocal data to: a) provide an objective diagnosis of depression; b) predict early treatment response; c) anticipate signs of relapse.</strong></p> On the basis of aforementioned analysis, we identified the most relevant biomarkers of depression to diagnose depression. </li>
+          </ol>
+        </div>
+      </div>
+      <div class="sub-information">
+        <h2 class="subheader">Method</h2>
+        <div class="sub-text">
+          <p>In total, 31 participants with major depressive disorder completed the study. To assess depression severity, the Mini International Neuropsychiatric Interview and the Hamilton Depression Rating Scale were administered by a licensed clinician. Participants wore two E4 Empatica wristband sensors (pictured below), one on each wrist, for 22 hours a day/7 days a week. These sensors tracked the following: electrodermal activity, heart rate, movement, and skin surface temperature. Additionally, smartphone applications were utilized to track socialization behavior (e.g. number of calls and texts received and sent) and movement.</p>
+        </div>
+        <div class="img-container">
+          <img src="{% static "img/empaticaE4.png" %}" alt="The Empatica E4 Wristband">
+          <p><strong>Pictured above is the Empatica E4 wristband sensors that were worn by all participants.</strong></p>
+        </div>
+      </div>
+      <div class="sub-information">
+        <h2 class='subheader'>Results</h2>
+        <div class="sub-text">
+          <ol>
+            <li>On average, participants uploaded approximately 17 and 15.5 hours of daily data from left and right-hand sensors, respectively.</li>
+            <li>Data analysis deemed 39 features as important for estimating HDRS scores. Of those 39 features, the ten most predictive features included seven from smartphone applications, such as screen time, while the other three were physiological measures related to electrodermal activity and heart rate variability. </li>
+          </ol>
+        </div>
+      </div>
+      <div class="sub-information">
+        <h2 class='subheader'>Conclusions</h2>
+        <div class="sub-text">
+          <ol>
+            <li>The utilization of wristband sensors and smartphone applications to digitally phenotype depression was shown to be feasible due to the high compliance rates.</li>
+            <li>Data suggest that the time-split scenario estimated depression severity most accurately, suggesting that it may have a high potential to be adopted into clinical settings that assess changes in depressive symptoms.</li>
+            <li>Digitally phenotyping depression will help clinicians provide support to patients, especially since clinicians may be able to tell if their patients’ depression is worsening or relapsing.</li>
+          </ol>
+          <p>For more information, visit our <a href="https://gcs.media.mit.edu/publications/">publications page</a>!</p>
+        </div>
+      </div>
     </div>
     <div class="spacer"></div>
-    <div class="row">
+    <div class="study-section">
+      <h1 class='study-name'>Sensor-Based Characterization of Depression (SENSCODE)</h1>
+      <div class="basic-information">
+        A follow-up from the Grand Challenge Study, SENSCODE employs smartphone applications and wristband sensors to monitor phone usage, physical activity, physiological sensors, sleep patterns, and vocal characteristics in patients with depression who are undergoing treatment.
+      </div>
+      <div class="sub-information">
+        <h2 class='subheader'>Primary Aims</h2>
+        <div class="sub-text">
+          <p>The study has three main aims:</p>
+          <ol>
+            <li><p><strong>To create a model that detects depression through physiological data, surveys, and vocalizations.</strong></p>Participants will wear two wristband sensors that automatically track electrodermal activity, heart rate, movements, sleep, and temperature. Moreover, participants will have to complete daily surveys measuring alcohol consumption, overall health, and mood and vocal tasks. Lastly, participants’ depression severity and symptomatology will be assessed by trained clinicians using various reliable and valid inventories.</li>
+            <li><p><strong>To identify which physiological data are most relevant to depression and to explore patterns between changes in depression and physiological data.</strong></p>By collecting various physiological data and tracking depression severity and symptomatology, the Coalition will search for links and patterns in the data, such as the relationship between changes in motion or sleep behavior and depression.</li>
+            <li><p><strong>To develop a model that will predict how people with depression will respond to treatments.</strong></p>The data collected from the study will help the Coalition establish a model that will be able to determine early treatment response, as well as signs of depression relapses.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="sub-information">
+        <h2 class='subheader'>Method</h2>
+        <div class="sub-text">
+          <p>For 12-weeks, the following will be recorded via the wristband sensors:</p>
+          <ul>
+            <li>Body Temperature</li>
+            <li>Electrodermal Activity</li>
+            <li>Heart Rate</li>
+            <li>Motion</li>
+            <li>Sleeping Habits</li>
+          </ul>
+          <br>
+          <p>Additionally, smartphone applications will record the following:</p>
+          <ul>
+            <li>Alcohol Consumption</li>
+            <li>Mood</li>
+            <li>Number of Phone Calls and Text Messages Received and Sent</li>
+            <li>Overall Health</li>
+            <li>Screen Time</li>
+            <li>Vocalizations from Vocal Tasks</li>
+          </ul>
+          <br>
+          <p>Depression data will be collected by a physician, psychologist, or master-level clinician using clinical measures, such as the Hamilton Depression Rating Scale and the SCID Mood Module.</p>
+          <br>
+          <p>The recorded data will be encrypted, de-identifiable, and secured. You will have access only to your data.</p>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
         <h2>Still Curious?</h2>
-        <p>Visit our <a class="text-link" href="{% url 'viz_app:faq' %}">FAQ Page</a> </p>
-        <p>Check out our <a class="text-link" href="{% url 'viz_app:publications' %}">peer-reviewed publications</a> </p>
-        <p>Or <a class="text-link" href="mailto:sfedor@media.mit.edu">email us</a>!</p>
+        <div class="curious">
+          <p>Visit our <a class="text-link" href="{% url 'viz_app:faq' %}">FAQ Page</a></p>
+          <p>|</p>
+          <p>Check out our <a class="text-link" href="{% url 'viz_app:publications' %}">peer-reviewed publications</a> </p>
+          <p>|</p>
+          <p>Or <a class="text-link" href="mailto:sfedor@media.mit.edu">email us</a>!</p>
+        </div>
     </div>
 </div>
 {% endblock %}

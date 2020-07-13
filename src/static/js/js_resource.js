@@ -25,6 +25,8 @@ const error_colors = [
 
 var common_unit;
 const unitsDaily = {
+    "Daily (PHQ-9)": (common_unit = "PHQ-9 Rating"),
+    "Weekly (HDRS)": (common_unit = "HDRS Rating"),
     "Accelerometer": (common_unit = "Vector Magnitude of Motion"),
     "Heart Rate": (common_unit = "BPM"),
     "Motion": (common_unit = "Minutes of Day in Motion"),
@@ -116,6 +118,8 @@ const unitsHourly = {
 };
 
 const titleForTypeDaily = {
+    "Weekly (HDRS)": "Clinically Determined Depression Levels",
+    "Daily (PHQ-9)": "Reported Daily Depression Levels",
     "Accelerometer": "Acceleration",
     "New Accelerometer": "New Acceleration",
     "Heart Rate": "Heart Rate",
@@ -211,6 +215,7 @@ const titleForTypeHourly = {
 const isTwoHands = new Set(["Temperature", "EDA Mean", "Skin Conductance Response"]);
 
 const dataCategoryText = {
+    "Clinical_Data" : "Depression severity collected with the phone administered surveys or by a clinician.",
     "Activity": "Activity data collected from mobile phones and E4 measurements",
     "Phone_Usage": "Phone Usage data collected from Movisens Android application",
     "Physiology": "Physiology data collected from E4 measurements",
@@ -222,6 +227,8 @@ const dataCategoryText = {
 };
 
 const dataTypeTextDaily = {
+    "Daily (PHQ-9)" : "The depression score calculated using the standardized questionnaire: Patient Health Questionnaire-9 (PHQ-9)",
+    "Weekly (HDRS)" : "The depression score calculated using the standardized questionnaire: Hamilton Depression Rating Scale (HDRS)",
     "Accelerometer": "The daily average of the magnitude of motion vectors combining 3-axis accelerometer measurements",
     "Heart Rate": "The daily average heart rate, measured in beats per minute",
     "Motion": "The total number of minutes of the day when the individual was in motion (estimated using actigraphy)",
@@ -315,6 +322,8 @@ const dataTypeTextHourly = {
 const preprocessTextDefault = "There is no additional preprocessing for this data type";
 
 const preprocessTextDaily = {
+    "Daily (PHQ-9)" : "There is no additional preprocessing for this data type.",
+    "Weekly (HDRS)" : "There is no additional preprocessing for this data type.",
     "Accelerometer": "To calculate the motion vector, the 3-axis raw acceleration was first rescaled to the range " +
         "[-2g; 2g]. Then a Butterworth bandpass filter was applied (0.1 Hz - 20Hz band, 4 poles) and the maximum " +
         "difference between two consecutive samples over the 3-axis acceleration was processed. Next, the moving " +

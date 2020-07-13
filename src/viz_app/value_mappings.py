@@ -6,9 +6,10 @@ PARTICIPANTS = ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 
                 'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042', 'M045', 'M047', 'M048',
                 'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
 
-PARTICIPANTS2 = ['SP1', 'SP2', 'SP3', 'SP5']
+PARTICIPANTS2 = ['SP1', 'SP2', 'SP3', 'SP5', 'SP6', 'Far']
 
 DATABASE_MAPPING = {
+    DepData: {'Weekly (HDRS)', 'Daily (PHQ-9)'},
     PhysData: {'Accelerometer', 'Motion', 'Heart Rate', 'Temperature', 'EDA Mean Difference', 'EDA Mean',
                'Skin Conductance Response', 'New Motion', 'New Accelerometer'},
     PhoneData: {'Incoming Call Count', 'Incoming Call Mean Duration', 'Incoming Call Median Duration',
@@ -29,7 +30,7 @@ GROUPINGS = {
     "All": {
         "All": ['M001', 'M002', 'M004', 'M005', 'M006', 'M008', 'M011', 'M012', 'M013', 'M014', 'M015', 'M016', 'M017',
                 'M020', 'M021', 'M022', 'M029', 'M030', 'M033', 'M034', 'M037', 'M039', 'M042', 'M045', 'M047', 'M048',
-                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060']
+                'M049', 'M050', 'M053', 'M054', 'M055', 'M056', 'M057', 'M059', 'M060', 'Far', 'SP1', 'SP2', 'SP3', 'SP5', 'SP6']
     },
     "Depression": {
         "HC": ['M001', 'M002', 'M014', 'M021'],
@@ -83,7 +84,7 @@ GROUPINGS = {
         "[36, 1000]": ['M011', 'M033', 'M034', 'M056', 'M060']
     },
     "Episode Type": {
-        "Single": ['M004', 'M011', 'M020', 'M033', 'M054', 'M056', 'M057'],
+        "Single": ['M004', 'M011', 'M020', 'M033', 'M054', 'M056', 'M057', 'Far'],
         "Recurrent": ['M005', 'M006', 'M008', 'M012', 'M013', 'M015', 'M016', 'M017', 'M022', 'M029', 'M030', 'M034',
                       'M037', 'M039', 'M042', 'M045', 'M047', 'M048', 'M049', 'M050', 'M053', 'M055', 'M060']
     },
@@ -122,7 +123,7 @@ PHONES = {"Incoming Call Mean Duration",
     "Incoming Call Std Duration",
     "Incoming Call Sum Duration",
     "Outgoing Call Mean Duration",
-    "Outgoing Call Median Duration", 
+    "Outgoing Call Median Duration",
     "Outgoing Call Std Duration",
     "Outgoing Call Sum Duration",
     "Screen On Mean Duration",
@@ -134,7 +135,15 @@ MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Heart Rate": (0, 160),
                           "Motion": (0, 1),
                           "Temperature": (20, 40),
-                          }    
+                          "Daily (PHQ-9)": (0,29),
+                          "Weekly (HDRS)": (0,29),
+                          }
+
+DEPRESSION_CATEGORY_MAPPING = {
+    'Clinical_Data': ['Weekly (HDRS)',
+                        'Daily (PHQ-9)'],
+}
+
 CATEGORY_MAPPING_DAILY = {
     'Activity': ['Accelerometer',
                  'Motion'],
@@ -257,6 +266,10 @@ NEW_CATEGORIES = {
     'Activity': 'Activity',
     'Phone_Usage': 'Phone Usage',
     'Location': 'Location',
+}
+
+DEPRESSION_CATEGORIES = {
+    'Clinical_Data': 'Clinical Data',
 }
 
 CATEGORIES_HOURLY = {

@@ -19,6 +19,11 @@ $( document ).ready(function() {
         user_type = data.user;
         drawScatterPlot();
     });
+    $("#PHQ9-colors").css('display', 'none');
+    $("#HDRS-colors").css('display', 'none');
+    $("#depression-legend-PHQ9").css('display', 'none');
+    $("#depression-legend-HDRS").css('display', 'none');
+    $(".surrounding-chart-container").css('width', '100%');
     $("#x_axis_category, #y_axis_category, .x_axis_dropdown, .y_axis_dropdown, #group_dropdown").change(function() {
         $("#loading").css('display', 'flex');
         resetDescriptionText(description);
@@ -202,7 +207,9 @@ function drawScatterPlotIndividual() {
                     y1: 1,
                     line: {
                         width: 1
-                    }
+                    },
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
                 }]
             };
             Plotly.newPlot("chart1", [trace_left, trace_right], layout, {displayModeBar: false, responsive: true, scrollZoom: true})
@@ -248,7 +255,9 @@ function drawScatterPlotIndividual() {
                     y: 0.5
                 },
                 dragmode: "pan",
-                hovermode: "closest"
+                hovermode: "closest",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
 
             Plotly.newPlot("chart1", [trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true})
@@ -367,7 +376,9 @@ function drawScatterPlotGroup() {
                     y1: 1,
                     line: {
                         width: 1
-                    }
+                    },
+                  plot_bgcolor: "rgba(0,0,0,0)",
+                  paper_bgcolor: 'rgba(0,0,0,0)',
                 }]
             };
 
@@ -421,7 +432,9 @@ function drawScatterPlotGroup() {
                     y: 0.5
                 },
                 dragmode: "pan",
-                hovermode: "closest"
+                hovermode: "closest",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});

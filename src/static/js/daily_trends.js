@@ -23,6 +23,11 @@ $( document ).ready(function() {
             drawDailyTrendsGroup();
         }
     });
+    $("#PHQ9-colors").css('display', 'none');
+    $("#HDRS-colors").css('display', 'none');
+    $("#depression-legend-PHQ9").css('display', 'none');
+    $("#depression-legend-HDRS").css('display', 'none');
+    $(".surrounding-chart-container").css('width', '100%');
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
         resetDescriptionText(description);
@@ -215,7 +220,9 @@ function drawDailyTrendsIndividual() {
                     line: {
                         width: 1
                     }
-                }]
+                }],
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
 
             Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -267,6 +274,8 @@ function drawDailyTrendsIndividual() {
                     y: 0.5
                 },
                 dragmode: "pan",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
             Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
         }
@@ -486,7 +495,9 @@ function drawDailyTrendsGroup() {
                     line: {
                         width: 1
                     }
-                }]
+                }],
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -585,6 +596,8 @@ function drawDailyTrendsGroup() {
                     y: 0.5
                 },
                 dragmode: "pan",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});

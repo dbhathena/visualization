@@ -8,11 +8,19 @@ var user_type;
 var study = $("#study").data("value");
 
 $( document ).ready(function() {
+  //Self explanatory.
     var category = category_dropdown.val();
     var dataType = $("#" + category_dropdown.val() + "_dropdown").val();
+    //Group is none unless a superuser.
     var group = group_dropdown.val();
+    //Aggregationn likely undefined unless a superuser.
     var aggregation = aggregation_dropdown.val();
+    //Name of user.
     var name = names_dropdown.val();
+
+    //This essentially finds the user type of the logged in user.
+    //.ajax makes a request to get the type, and .done is the callback.
+    //If the user is not a superuser, runs individual(). Otherwise group().
     $.ajax({
         url: "/get-user-type/",
         dataType: "json"
@@ -24,18 +32,27 @@ $( document ).ready(function() {
             drawStudyTrendsGroup();
         }
     });
+    $("#PHQ9-colors").css('display', 'none');
+    $("#HDRS-colors").css('display', 'none');
+    $("#depression-legend-PHQ9").css('display', 'none');
+    $("#depression-legend-HDRS").css('display', 'none');
+    $(".surrounding-chart-container").css('width', '100%');
+    //Only when the following id's or classes get changed does this function run.
     $("#names_dropdown, .type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
         resetDescriptionText(description);
         if (group_dropdown.val() === "None") {
+          //This means that individual was hit. Thus, aggregation leaves, individual arrises.
             if (user_type !== "participant") {
                 $("#aggregation_container").css("display", "none");
                 $("#names_container").css("display", "flex");
                 $("div.aggregation-description").css("display", "none");
                 $("div.individual-description").css("display", "block");
             }
+            //Reloading of the study trends.
             drawStudyTrendsIndividual();
         } else {
+          //Resets names and aggregation, reestablishes group study trend.
             $("#names_container").css("display", "none");
             $("#aggregation_container").css("display", "flex");
             $("div.individual-description").css("display", "none");
@@ -108,6 +125,7 @@ $( document ).ready(function() {
 });
 
 function drawStudyTrendsIndividual() {
+  //Ready state 4 == the http request was completed.
     if (last_request && last_request.readyState !== 4) {
         last_request.abort();
     }
@@ -122,6 +140,7 @@ function drawStudyTrendsIndividual() {
         },
         dataType: "json"
     }).done(function(data) {
+        console.log('Study!');
         const type = $("#" + category_dropdown.val() + "_dropdown").val();
         const name = names_dropdown.val();
         if (isTwoHands.has(type)) {
@@ -228,13 +247,16 @@ function drawStudyTrendsIndividual() {
                     y1: 0.5,
                     line: {
                         width: 1
-                    }
+                    },
+                  plot_bgcolor: "rgba(0,0,0,0)",
+                  paper_bgcolor: 'rgba(0,0,0,0)',
                 }]
             };
 
             Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
+          //Subject data found on views.py. Null gives both dates and measurements.
             const subject_data = data.subject_data[null];
             const dates = [];
             subject_data["dates"].forEach(function(d) {
@@ -603,6 +625,8 @@ function drawStudyTrendsGroup() {
                     y: 0.5
                 },
                 dragmode: "pan",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
             };
 
             Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});

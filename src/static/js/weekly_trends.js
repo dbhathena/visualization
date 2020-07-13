@@ -11,6 +11,11 @@ $( document ).ready(function() {
     var aggregation = aggregation_dropdown.val();
 
     drawWeeklyTrends();
+    $("#PHQ9-colors").css('display', 'none');
+    $("#HDRS-colors").css('display', 'none');
+    $("#depression-legend-PHQ9").css('display', 'none');
+    $("#depression-legend-HDRS").css('display', 'none');
+    $(".surrounding-chart-container").css('width', '100%');
     $(".type_dropdown, #aggregation_dropdown, #group_dropdown, #category_dropdown").change(function() {
         $("#loading").css("display","flex");
         resetDescriptionText(description);
@@ -283,7 +288,9 @@ function drawWeeklyTrends() {
                     y1: 0.5,
                     line: {
                         width: 1
-                    }
+                    },
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
                 }].concat(constructVerticalDividers(7,7))
             };
 
@@ -386,6 +393,8 @@ function drawWeeklyTrends() {
                     y: 0.5
                 },
                 dragmode: "pan",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
                 shapes: constructVerticalDividers(7,7)
             };
 

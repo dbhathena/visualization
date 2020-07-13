@@ -27,7 +27,7 @@
                 style="background-color: indianred";
             {% endif %}>
             {% if request.user.is_authenticated %}
-                {% if perms.viz_app.study_1 %}    
+                {% if perms.viz_app.study_1 %}
                 <div class="dropdown">
                         <a class="first_button">Study {{ value }}</a>
                         <div class="dropdown-content">
@@ -57,6 +57,7 @@
                     <a href="{% url 'viz_app:daily_trends2' %}">Daily Trends</a>
                     <a href="{% url 'viz_app:scatter_plot2' %}">Scatter Plot</a>
                     <a href="{% url 'viz_app:sleep_data2' %}">Sleep Data</a>
+                    <a href="{% url 'viz_app:depression_levels2' %}">Depression Levels</a>
                     {% if perms.viz_app.aggregate %}
                         <a href="{% url 'viz_app:demographics2' %}">Demographics</a>
                     {% endif %}

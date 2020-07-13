@@ -38,6 +38,16 @@ def study_trends(request):
     context.update(get_dict(request, True))
     return render(request, 'viz_app/study_trends.html', context)
 
+@login_required
+def depression_levels(request):
+    name = request.resolver_match.view_name
+    patients = PARTICIPANTS
+    if STUDY2_KEY in name:
+        patients = PARTICIPANTS2
+    context = {"names": patients, "category_mapping": sorted(DEPRESSION_CATEGORY_MAPPING.items()), "new_category_mapping": sorted(DEPRESSION_CATEGORY_MAPPING.items()), "categories": sorted(DEPRESSION_CATEGORIES.items()), "new_categories": sorted(DEPRESSION_CATEGORIES.items())}
+    context.update(get_dict(request, True))
+    return render(request, 'viz_app/depression_levels.html', context)
+
 @permission_required("viz_app.aggregate")
 @login_required
 def weekly_trends(request):
@@ -68,7 +78,7 @@ def sleep_data(request):
     if STUDY2_KEY in name:
         patients = PARTICIPANTS2
     context = {"names": patients}
-    context.update(get_dict(request, True))    
+    context.update(get_dict(request, True))
     return render(request, 'viz_app/sleep_data.html', context)
 
 
@@ -154,7 +164,7 @@ def get_study_trends_data(request):
             if type in SEPARATE_HANDS:
                 subject_data = {"left": {"dates": [], "measurements": []},
                                 "right": {"dates": [], "measurements": []},
-                                }            
+                                }
                 raw_data = list(model.objects
                                 .filter(name=name,
                                         category=type,
@@ -253,6 +263,8 @@ def get_study_trends_data(request):
                 raw_data = {}
                 database_query = model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement")
                 for datum in database_query:
+                    print('FUCK')
+                    print(datum)
                     participant = datum["name"]
                     if participant not in raw_data:
                         raw_data[participant] = []
@@ -290,6 +302,101 @@ def get_study_trends_data(request):
     except Exception as e:
         print(e)
         return HttpResponse(json.dumps({"unavailable": "data"}))
+
+
+@login_required
+def get_depression_scale_data(request):
+    try:
+        type = request.GET.get("type")
+        group = request.GET.get("group")
+        number = request.GET.get("number")
+        model = None
+        for m in DATABASE_MAPPING:
+            if type in DATABASE_MAPPING[m]:
+                model = m
+        assert model is not None
+        if group == "None":
+            name = request.GET.get("name")
+            subject_data = {None: {"dates": [], "measurements": []},
+                            }
+            if type == "Daily (PHQ-9)":
+                raw_data = list(model.objects
+                                .filter(name=name,
+                                        category=type,
+                                        interval="daily")
+                                .order_by("date")
+                                .values("date", "measurement"))
+            else:
+                raw_data = list(model.objects
+                                .filter(name=name,
+                                        category=type,
+                                        interval="weekly")
+                                .order_by("date")
+                                .values("date", "measurement"))
+            for x in raw_data:
+                subject_data[None]["dates"].append(x["date"].isoformat())
+                value = x["measurement"]
+                ans = value if value else None
+                subject_data[None]["measurements"].append(ans)
+            return HttpResponse(json.dumps({"subject_data": subject_data}))
+        else:
+            aggregation = request.GET.get("aggregation")
+            aggregation_method = AGGREGATION_METHODS[aggregation]
+            group_dictionary = GROUPINGS[group]
+
+            raw_data = {}
+            if type == "Daily (PHQ-9)":
+                database_query = model.objects.filter(category=type,interval="daily").order_by("date").values("name", "measurement")
+            else:
+                database_query = model.objects.filter(category=type,interval="weekly").order_by("date").values("name", "measurement")
+            for datum in database_query:
+                participant = datum["name"]
+                if participant not in raw_data:
+                    raw_data[participant] = []
+                value = datum["measurement"]
+                ans = value if value else None
+                raw_data[participant].append(ans)
+
+            print('ALKSDHFLKASHDF')
+            print(raw_data)
+
+            aggregate_data = {}
+            group_sizes = {}
+            error_trace_by_subgroup = {}
+            for subgroup in group_dictionary:
+                if type == "Daily (PHQ-9)":
+                    group_sizes[subgroup] = model.objects.filter(category=type,
+                                                                 interval='daily',
+                                                                 measurement__isnull=False,
+                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
+                else:
+                    group_sizes[subgroup] = model.objects.filter(category=type,
+                                                                 interval='weekly',
+                                                                 measurement__isnull=False,
+                                                                 name__in=group_dictionary[subgroup]).distinct('name').count()
+                subgroup_data = []
+                subgroup_std_devs = []
+                for day in range(0, 56):
+                    day_data = []
+                    for participant in group_dictionary[subgroup]:
+                        if (participant in raw_data
+                                and day < len(raw_data[participant])
+                                and raw_data[participant][day] is not None):
+                            day_data.append(raw_data[participant][day])
+                    if not day_data:
+                        subgroup_data.append(None)
+                        subgroup_std_devs.append(None)
+                    else:
+                        subgroup_data.append(aggregation_method(day_data))
+                        subgroup_std_devs.append(statistics.pstdev(day_data))
+                aggregate_data[subgroup] = subgroup_data
+                error_trace_by_subgroup[subgroup] = get_error_trace_from_std_devs(subgroup_data, subgroup_std_devs)
+
+            return HttpResponse(json.dumps({"aggregate_data": aggregate_data, "group_sizes": group_sizes, "error_traces": error_trace_by_subgroup}))
+    except Exception as e:
+        print(e)
+        return HttpResponse(json.dumps({"unavailable": "data"}))
+
 
 @permission_required("viz_app.aggregate")
 @login_required
@@ -571,7 +678,7 @@ def get_daily_trends_data(request):
                     if hour not in raw_data[subgroup]:
                         raw_data[subgroup][hour] = []
                     raw_data[subgroup][hour].append(datum["measurement"]/val)
-                    
+
                 aggregate_data = {}
                 error_trace_by_subgroup = {}
                 group_sizes = {}
@@ -773,7 +880,7 @@ def get_scatter_plot_data(request):
                           .values_list("measurement", flat=True))
             data = {"x": x_data, "y": y_data}
             return HttpResponse(json.dumps({"scatter_data": data, "name": name}))
-        
+
 @login_required
 def get_sleep_data(request):
     group = request.GET.get("group")
@@ -944,7 +1051,7 @@ def get_sleep_data(request):
                             dictionary_to_update = participant_reported_data
                         else:
                             raise ValueError("Invalid reporting")
-                        
+
                         if participant not in dictionary_to_update:
                             dictionary_to_update[participant] = {}
                         if time not in dictionary_to_update[participant]:
@@ -952,7 +1059,7 @@ def get_sleep_data(request):
                         dictionary_to_update[participant][time].append(int(is_asleep))
             except Exception as e:
                 print(e)
-                
+
         subgroup_data_recorded = {}
         subgroup_data_reported = {}
         for participant in participant_recorded_data:
@@ -1102,4 +1209,3 @@ def get_viewing_permission(request):
             return HttpResponse(json.dumps({"user": "participant"}))
         else:
             raise PermissionError('User has no data-viewing permissions!')
-

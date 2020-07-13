@@ -23,7 +23,11 @@ $( document ).ready(function() {
            drawAgeSexCharts();
         }
     });
-
+    $("#PHQ9-colors").css('display', 'none');
+    $("#HDRS-colors").css('display', 'none');
+    $("#depression-legend-PHQ9").css('display', 'none');
+    $("#depression-legend-HDRS").css('display', 'none');
+    $(".surrounding-chart-container").css('width', '100%');
     $(".category-description").click(
         function() {
             description.text(dataCategoryText[category]);
@@ -259,7 +263,9 @@ function drawMentalHealthCharts() {
                         size: 18
                     }
                 }
-            ]
+            ],
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true});
@@ -552,7 +558,9 @@ function drawRaceEthnicityCharts() {
                         size: 18
                     }
                 }
-            ]
+            ],
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true});
@@ -658,7 +666,9 @@ function drawAgeSexCharts() {
                         size: 18
                     }
                 }
-            ]
+            ],
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true});

@@ -57,7 +57,11 @@ $( document ).ready(function() {
     type_dropdown.change(function() {
         chart_type = type_dropdown.val();
     });
-
+    $("#PHQ9-colors").css('display', 'none');
+    $("#HDRS-colors").css('display', 'none');
+    $("#depression-legend-PHQ9").css('display', 'none');
+    $("#depression-legend-HDRS").css('display', 'none');
+    $(".surrounding-chart-container").css('width', '100%');
     $(".preprocess-description").click(
         function() {
             if (type_dropdown.val() === "regularity") {
@@ -145,6 +149,8 @@ function drawReportedPlot() {
                 fixedrange: true
             },
             dragmode: "pan",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", [reported_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -207,6 +213,8 @@ function drawTotalPlot() {
                 fixedrange: true
             },
             dragmode: "pan",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", [recorded_trace, self_reported_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -264,6 +272,8 @@ function drawRegularityPlot() {
                 fixedrange: true
             },
             dragmode: "pan",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", [trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -379,6 +389,8 @@ function drawRasterPlot() {
                 y: 0.5
             },
             hovermode: 'closest',
+            plot_bgcolor: "rgba(0,0,0,0)",
+            paper_bgcolor: 'rgba(0,0,0,0)',
         };
 
         Plotly.newPlot("chart1", traces, layout, {displayModeBar: false, responsive: true, scrollZoom: true});
@@ -591,7 +603,9 @@ function drawSleepDataGroup() {
                 y1: 0.5,
                 line: {
                     width: 1
-                }
+                },
+              plot_bgcolor: "rgba(0,0,0,0)",
+              paper_bgcolor: 'rgba(0,0,0,0)',
             }]
         };
 

@@ -1,0 +1,64 @@
+{% extends parent %}
+
+{% load staticfiles %}
+{% load static from staticfiles %}
+
+{% block content %}
+<div class="content">
+    <div class="study-section">
+      <h1 class='study-name'>For Participants: How to Use this Platform</h1>
+      <div class="basic-information">
+        <p>Below is a quick walkthrough of this platform, what data you can see about yourself, and how to use the features that are available to you.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+      <h1 class='study-name'>What You Have Access To</h1>
+      <div class="basic-information">
+        <p>As a part of the SENSCODE study you have worn the E4 sensor(s) on your wrist(s), taken daily surveys to assess your own mental health and habits, and have been clinically evaluated by professionals on a weekly basis. The information from these sources is collected, analyzed, and displayed for your viewing. As long as you are consistent with the wearing of the sensors and the taking of the daily surveys and weekly evaluations, then thorough data can be seen and you can track your own progress - both physiologically and mentally - as you go through the study!</p>
+      </div>
+      <div class="sub-information">
+        <div class="sub-text">
+          <p>With all of this information, you will have access to:</p>
+          <ol>
+            <li><p><strong style='font-family:arimobold'>Activity Levels</strong></p>This includes the total number of minutes you were physically active and actual data drawn from the sensor displayed as “vectors of acceleration”.</li>
+            <li><p><strong style='font-family:arimobold'>Location Variation</strong></p>This includes how often you leave your home, and how variable your location is throughout the day. This information is only available to Android phone users.</li>
+            <li><p><strong style='font-family:arimobold'>Phone Usage</strong></p>This includes how many phone calls you received and sent, to see how active you are on your handheld devices.This information is only available to Android phone users.</li>
+            <li><p><strong style='font-family:arimobold'>Sleep Data</strong></p>This includes your total sleep per day in the study so far, and also how regular or consistent your sleep is between individual days. This data is based on the recordings from the wristband accelerometer.</li>
+            <li><p><strong style='font-family:arimobold'>Depression Levels</strong></p>Often the most representative and helpful data that we can provide, we give you details on both your daily survey responses and your weekly clinical evaluations. We also provide you with a diagnosis of what level of depression you are at based on your given scores to these assessments, and we display them to give you the best idea of your progress as you continue in the study.</p> </li>
+
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+      <h1 class='study-name'>How to Use Our Platform</h1>
+      <div class="basic-information">
+        Given the high frequency of data that we collect, we give you the ability to see your data in a variety of formats specifically for the activity levels, location variation, and phone usage. Within the dropdown “Data Visualization”, you can see: Study Trends, Daily Trends, Scatter Plot, Sleep Data, and Depression Levels:
+      </div>
+      <div class="sub-information">
+        <div class="sub-text">
+          <ol>
+            <li><p><strong style='font-family:arimobold'>Study Trends</strong></p>This allows you to see the changes in your parameters over the course of the entire study, showing you patterns or trends composed from data points that represent a singular day.</li>
+            <li><p><strong style='font-family:arimobold'>Daily Trends</strong></p>This allows you to see how your parameters change throughout the day rather than over the course of the study. The graph shows a parameter’s average value at a specific point in the day; for example, you could see what time of the day you are the most active.</li>
+            <li><p><strong style='font-family:arimobold'>Scatter Plot</strong></p>This plot specifically allows you to compare trends of different parameters. For example, if you would like to see how your phone usage compares to your activity levels, you can see that in this graph.</li>
+            <li><p><strong style='font-family:arimobold'>Sleep Data</strong></p>Here you can see your total sleep per day marked as bar graphs and your sleep regularity marked as line graphs, both over the course of the entire study.</li>
+            <li><p><strong style='font-family:arimobold'>Depression Levels</strong></p>These graphs specifically are used to show your depressive trends over the course of the entire study. The data types within this page are “PHQ-9”, which is the scale at which we determine your depressive symptoms based on your daily responses to our surveys, and “HDRS”, which is the score generated by your clinician’s evaluations to determine your depressive symptoms. You can see both of these on this plot, and additionally can see what these scores mean by the shading of the chart.</li>
+          </ol>
+        </div>
+      </div>
+      <div class="sub-information">
+        <div class="curious">
+          <p>Within each chart, you can select a data category - these for example include the activity levels, phone usage, and location variation within the “Study Trends” page. Select one of these to bring up a new data source in the graph. Additionally, we include a data type dropdown, where you can select the calculation of the data that you would like to see. At the bottom of the page, we provide explanations for different things that were done to produce these graphs for a given data category or type - just click a label to bring up the explanation.</p>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+        <div class="curious">
+            <p>Thank you so much for being a part of our study, and we hope you get as much out of it as we do with this platform!</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

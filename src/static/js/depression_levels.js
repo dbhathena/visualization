@@ -158,15 +158,24 @@ function drawDepTrendsIndividual() {
         // console.log(subject_data);
         const dates = [];
         //Dates after raw data conversion are in Unix Time format.
+
+        const weekdayArray = ['Sunday, ', 'Monday, ', 'Tuesday, ', 'Wednesday, ', 'Thursday, ', 'Friday, ', 'Saturday, ']
+        var weekdaysOfDates = []
+        let currentWeekday
         subject_data["dates"].forEach(function(d) {
-            dates.push(new Date(new Date(d).toDateString()));
+            currentWeekday = weekdayArray[new Date(d).getDay()]
+            weekdaysOfDates.push(currentWeekday)
+            dates.push((new Date(d)));
         });
         const measurements = subject_data["measurements"];
 
         const individual_trace = {
             x: dates,
             y: measurements,
-            mode: 'lines',
+            mode: 'lines+markers',
+            hovertemplate: '%{y}<extra>%{text}%{x}</extra>',
+            text: weekdaysOfDates,
+            hoverinfo: "skip",
             name: name,
             line: {
                 width: 1.5
@@ -202,7 +211,7 @@ function drawDepTrendsIndividual() {
                 automargin: true,
                 range: unitRange
             },
-            showlegend: true,
+            showlegend: false,
             legend: {
                 x: 1,
                 y: 0.5
@@ -210,6 +219,7 @@ function drawDepTrendsIndividual() {
             dragmode: "pan",
             plot_bgcolor: "rgba(0,0,0,0)",
             paper_bgcolor: 'rgba(0,0,0,0)',
+            hovermode: 'closest',
         };
 
         Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});

@@ -1,0 +1,86 @@
+{% extends parent %}
+
+{% load staticfiles %}
+{% load static from staticfiles %}
+
+{% block content %}
+<div class="content">
+    <div class="study-section">
+      <h1 class='study-name'>For Admin: How to Use this Platform</h1>
+      <div class="basic-information">
+        <p>Below is a quick walkthrough of this platform, what data you can see about your participants, and how to use the features that are available to you.</p>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+      <h1 class='study-name'>What You Have Access To</h1>
+      <div class="basic-information">
+        <p>As a part of the SENSCODE study participants have worn the E4 sensor(s) on their wrist(s), taken daily surveys to assess their own mental health and habits, and have been clinically evaluated by professionals on a weekly basis. The information from these sources is collected, analyzed, and displayed for your viewing.</p>
+      </div>
+      <div class="sub-information">
+        <div class="sub-text">
+          <p>With all of this information, you will have access to participants’:</p>
+          <ol>
+            <li><p><strong style='font-family:arimobold'>Activity Levels</strong></p>This includes the total number of minutes they were physically active and actual data drawn from the sensor displayed as “vectors of acceleration”.</li>
+            <li><p><strong style='font-family:arimobold'>Location Variation</strong></p>If a participant has an Android phone, their location data is provided with statistics about their variation in latitude and longitude, how long they were stationary or moving, the percentage of the day spent at home, their total distance travelled, and their transition time between activities.</li>
+            <li><p><strong style='font-family:arimobold'>Phone Usage</strong></p>For participants with Android phones, this data category is immensely populated with data. You have statistics about the duration and length of outgoing and incoming calls, about the length and frequency of sent and received messages, and about the screen time of the user on their phone. All of these are statistics shown for a given day in the study.</li>
+            <li><p><strong style='font-family:arimobold'>Physiology</strong></p>This is something that is not available to the current participant’s viewing on the visualization platform. This category includes heart rate, temperature, EDA, and skin conductance statistics over the course of the entire study.</li>
+            <li><p><strong style='font-family:arimobold'>Weather</strong></p>This is also something that is not available to the current participant’s viewing on the visualization platform. This category includes time of daylight, precipitation, and temperature highs for given days throughout the study.</li>
+            <li><p><strong style='font-family:arimobold'>Sleep Data</strong></p>When looking at both group data and individual data, you can directly see a participant’s actual sleep statistics compared to their reported sleep statistics. In group viewings, the data visualized is limited to just sleep fraction, representing when they were asleep during the day. For individual data, there are very interesting visuals - you can get total sleep for a given day, sleep regularity for a given day, and even a Raster Plot to directly compare their reported and actual sleep statistics.</li>
+            <li><p><strong style='font-family:arimobold'>Depression Levels</strong></p>Details are provided for both a participant’s daily survey responses and weekly clinical evaluations. You can also see the diagnosis of what level of depression they are at based on your given scores to these assessments, allowing you to see the participant’s mental progression throughout the study so far.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+      <h1 class='study-name'>How to Use The Platform</h1>
+      <div class="sub-information">
+        <div class="sub-text">
+          <p>Given the high frequency of data that we collect, we give you the ability to see a participant’s data in a variety of formats specifically for the activity levels, location variation, and phone usage. Within the dropdown “Data Visualization”, you can see: Study Trends, Weekly Trends, Daily Trends, Scatter Plot, Sleep Data, Depression Levels, and Demographics:</p>
+          <ol>
+            <li><p><strong style='font-family:arimobold'>Study Trends</strong></p>This allows you to see the changes in a participant’s parameters over the course of the entire study, showing you patterns or trends composed from data points that represent a singular day.</li>
+            <li><p><strong style='font-family:arimobold'>Weekly Trends</strong></p>This allows you to see the trends in a participant’s parameters throughout the entire study but from a different lens - rather than looking at the numbers from a holistic point of view, the graphs are segmented by weeks and the data points are labelled with the day in the week. This allows you to directly see how a participant’s data changed on a weekly basis.</li>
+            <li><p><strong style='font-family:arimobold'>Daily Trends</strong></p>This allows you to see how a participant’s parameters change throughout the day rather than over the course of the study. The graph shows a parameter’s average value at a specific point in the day; for example, you could see what time of the day a participant is the most active.</li>
+            <li><p><strong style='font-family:arimobold'>Scatter Plot</strong></p>This plot specifically allows you to compare trends of different parameters. For example, if you would like to see how a participant’s phone usage compares to their activity levels, you can see that in this graph.</li>
+            <li><p><strong style='font-family:arimobold'>Sleep Data</strong></p>Here you can see the different statistics collected about both group and individual sleep data, and can also see the direct correlation between the participant’s actual amount of sleep and their self-reported sleep patterns.</li>
+            <li><p><strong style='font-family:arimobold'>Depression Levels</strong></p>These graphs specifically are used to show a participant’s depressive trends over the course of the entire study. The data types within this page are “PHQ-9”, which is the scale at which we determine their depressive symptoms based on your daily responses to our surveys, and “HDRS”, which is the score generated by their clinician’s evaluations to determine your depressive symptoms. You can see both of these on this plot, and additionally can see what these scores mean by the shading of the chart.</li>
+            <li><p><strong style='font-family:arimobold'>Demographics</strong></p>It is important to not only look at the data we collect from the participants individually, as it can also be immensely valuable to find trends that are common for specific groups of people. On the demographics page you can find many potential groups that you could analyze, providing statistics about the study’s diversity in mental health, ethnicity, race, sex, age, and more.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+      <h1 class='study-name'>How to Customize the Datasets on the Figures</h1>
+      <div class="sub-text">
+          <p>On each page, there is a lot of data and graphics to unpack. There are four different dropdowns for each page that allow you to customize what parts of the data you are looking at and how that data is analyzed:</p>
+          <ol>
+            <li><p><strong style='font-family:arimobold'>Data Category</strong></p>Within this, you can choose from the different sources of data that you can pull from. The different data categories were listed in the first part of this page.</li>
+            <li><p><strong style='font-family:arimobold'>Data Type</strong></p>Here you can choose what part of that data source you would like to analyze. For example, if you were looking at a participant’s activity, you could pick from either accelerometer data or motion data, while if you were looking at a participant’s location information you could pick from a range of different data types such as longitudinal and latitudinal deviation.</li>
+            <li><p><strong style='font-family:arimobold'>Group</strong></p>This allows you to filter the participants that you are including in the given graph. The groups listed are based on the classification of the participants that you can find directly on the Demographics page. In addition to this, you can also look at a participant’s data individually if you would like to analyze their trends alone.</li>
+            <li><p><strong style='font-family:arimobold'>Aggregation Method</strong></p>If you are looking at a group’s data and not an individual’s, then the plot is some sort of aggregation of the group’s data. Here, you can pick from mean, median, maximum, minimum, and standard deviation for the given dataset. In addition to these metrics that you can choose from, you can also enable Error Shading on the side of the graph to see how error affected the given aggregation method.</li>
+          </ol>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+      <h1 class='study-name'>How Things are Different From the Participant's View of the Platform</h1>
+      <div class="sub-text">
+        <p>In case you are conversing with a participant about the platform, there are a few things that are different about your admin privileges compared to those given to a participant:</p>
+        <ul>
+          <li>They cannot see any Weekly Trends or Demographics data.</li>
+          <li>They cannot see which groups they belong to in the given demographics, or see any information about other participants in the study.</li>
+          <li>Some data types and categories are not shown for participants, such as their local weather and physiology information.</li>
+          <li>They cannot see their self-reported sleep statistics and can only see their actual sleep statistics, as we do not want to bias their reporting of their sleep.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <div class="study-section">
+        <div class="curious">
+            <p>I hope you enjoy the visualization platform, and feel free to reach out to <a class="text-link" href="mailto:sfedor@mit.edu">Szymon Fedor</a> or <a class="text-link" href="mailto:nfaro@mit.edu">Noah Faro</a> with any questions.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

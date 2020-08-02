@@ -103,6 +103,12 @@ def publications(request):
 def team(request):
     return render(request, 'viz_app/team.html', get_dict(request))
 
+def for_admin(request):
+    return render(request, 'viz_app/for_admin.html', get_dict(request))
+
+def for_participants(request):
+    return render(request, 'viz_app/for_participants.html', get_dict(request))
+
 
 def faq(request):
     return render(request, 'viz_app/faq.html', get_dict(request))
@@ -263,8 +269,6 @@ def get_study_trends_data(request):
                 raw_data = {}
                 database_query = model.objects.filter(category=type, interval="24hrs").order_by("date").values("name", "measurement")
                 for datum in database_query:
-                    print('FUCK')
-                    print(datum)
                     participant = datum["name"]
                     if participant not in raw_data:
                         raw_data[participant] = []

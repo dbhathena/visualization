@@ -200,7 +200,7 @@ function drawDailyTrendsIndividual() {
                     tickprefix: "   ",
                     automargin: true
                 },
-                showlegend: true,
+                showlegend: false,
                 legend: {
                     x: 1,
                     y: 0.5
@@ -268,7 +268,7 @@ function drawDailyTrendsIndividual() {
                     tickprefix: "   ",
                     automargin: true
                 },
-                showlegend: true,
+                showlegend: false,
                 legend: {
                     x: 1,
                     y: 0.5

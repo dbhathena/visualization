@@ -7,11 +7,12 @@
     <title>
         {% block title %}GCS Visualization{% endblock %}
     </title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css"
           integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
           crossorigin="anonymous">
     <link rel="icon" href="{% static 'img/favicon.ico' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel = "stylesheet" href = "{% static 'css/stylesheet.css' %}">
 
     <script
@@ -24,71 +25,90 @@
 
 <body>
     <main>
-        <nav class="topnav"
-        {% if perms.viz_app.aggregate %}
-            style="background-color: indigo";
-        {% endif %}>
+      <nav class="navbar navbar-expand-lg navbar-dark" {% if perms.viz_app.study2 %} style="background-color: #9c3030; color: #f6f9f6;" {% else %} style="background-color: #2ba12f; color: #f6f9f6;"{% endif %}>
+        {% if request.user.is_authenticated %}
+          {% if perms.viz_app.aggregate %}
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle navbar-brand" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-right:0; padding-left:0; color: #f6f9f6;">
+              Study 1
+            </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'viz_app:home' %}">Study 1</a>
+                  <hr>
+                  <a class="dropdown-item" href="{% url 'viz_app:home2' %}">SENSCODE</a>
+              </div>
+          </div>
+          {% elif perms.viz_app.study1 %}
+            <a class="navbar-brand" href="{% url 'viz_app:home1' %}">Study 1</a>
+          {% else %}
+            <a class="navbar-brand" href="{% url 'viz_app:home2' %}">GCS</a>
+          {% endif %}
+        {% else %}
+            <a class="navbar-brand" href="{% url 'viz_app:home' %}">GCS</a>
+        {% endif %}
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'viz_app:home' %}" style="padding-right: 1rem;">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'viz_app:about' %}" style="padding-right: 1rem;">About</a>
+            </li>
             {% if request.user.is_authenticated %}
-                {% if perms.viz_app.aggregate %}
-                    <div class="dropdown">
-                            <a class="first_button">Study 1</a>
-                            <div class="dropdown-content">
-                                <a href="{% url 'viz_app:home' %}">Study 1</a>
-                                <hr>
-                                <a href="{% url 'viz_app:home2' %}">SENSCODE</a>
-                        </div>
-                    </div>
-                {% elif perms.viz_app.study1 %}
-                    <a class="first_button" href="{% url 'viz_app:home' %}">Study 1</a>
-                {% else  %}
-                    <a class="first_button" href="{% url 'viz_app:incomplete' %}">GCS</a>
-                {% endif %}
-            {% else %}
-                <a class="first_button" href="{% url 'viz_app:home' %}">GCS</a>
-            {% endif %}
-            <a class="button" href="{% url 'viz_app:home' %}">Home</a>
-            <a class="button" href="{% url 'viz_app:about' %}">About</a>
-            {% if perms.viz_app.study1 or perms.viz_app.study2 or perms.viz_app.aggregate %}
               {% if perms.viz_app.aggregate %}
-                  <a class = 'button' href="{% url 'viz_app:for_admin' %}">For Admin</a>
+                <li class="nav-item">
+                  <a class = 'nav-link' href="{% url 'viz_app:for_admin' %}" style="padding-right: 1rem;">For Admin</a>
+                </li>
               {% else %}
-                  <a class = 'button' href="{% url 'viz_app:for_participants' %}">For Participants</a>
+                <li class="nav-item">
+                  <a class = 'nav-link' href="{% url 'viz_app:for_participants' %}" style="padding-right: 1rem;">For Participants</a>
+                </li>
               {% endif %}
-                <div class="dropdown">
-                    <a class="button dropbtn">Data Visualization</a>
-                    <div class="dropdown-content">
-                        <a href="{% url 'viz_app:index' %}">Visualization Index</a>
-                        <hr>
-                        <a href="{% url 'viz_app:study_trends' %}">Study Trends</a>
-                        {% if perms.viz_app.aggregate %}
-                            <a href="{% url 'viz_app:weekly_trends' %}">Weekly Trends</a>
-                        {% endif %}
-                        <a href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
-                        <a href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
-                        <a href="{% url 'viz_app:sleep_data' %}">Sleep Data</a>
-                        <a href="{% url 'viz_app:depression_levels' %}">Depression Levels</a>
-                        {% if perms.viz_app.aggregate %}
-                            <a href="{% url 'viz_app:demographics' %}">Demographics</a>
-                        {% endif %}
-                    </div>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-right: 1rem;">
+                  Data Visualization
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a class='dropdown-item' href="{% url 'viz_app:index' %}">Visualization Index</a>
+                  <hr>
+                  <a class='dropdown-item' href="{% url 'viz_app:study_trends' %}">Study Trends</a>
+                  {% if perms.viz_app.aggregate %}
+                      <a class='dropdown-item' href="{% url 'viz_app:weekly_trends' %}">Weekly Trends</a>
+                  {% endif %}
+                  <a class='dropdown-item' href="{% url 'viz_app:daily_trends' %}">Daily Trends</a>
+                  <a class='dropdown-item' href="{% url 'viz_app:scatter_plot' %}">Scatter Plot</a>
+                  <a class='dropdown-item' href="{% url 'viz_app:sleep_data' %}">Sleep Data</a>
+                  <a class='dropdown-item' href="{% url 'viz_app:depression_levels' %}">Depression Levels</a>
+                  {% if perms.viz_app.aggregate %}
+                      <a class='dropdown-item' href="{% url 'viz_app:demographics' %}">Demographics</a>
+                  {% endif %}
                 </div>
+              </li>
             {% endif %}
-            <a class="button" href="{% url 'viz_app:publications' %}">Publications</a>
-            <a class="button" href="{% url 'viz_app:team' %}">Team</a>
-            <a class="button" href="{% url 'viz_app:faq' %}">FAQ</a>
-            <div id="login_logout_button">
-                {% if request.user.is_authenticated %}
-                    {% if user.groups.all.0.name == 'Participants' %}
-                        <span id="greeting">Hello, {{ user.username }}</span>
-                    {% else %}
-                        <span id="greeting">Hello, {{ user.first_name }}</span>
-                    {% endif %}
-                    <a class="button" href="{% url 'viz_app:logout' %}">Log Out</a>
+            <li class="nav-item">
+              <a class=" nav-link" href="{% url 'viz_app:publications' %}" style="padding-right: 1rem;">Publications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'viz_app:team' %}" style="padding-right: 1rem;">Team</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'viz_app:faq' %}">FAQ</a>
+            </li>
+          </ul>
+        </div>
+        <div id="login_logout_button" style="padding-top: 0; padding-bottom: 0;">
+            {% if request.user.is_authenticated %}
+                {% if user.groups.all.0.name == 'Participants' %}
+                    <span id="greeting" style='padding-right: 0.5rem;padding-top:0.30rem;'>Hello, {{ user.username }}</span>
                 {% else %}
-                    <a class="button" href="{% url 'viz_app:login' %}">Log In</a>
+                    <span id="greeting" style='padding-right: 0.5rem;padding-top:0.30rem;'>Hello, {{ user.first_name }}</span>
                 {% endif %}
-            </div>
-        </nav>
+                <a role="button" class="btn btn-light" href="{% url 'viz_app:logout' %}">Log Out</a>
+            {% else %}
+                <a role="button" class="btn btn-light" href="{% url 'viz_app:login' %}">Log In</a>
+            {% endif %}
+        </div>
+      </nav>
         {% block content %}{% endblock %}
         <div class="spacer"></div>
     </main>
@@ -102,6 +122,9 @@
             <a class="text-link" href="https://www.massgeneral.org/psychiatry/services/treatmentprograms.aspx?id=2091&display=research">Depression Clinical & Research Program (DCRP)</a>
             at Massachusetts General Hospital.</p>
     </footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     {% block script %}{% endblock %}
 </body>
 </html>

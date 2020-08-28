@@ -1,60 +1,59 @@
 {% extends parent %} {% load staticfiles %} {% load static from staticfiles %}
 {% block content %}
 <div class="content">
-  <!-- Slideshow container -->
-  <!-- <div> -->
-  <div class="slideshow-container" style='width: 100%; height:65vh; max-height: 450px; overflow:hidden; position: relative'>
-    <h1 class="study-name" style='background-color: rgba(204, 204, 204, 0.6); position:relative;margin: auto; margin-top: 12%;z-index:100;color: #f2f2f2;font-size: 100px;'><strong>WELCOME!</strong></h1>
 
-    <!-- Full-width images with number and caption text -->
-    <div class="mySlides fade img1">
-      <img src="{% static "img/img1.jpg" %}" style="  object-fit: cover;width: 100%; margin-top: -50vh">
-    </div>
-
-    <div class="mySlides fade img2">
-      <img src="{% static "img/img2.jpg" %}" style="  object-fit: cover;width: 100%;margin-top: -50vh">
-    </div>
-
-    <div class="mySlides fade img3">
-      <img src="{% static "img/img3.jpg" %}" style="  object-fit: cover;width: 100%; margin-top: -50vh;">
-    </div>
-
-    <div class="mySlides fade img4">
-      <img src="{% static "img/img4.jpg" %}" style="  object-fit: cover;width: 100%;margin-top: -50vh">
-    </div>
-
-    <div class="mySlides fade img5">
-      <img src="{% static "img/img5.jpg" %}" style="  object-fit: cover;width: 100%; margin-top:-50vh">
-    </div>
-
-    <!-- Next and previous buttons -->
-    <!-- <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-    <a class="next" onclick="plusSlides(1)">&#10095;</a> -->
+  <div style='overflow: hidden'>
+      <ul class="cb-slideshow">
+      <li>
+        <span>Image 01</span>
+        <div>
+          <h3>WELCOME!</h3>
+        </div>
+      </li>
+      <li>
+        <span>Image 02</span>
+        <div>
+          <h3>WELCOME!</h3>
+        </div>
+      </li>
+      <li>
+        <span>Image 03</span>
+        <div>
+          <h3>WELCOME!</h3>
+        </div>
+      </li>
+      <li>
+        <span>Image 04</span>
+        <div>
+          <h3>WELCOME!</h3>
+        </div>
+      </li>
+      <li>
+        <span>Image 05</span>
+        <div>
+          <h3>WELCOME!</h3>
+        </div>
+      </li>
+      <li>
+        <span>Image 06</span>
+        <div>
+          <h3>WELCOME!</h3>
+        </div>
+      </li>
+    </ul>
   </div>
-<!-- <div style="text-align:center; margin-top: 2vh">
-    <span class="dot" onclick="currentSlide(1)"></span>
-    <span class="dot" onclick="currentSlide(2)"></span>
-    <span class="dot" onclick="currentSlide(3)"></span>
-    <span class="dot" onclick="currentSlide(4)"></span>
-    <span class="dot" onclick="currentSlide(5)"></span>
-  </div> -->
-
-  <!-- <div class="home-section">
-    <h1 class="study-name" style='background-color: rgba(204, 204, 204, 0.6); position:relative;z-index:100;color: #f2f2f2;font-size: 100px;margin-left:0; margin-right:0;margin-top:-42vh'><strong>WELCOME!</strong></h1>
-  </div>
-  </div> -->
   <div class ='home-section'>
     <h1 >to The Sensor-Based Characterization of Depression Study!<br>(SENSCODE)</h1>
   </div>
     <div class="img-container-home">
-    <img style='margin:0;'src="{% static "img/mghlogo.png" %}" alt="The Empatica E4 Wristband">
-    <div style="position:relative;height:15vh;width:39vh;overflow:hidden">
-      <img style='margin-top:1.5vh;margin-left:-9.5vh;' src="{% static "img/mgh-logo.png" %}" alt="The Empatica E4 Wristband">
+    <img class='mgh-logo' src="{% static "img/mghlogo.png" %}" alt="The Empatica E4 Wristband">
+    <div class='mgh-words-container'>
+      <img src="{% static "img/mgh-logo.png" %}" alt="The Empatica E4 Wristband">
     </div>
-    <div style="margin: 0 0 0 10vh;position:relative;width:23vh;overflow:hidden">
-      <img style='height:14.5vh;margin: -2.3vh 0 0 -2.2vh' src="{% static "img/affective_computing.png" %}" alt="The Empatica E4 Wristband">
+    <div class='affective-computing-container'>
+      <img src="{% static "img/affective_computing.png" %}" alt="The Empatica E4 Wristband">
     </div>
-    <img style='margin: 0 0 0 10vh' src="{% static "img/mitmedialab.png" %}" alt="The Empatica E4 Wristband">
+    <img class='media-lab-img' src="{% static "img/mitmedialab.png" %}" alt="The Empatica E4 Wristband">
   </div>
   <div class="study-section">
     <h2 class='study-name'>More on the MGH-Psychiatry and MIT Media Lab Research Collaboration</h2>

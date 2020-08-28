@@ -26,6 +26,10 @@
 <body>
     <main>
       <nav class="navbar navbar-expand-lg navbar-dark" {% if perms.viz_app.study2 %} style="background-color: #6800b3; color: #f6f9f6;"; {% else %} style="background-color: #2ba12f; color: #f6f9f6;" {% endif %}>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
         {% if request.user.is_authenticated %}
           {% if perms.viz_app.study_1 %}
             <div class="dropdown">
@@ -44,6 +48,7 @@
         {% else %}
             <a class="navbar-brand" href="{% url 'viz_app:home2' %}">GCS</a>
         {% endif %}
+
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav">
             <li class="nav-item">

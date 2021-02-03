@@ -1,4 +1,6 @@
-{% extends parent %} {% load staticfiles %} {% block content %}
+{% extends parent %} {% load staticfiles %}
+{% block title %}GCS - Team{% endblock %}
+{% block content %}
 <div class="content">
   <h1 class="study-name">Team</h1>
   <div class="spacer"></div>
@@ -380,5 +382,11 @@
       </ul>
     </div>
   </div>
-  {% endblock %}
 </div>
+
+{% endblock %} {% block script %} {{ block.super }}
+<script>
+    $('.navbar-nav .nav-item.active').removeClass('active');
+    $('#team').addClass('active');
+</script>
+{% endblock %}

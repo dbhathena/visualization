@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% load static from staticfiles %}
-
+{% block title %}GCS - About{% endblock %}
 {% block content %}
 <div class="content">
     <div class="study-section">
@@ -125,4 +125,9 @@
         </div>
     </div>
 </div>
+{% endblock %} {% block script %} {{ block.super }}
+<script>
+    $('.navbar-nav .nav-item.active').removeClass('active');
+    $('#about').addClass('active');
+</script>
 {% endblock %}

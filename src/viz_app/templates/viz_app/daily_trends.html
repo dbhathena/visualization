@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% load static from staticfiles %}
-
+{% block title %}GCS - Daily Trends{% endblock %}
 {% block header %}
     <h1>Daily Trends</h1>
 {% endblock %}
@@ -67,7 +67,7 @@
             </div>
         </div>
         {% endfor %}
-    {% endif %} 
+    {% endif %}
     <div class="dropdown-container"
          {% if perms.viz_app.individual and not perms.viz_app.aggregate %}style="display: none;"{% endif %}>
         <h3>Select a group (or none):</h3>
@@ -143,4 +143,8 @@
 {% block script %}
     {{ block.super }}
     <script src="{% static 'js/daily_trends.js' %}"></script>
+    <script>
+        $('.navbar-nav .nav-item.active').removeClass('active');
+        $('#data-visualization').addClass('active');
+    </script>
 {% endblock %}

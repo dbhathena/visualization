@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% load static from staticfiles %}
-
+{% block title %}GCS - Weekly Trends{% endblock %}
 {% block header %}
     <h1>Weekly Trends</h1>
 {% endblock %}
@@ -95,4 +95,8 @@
 {% block script %}
     {{ block.super }}
     <script src="{% static 'js/weekly_trends.js' %}"></script>
+    <script>
+        $('.navbar-nav .nav-item.active').removeClass('active');
+        $('#data-visualization').addClass('active');
+    </script>
 {% endblock %}

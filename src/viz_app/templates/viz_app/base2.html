@@ -25,7 +25,7 @@
 
 <body>
     <main>
-      <nav class="navbar navbar-expand-lg navbar-dark" {% if perms.viz_app.study2 %} style="background-color: #6800b3; color: #f6f9f6;"; {% else %} style="background-color: #2ba12f; color: #f6f9f6;" {% endif %}>
+      <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2ba12f; color: #f6f9f6;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
           aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -51,30 +51,30 @@
 
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'viz_app:home2' %}" style="padding-right: 1rem;">Home</a>
+            <li class="nav-item active" id='home'>
+              <a class="nav-link" href="{% url 'viz_app:home2' %}" >Home</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'viz_app:about2' %}" style="padding-right: 1rem;">About</a>
+            <li class="nav-item" id='about'>
+              <a class="nav-link" href="{% url 'viz_app:about2' %}" >About</a>
             </li>
             {% if request.user.is_authenticated %}
               {% if perms.viz_app.aggregate %}
-                <li class="nav-item">
-                  <a class = 'nav-link' href="{% url 'viz_app:for_admin2' %}" style="padding-right: 1rem;">For Admin</a>
+                <li class="nav-item" id='for-admin'>
+                  <a class = 'nav-link' href="{% url 'viz_app:for_admin2' %}" >For Admin</a>
                 </li>
               {% else %}
-                <li class="nav-item">
-                  <a class = 'nav-link' href="{% url 'viz_app:for_participants2' %}" style="padding-right: 1rem;">For Participants</a>
+                <li class="nav-item" id='for-participants'>
+                  <a class = 'nav-link' href="{% url 'viz_app:for_participants2' %}" >For Participants</a>
                 </li>
               {% endif %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding-right: 1rem;">
+              <li class="nav-item dropdown" id='data-visualization'>
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                   Data Visualization
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a class='dropdown-item' href="{% url 'viz_app:index2' %}">Visualization Index</a>
+                  <a class='dropdown-item' href="{% url 'viz_app:index' %}">Visualization Index</a>
                   <hr>
-                  <a class='dropdown-item' href="{% url 'viz_app:study_trends2' %}">Study Trends</a>
+                  <a class='dropdown-item' href="{% url 'viz_app:study_trends' %}">Study Trends</a>
                   {% if perms.viz_app.aggregate %}
                       <a class='dropdown-item' href="{% url 'viz_app:weekly_trends2' %}">Weekly Trends</a>
                   {% endif %}
@@ -87,15 +87,15 @@
                   {% endif %}
                 </div>
               </li>
-              <li class="nav-item">
-                <a class=" nav-link" href="{% url 'viz_app:publications2' %}" style="padding-right: 1rem;">Publications</a>
+              <li class="nav-item" id='publications'>
+                <a class=" nav-link" href="{% url 'viz_app:publications2' %}" >Publications</a>
               </li>
             {% endif %}
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'viz_app:team2' %}" style="padding-right: 1rem;">Team</a>
+            <li class="nav-item" id='team'>
+              <a class="nav-link" href="{% url 'viz_app:team2' %}" >Team</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'viz_app:faq2' %}" style="padding-right: 1rem;">FAQ</a>
+            <li class="nav-item" id='faq'>
+              <a class="nav-link" href="{% url 'viz_app:faq2' %}" >FAQ</a>
             </li>
           </ul>
         </div>
@@ -113,7 +113,6 @@
         </div>
       </nav>
         {% block content %}{% endblock %}
-        <div class="spacer"></div>
     </main>
     <footer>
         <p>This project has been funded by <a class="text-link" href="https://www.nih.gov/">NIH</a>,

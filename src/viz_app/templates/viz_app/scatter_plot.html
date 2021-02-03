@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% load static from staticfiles %}
-
+{% block title %}GCS - Scatter Plot{% endblock %}
 {% block header %}
     <h1>Scatter Plot</h1>
 {% endblock %}
@@ -183,4 +183,8 @@
 {% block script %}
     {{ block.super }}
     <script src="{% static 'js/scatter_plot.js' %}"></script>
+    <script>
+        $('.navbar-nav .nav-item.active').removeClass('active');
+        $('#data-visualization').addClass('active');
+    </script>
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends parent %}
 
 {% load staticfiles %}
-
+{% block title %}GCS - FAQ{% endblock %}
 {% block content %}
 <div class="content">
   <div class="study-section">
@@ -127,4 +127,9 @@
   </div>
   </div>
 </div>
+{% endblock %} {% block script %} {{ block.super }}
+<script>
+    $('.navbar-nav .nav-item.active').removeClass('active');
+    $('#faq').addClass('active');
+</script>
 {% endblock %}

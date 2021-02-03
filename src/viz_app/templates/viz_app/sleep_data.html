@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% load static from staticfiles %}
-
+{% block title %}GCS - Sleep Data{% endblock %}
 {% block header %}
     <h1>Sleep Data</h1>
 {% endblock %}
@@ -54,7 +54,7 @@
                 <select id="type_dropdown">
                         {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
                             <option value="total" selected>Total Sleep</option>
-                            <option value="regularity">Sleep Regularity</option>                                            
+                            <option value="regularity">Sleep Regularity</option>
                         {% else %}
                             <option value="total" selected>Total Sleep</option>
                             <option value="regularity">Sleep Regularity</option>
@@ -94,4 +94,8 @@
 {% block script %}
     {{ block.super }}
     <script src="{% static 'js/sleep_data.js' %}"></script>
+    <script>
+        $('.navbar-nav .nav-item.active').removeClass('active');
+        $('#data-visualization').addClass('active');
+    </script>
 {% endblock %}

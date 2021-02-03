@@ -131,4 +131,8 @@
 
 {% block script %}
     <script src="{% static 'js/js_resource.js' %}"></script>
+    <script>
+        $('.navbar-nav .nav-item.active').removeClass('active');
+        $('#data-visualization').addClass('active');
+    </script>
 {% endblock %}

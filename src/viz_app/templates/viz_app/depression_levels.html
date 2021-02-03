@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% load static from staticfiles %}
-
+{% block title %}GCS - Depression Levels{% endblock %}
 {% block header %}
     <h1>Clinical Data</h1>
 {% endblock %}
@@ -144,4 +144,8 @@
 {% block script %}
     {{ block.super }}
     <script src="{% static 'js/depression_levels.js' %}"></script>
+    <script>
+        $('.navbar-nav .nav-item.active').removeClass('active');
+        $('#data-visualization').addClass('active');
+    </script>
 {% endblock %}

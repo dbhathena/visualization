@@ -1,80 +1,90 @@
 {% extends parent %} {% load staticfiles %} {% load static from staticfiles %}
+{% block title %}GCS - Home{% endblock %}
 {% block content %}
 <div class="content">
-
-  <div style='overflow: hidden'>
+  <div class="home-section">
+    <h1>
+      <strong
+        >Welcome to The Sensor-Based Characterization of Depression Study!<br />(SENSCODE)</strong
+      >
+    </h1>
+  </div>
+  <div class="img-container-home">
+    <img class='mgh-logo' src="{% static "img/mghlogo.png" %}" alt="The Empatica
+    E4 Wristband">
+    <div class="mgh-words-container">
+      <img src="{% static "img/mgh-logo.png" %}" alt="The Empatica E4
+      Wristband">
+    </div>
+    <div class="affective-computing-container">
+      <img src="{% static "img/affective_computing.png" %}" alt="The Empatica E4
+      Wristband">
+    </div>
+    <img class='media-lab-img' src="{% static "img/mitmedialab.png" %}" alt="The
+    Empatica E4 Wristband">
+  </div>
+  <div id="home-page-more-info">
+    <div class="home-study-section">
+      <h2 class="study-name">
+        More on the MGH-Psychiatry and MIT Media Lab Research Collaboration
+      </h2>
+      <div class="basic-information">
+        <p style="margin: 0.4em 0.4em 2em 0.4em;">
+          In 2015, the
+          <a href="http://www.depressionmgh.org/about-us"
+            >Depression Clinical and Research Program</a
+          >
+          at Massachusetts General Hospital (MGH) and the Massachusetts
+          Institute of Technology Media Lab’s
+          <a href="https://affect.media.mit.edu/index.php"
+            >Affective Computing Group</a
+          >
+          joined forces to establish the MGH-MIT Alliance. The goal of this
+          collaboration is to employ machine learning and artificial
+          intelligence to digitally phenotype depression, which refers to
+          exploring people’s interactions with various devices, including
+          smartphones, to assess their well-being. This has led to the birth of
+          two studies: the Grand Challenge Study and Sensor-Based
+          Characterization of Depression (SENSCODE).
+        </p>
+        {% if request.user.is_authenticated %} {% if perms.viz_app.study_1 %}
+        <a id="learn-more" href="{% url 'viz_app:about' %}">Learn More!</a>
+        {% else %}
+        <a id="learn-more" href="{% url 'viz_app:about2' %}">Learn More!</a>
+        {% endif %} {% else %}
+        <a id="learn-more" href="{% url 'viz_app:about' %}">Learn More!</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="slideshow-container">
       <ul class="cb-slideshow">
-      <li>
-        <span>Image 01</span>
-        <div>
-          <h3>WELCOME!</h3>
-        </div>
-      </li>
-      <li>
-        <span>Image 02</span>
-        <div>
-          <h3>WELCOME!</h3>
-        </div>
-      </li>
-      <li>
-        <span>Image 03</span>
-        <div>
-          <h3>WELCOME!</h3>
-        </div>
-      </li>
-      <li>
-        <span>Image 04</span>
-        <div>
-          <h3>WELCOME!</h3>
-        </div>
-      </li>
-      <li>
-        <span>Image 05</span>
-        <div>
-          <h3>WELCOME!</h3>
-        </div>
-      </li>
-      <li>
-        <span>Image 06</span>
-        <div>
-          <h3>WELCOME!</h3>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div class ='home-section'>
-    <h1 >to The Sensor-Based Characterization of Depression Study!<br>(SENSCODE)</h1>
-  </div>
-    <div class="img-container-home">
-    <img class='mgh-logo' src="{% static "img/mghlogo.png" %}" alt="The Empatica E4 Wristband">
-    <div class='mgh-words-container'>
-      <img src="{% static "img/mgh-logo.png" %}" alt="The Empatica E4 Wristband">
-    </div>
-    <div class='affective-computing-container'>
-      <img src="{% static "img/affective_computing.png" %}" alt="The Empatica E4 Wristband">
-    </div>
-    <img class='media-lab-img' src="{% static "img/mitmedialab.png" %}" alt="The Empatica E4 Wristband">
-  </div>
-  <div class="study-section">
-    <h2 class='study-name'>More on the MGH-Psychiatry and MIT Media Lab Research Collaboration</h2>
-    <div class="basic-information">
-      <p>In 2015, the <a href="http://www.depressionmgh.org/about-us">Depression Clinical and Research Program</a> at Massachusetts General Hospital (MGH) and the Massachusetts Institute of Technology Media Lab’s <a href="https://affect.media.mit.edu/index.php">Affective Computing Group</a> joined forces to establish the MGH-MIT Alliance. The goal of this collaboration is to employ machine learning and artificial intelligence to digitally phenotype depression, which refers to exploring people’s interactions with various devices, including smartphones, to assess their well-being. This has led to the birth of two studies: the Grand Challenge Study and Sensor-Based Characterization of Depression (SENSCODE).</p>
+        <li>
+          <span>Image 01</span>
+        </li>
+        <li>
+          <span>Image 02</span>
+        </li>
+        <li>
+          <span>Image 03</span>
+        </li>
+        <li>
+          <span>Image 04</span>
+        </li>
+        <li>
+          <span>Image 05</span>
+        </li>
+        <li>
+          <span>Image 06</span>
+        </li>
+      </ul>
     </div>
   </div>
   <div class="spacer"></div>
-  {% if request.user.is_authenticated %}
-    {% if perms.viz_app.study_1 %}
-    <a id="learn-more" href="{% url 'viz_app:about' %}">Learn More!</a>
-    {% else %}
-    <a id="learn-more" href="{% url 'viz_app:about2' %}">Learn More!</a>
-    {% endif %}
-  {% else %}
-    <a id="learn-more" href="{% url 'viz_app:about' %}">Learn More!</a>
-  {% endif %}
 </div>
-{% endblock %}
-
-{% block script %}
-    {{ block.super }}
-    <script src="{% static 'js/photo_gallery.js' %}"></script>
+{% endblock %} {% block script %} {{ block.super }}
+<script src="{% static 'js/photo_gallery.js' %}"></script>
+<script>
+    $('.navbar-nav .nav-item.active').removeClass('active');
+    $('#home').addClass('active');
+</script>
 {% endblock %}

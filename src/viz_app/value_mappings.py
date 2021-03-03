@@ -191,7 +191,7 @@ CATEGORY_MAPPING_DAILY = {
                 'Apparent Temperature High']
 }
 
-NEW_CATEGORY_MAPPING_DAILY = {
+ANDROID_CATEGORY_MAPPING_DAILY = {
     'Activity': ['Accelerometer',
                  'Motion'],
     'Phone_Usage': ['Incoming Call Count',
@@ -208,6 +208,11 @@ NEW_CATEGORY_MAPPING_DAILY = {
                     'Outgoing SMS Count',
                     'Outgoing SMS Sum Length'],
     "Location": ['Home Stay']
+}
+
+NON_ANDROID_CATEGORY_MAPPING_DAILY = {
+    'Activity': ['Accelerometer',
+                 'Motion']
 }
 
 CATEGORY_MAPPING_HOURLY = {
@@ -262,11 +267,22 @@ CATEGORIES_DAILY = {
     'Weather': 'Weather'
 }
 
+ANDROID_CATEGORIES = {
+    'Activity': 'Activity',
+    'Phone_Usage': 'Phone Usage',
+    'Location': 'Location',
+}
+
+NON_ANDROID_CATEGORIES = {
+    'Activity': 'Activity',
+}
+
 NEW_CATEGORIES = {
     'Activity': 'Activity',
     'Phone_Usage': 'Phone Usage',
     'Location': 'Location',
 }
+
 
 DEPRESSION_CATEGORIES = {
     'Clinical_Data': 'Clinical Data',

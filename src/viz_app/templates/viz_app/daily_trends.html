@@ -25,9 +25,15 @@
             <div class="select">
                 <select id="category_dropdown">
                     {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
-                        {%  for category_value, category_label in new_categories %}
+                      {% if perms.viz_app.android_user %}
+                        {%  for category_value, category_label in android_categories %}
                             <option value="{{ category_value }}">{{ category_label }}</option>
                         {% endfor %}
+                      {% else %}
+                        {%  for category_value, category_label in non_android_categories %}
+                            <option value="{{ category_value }}">{{ category_label }}</option>
+                        {% endfor %}
+                      {% endif %}
                     {% else %}
                         {%  for category_value, category_label in categories %}
                             <option value="{{ category_value }}">{{ category_label }}</option>
@@ -38,7 +44,8 @@
         </div>
     </div>
     {% if perms.viz_app.individual and not perms.viz_app.aggregate %}
-        {% for category, types in new_category_mapping %}
+      {% if perms.viz_app.android_user %}
+        {% for category, types in android_category_mapping %}
             <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
                 <h3>Select a data type:</h3>
                 <div class="search-categories">
@@ -52,6 +59,22 @@
                 </div>
             </div>
         {% endfor %}
+      {% else %}
+        {% for category, types in non_android_category_mapping %}
+            <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">
+                <h3>Select a data type:</h3>
+                <div class="search-categories">
+                    <div class="select">
+                        <select class="type_dropdown" id="{{ category }}_dropdown">
+                            {% for type in types %}
+                                <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+      {% endif %}
     {% else %}
         {% for category, types in category_mapping %}
         <div class="dropdown-container data-dropdown-container" id="{{ category }}_dropdown_container">

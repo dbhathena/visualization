@@ -34,7 +34,7 @@ def study_trends(request):
     patients = PARTICIPANTS
     if STUDY2_KEY in name:
         patients = PARTICIPANTS2
-    context = {"names": patients, "category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    context = {"names": patients, "category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "android_category_mapping": sorted(ANDROID_CATEGORY_MAPPING_DAILY.items()), "non_android_category_mapping": sorted(NON_ANDROID_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "android_categories": sorted(ANDROID_CATEGORIES.items()), "non_android_categories" : sorted(NON_ANDROID_CATEGORIES.items())}
     context.update(get_dict(request, True))
     return render(request, 'viz_app/study_trends.html', context)
 
@@ -61,13 +61,14 @@ def daily_trends(request):
     patients = PARTICIPANTS
     if STUDY2_KEY in name:
         patients = PARTICIPANTS2
-    context = {"names": patients, "category_mapping": sorted(CATEGORY_MAPPING_HOURLY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_HOURLY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    context = {"names": patients, "category_mapping": sorted(CATEGORY_MAPPING_HOURLY.items()), "android_category_mapping": sorted(ANDROID_CATEGORY_MAPPING_DAILY.items()),"non_android_category_mapping": sorted(NON_ANDROID_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_HOURLY.items()), "android_categories": sorted(ANDROID_CATEGORIES.items()), "non_android_categories" : sorted(NON_ANDROID_CATEGORIES.items())}
     context.update(get_dict(request, True))
     return render(request, 'viz_app/daily_trends.html', context)
 
+@permission_required("viz_app.aggregate")
 @login_required
 def scatter_plot(request):
-    context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(NEW_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(NEW_CATEGORIES.items())}
+    context = {"category_mapping": sorted(CATEGORY_MAPPING_DAILY.items()), "new_category_mapping": sorted(ANDROID_CATEGORY_MAPPING_DAILY.items()), "categories": sorted(CATEGORIES_DAILY.items()), "new_categories": sorted(ANDROID_CATEGORIES.items())}
     context.update(get_dict(request, True))
     return render(request, 'viz_app/scatter_plot.html', context)
 
@@ -708,6 +709,7 @@ def get_daily_trends_data(request):
     except Exception as e:
         print(e)
 
+@permission_required("viz_app.aggregate")
 @login_required
 def get_scatter_plot_data(request):
     x_axis = request.GET.get("x_axis")

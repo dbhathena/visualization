@@ -79,9 +79,7 @@
                       <a class='dropdown-item' href="{% url 'viz_app:weekly_trends2' %}">Weekly Trends</a>
                   {% endif %}
                   <a class='dropdown-item' href="{% url 'viz_app:daily_trends2' %}">Daily Trends</a>
-                  {% if perms.viz_app.aggregate %}
                   <a class='dropdown-item' href="{% url 'viz_app:scatter_plot2' %}">Scatter Plot</a>
-                  {% endif %}
                   <a class='dropdown-item' href="{% url 'viz_app:sleep_data2' %}">Sleep Data</a>
                   <a class='dropdown-item' href="{% url 'viz_app:depression_levels2' %}">Depression Levels</a>
                   {% if perms.viz_app.aggregate %}

@@ -49,8 +49,6 @@ class PhoneData(models.Model):
         return hash((self.name, self.date, self.category, self.interval, self.measurement))
 
 
-
-
 class WeatherData(models.Model):
     name = models.CharField(null=True, max_length=4)
     date = models.DateTimeField(null=True)
@@ -115,7 +113,5 @@ class SitePrivileges(models.Model):
             ("aggregate", "Can view aggregate data"),
             ("individual", "Can view specific individual data"),
             ("study1", "Can view GCS study data"),
-            ("study2", "Can view followup study data"),
-            ('android_user', "Android User"),
-            ('nonandroid_user', "NonAndroid User")
+            ("study2", "Can view followup study data")
         )

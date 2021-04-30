@@ -230,13 +230,64 @@ function drawDailyTrendsIndividual() {
         } else {
             const subject_data = data.subject_data["both"];
 
+            if (type != "Time in Activity Levels" && type != "Activity Level") {
+              const individual_trace = {
+                  y: subject_data,
+                  mode: 'lines',
+                  name: name,
+                  line: {
+                      width: 1.5
+                  }
+              };
+
+              const layout = {
+                  title: "<b>" + titleForTypeHourly[type] + "</b>",
+                  font: {
+                      family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                      size: 16
+                  },
+                  titlefont: {
+                      size: 28
+                  },
+                  xaxis: {
+                      title: "Hour of Day",
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      },
+                      tickvals: [0,6,12,18,24]
+                  },
+                  yaxis: {
+                      title: unitsHourly[type],
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      },
+                      fixedrange: true,
+                      tickprefix: "   ",
+                      automargin: true
+                  },
+                  showlegend: false,
+                  legend: {
+                      x: 1,
+                      y: 0.5
+                  },
+                  dragmode: "pan",
+                  plot_bgcolor: "rgba(0,0,0,0)",
+                  paper_bgcolor: 'rgba(0,0,0,0)',
+              };
+              Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+          } else if (type == "Activity Level") {
             const individual_trace = {
                 y: subject_data,
                 mode: 'lines',
                 name: name,
                 line: {
                     width: 1.5
-                }
+                },
+                type: "bar",
             };
 
             const layout = {
@@ -278,6 +329,83 @@ function drawDailyTrendsIndividual() {
                 paper_bgcolor: 'rgba(0,0,0,0)',
             };
             Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+          } else {
+            const sedentary_data = [];
+            const light_data = [];
+            const moderate_data = [];
+            const vigorous_data = [];
+            subject_data.forEach(function (item, index) {
+              sedentary_data.push(item[0]);
+              light_data.push(item[1]);
+              moderate_data.push(item[2]);
+              vigorous_data.push(item[3]);
+            });
+
+            const sedentary = {
+                y: sedentary_data,
+                name: "Sedentary Activity",
+                type: 'bar'
+            };
+
+            const light = {
+                y: light_data,
+                name: "Light Activity",
+                type: 'bar'
+            };
+
+            const moderate = {
+                y: moderate_data,
+                name: "Moderate Activity",
+                type: 'bar'
+            };
+
+            const vigorous = {
+                y: vigorous_data,
+                name: "Vigorous Activity",
+                type: 'bar'
+            };
+
+            const layout = {
+                title: "<b>" + titleForTypeHourly[type] + "</b>",
+                font: {
+                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                    size: 16
+                },
+                titlefont: {
+                    size: 28
+                },
+                xaxis: {
+                    title: "Hour of Day",
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    tickvals: [0,6,12,18,24]
+                },
+                yaxis: {
+                    title: unitsHourly[type],
+                    showline: true,
+                    zeroline: false,
+                    titlefont: {
+                        size: 20
+                    },
+                    fixedrange: true,
+                    tickprefix: "   ",
+                    automargin: true
+                },
+                showlegend: true,
+                legend: {
+                    x: 1,
+                    y: 0.5
+                },
+                dragmode: "pan",
+                plot_bgcolor: "rgba(0,0,0,0)",
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                barmode: 'stack',
+            };
+            Plotly.newPlot("chart1", [sedentary, light, moderate, vigorous], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+          }
         }
         $("#loading").css("display","none");
     });

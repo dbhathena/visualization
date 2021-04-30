@@ -140,7 +140,6 @@ function drawStudyTrendsIndividual() {
         },
         dataType: "json"
     }).done(function(data) {
-        console.log('Study!');
         const type = $("#" + category_dropdown.val() + "_dropdown").val();
         const name = names_dropdown.val();
         if (isTwoHands.has(type)) {
@@ -155,6 +154,7 @@ function drawStudyTrendsIndividual() {
             subject_data_right["dates"].forEach(function(d) {
                 dates_right.push(new Date(new Date(d).toDateString()));
             });
+
 
             const measurements_left = subject_data_left["measurements"];
             const measurements_right = subject_data_right["measurements"];
@@ -256,61 +256,200 @@ function drawStudyTrendsIndividual() {
             Plotly.newPlot("chart1", [left_trace, right_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
 
         } else {
-          //Subject data found on views.py. Null gives both dates and measurements.
+            //Subject data found on views.py. Null gives both dates and measurements.
             const subject_data = data.subject_data[null];
-            const dates = [];
-            subject_data["dates"].forEach(function(d) {
-                dates.push(new Date(new Date(d).toDateString()));
-            });
-            const measurements = subject_data["measurements"];
 
-            const individual_trace = {
-                x: dates,
-                y: measurements,
-                mode: 'lines',
-                name: name,
-                line: {
-                    width: 1.5
-                }
-            };
+            if (type == "Time in Activity Levels"){
+              const dates = [];
+              subject_data["dates"].forEach(function(d) {
+                  dates.push(new Date(new Date(d).toDateString()));
+              });
+              const sedentary_data = [];
+              const light_data = [];
+              const moderate_data = [];
+              const vigorous_data = [];
+              subject_data["measurements"].forEach(function (item, index) {
+                sedentary_data.push(item[0]);
+                light_data.push(item[1]);
+                moderate_data.push(item[2]);
+                vigorous_data.push(item[3]);
+              });
 
-            const layout = {
-                title: "<b>" + titleForTypeDaily[type] + "</b>",
-                font: {
-                    family: "Helvetica Neue, Helvetica, Arial, sans-serif",
-                    size: 16
-                },
-                titlefont: {
-                    size: 28
-                },
-                xaxis: {
-                    title: "Date",
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    }
-                },
-                yaxis: {
-                    title: unitsDaily[type],
-                    showline: true,
-                    zeroline: false,
-                    titlefont: {
-                        size: 20
-                    },
-                    fixedrange: true,
-                    tickprefix: "   ",
-                    automargin: true
-                },
-                showlegend: false,
-                legend: {
-                    x: 1,
-                    y: 0.5
-                },
-                dragmode: "pan",
-            };
+              const sedentary = {
+                  x: dates,
+                  y: sedentary_data,
+                  name: "Sedentary Activity",
+                  type: 'bar'
+              };
 
-            Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+              const light = {
+                  x: dates,
+                  y: light_data,
+                  name: "Light Activity",
+                  type: 'bar'
+              };
+
+              const moderate = {
+                  x: dates,
+                  y: moderate_data,
+                  name: "Moderate Activity",
+                  type: 'bar'
+              };
+
+              const vigorous = {
+                  x: dates,
+                  y: vigorous_data,
+                  name: "Vigorous Activity",
+                  type: 'bar'
+              };
+
+              const layout = {
+                  title: "<b>" + titleForTypeDaily[type] + "</b>",
+                  font: {
+                      family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                      size: 16
+                  },
+                  titlefont: {
+                      size: 28
+                  },
+                  xaxis: {
+                      title: "Date",
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      }
+                  },
+                  yaxis: {
+                      title: unitsDaily[type],
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      },
+                      fixedrange: true,
+                      tickprefix: "   ",
+                      automargin: true
+                  },
+                  showlegend: true,
+                  legend: {
+                      x: 1,
+                      y: 0.5
+                  },
+                  dragmode: "pan",
+                  barmode: 'stack',
+              };
+
+              Plotly.newPlot("chart1", [sedentary, light, moderate, vigorous], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+          } else if  (type == "Activity Level"){
+              const dates = [];
+              subject_data["dates"].forEach(function(d) {
+                  dates.push(d);
+              });
+              const measurements = subject_data["measurements"];
+
+              const individual_trace = {
+                  x: dates,
+                  y: measurements,
+                  mode: 'lines',
+                  name: name,
+                  line: {
+                      width: 1.5
+                  },
+              };
+
+              const layout = {
+                  title: "<b>" + titleForTypeDaily[type] + "</b>",
+                  font: {
+                      family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                      size: 16
+                  },
+                  titlefont: {
+                      size: 28
+                  },
+                  xaxis: {
+                      title: "Date",
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      }
+                  },
+                  yaxis: {
+                      title: unitsDaily[type],
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      },
+                      fixedrange: true,
+                      tickprefix: "   ",
+                      automargin: true,
+                  },
+                  showlegend: false,
+                  legend: {
+                      x: 1,
+                      y: 0.5
+                  },
+                  dragmode: "pan",
+              };
+
+              Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            } else {
+              const dates = [];
+              subject_data["dates"].forEach(function(d) {
+                  dates.push(new Date(new Date(d).toDateString()));
+              });
+              const measurements = subject_data["measurements"];
+
+              const individual_trace = {
+                  x: dates,
+                  y: measurements,
+                  mode: 'lines',
+                  name: name,
+                  line: {
+                      width: 1.5
+                  }
+              };
+
+              const layout = {
+                  title: "<b>" + titleForTypeDaily[type] + "</b>",
+                  font: {
+                      family: "Helvetica Neue, Helvetica, Arial, sans-serif",
+                      size: 16
+                  },
+                  titlefont: {
+                      size: 28
+                  },
+                  xaxis: {
+                      title: "Date",
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      }
+                  },
+                  yaxis: {
+                      title: unitsDaily[type],
+                      showline: true,
+                      zeroline: false,
+                      titlefont: {
+                          size: 20
+                      },
+                      fixedrange: true,
+                      tickprefix: "   ",
+                      automargin: true
+                  },
+                  showlegend: false,
+                  legend: {
+                      x: 1,
+                      y: 0.5
+                  },
+                  dragmode: "pan",
+              };
+
+              Plotly.newPlot("chart1", [individual_trace], layout, {displayModeBar: false, responsive: true, scrollZoom: true});
+            }
         }
         $("#loading").css("display", "none");
     });

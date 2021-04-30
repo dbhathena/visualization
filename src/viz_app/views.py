@@ -185,17 +185,66 @@ def get_study_trends_data(request):
                 val = 60 if type in PHONES else 1
                 subject_data = {None: {"dates": [], "measurements": []},
                                 }
-                raw_data = list(model.objects
-                                .filter(name=name,
-                                        category=type,
-                                        interval="24hrs")
-                                .order_by("date")
-                                .values("date", "measurement"))
-                for x in raw_data:
-                    subject_data[None]["dates"].append(x["date"].isoformat())
-                    value = x["measurement"]
-                    ans = value/val if value else None
-                    subject_data[None]["measurements"].append(ans)
+                print(type)
+                if (type == "Time in Activity Levels"):
+                    print("whaaaaaaat")
+                    sedentary = list(model.objects
+                                    .filter(name=name,
+                                            category="Sedentary Activity",
+                                            interval="24hrs")
+                                    .order_by("date")
+                                    .values("date", "measurement"))
+                    light = list(model.objects
+                                    .filter(name=name,
+                                            category="Light Activity",
+                                            interval="24hrs")
+                                    .order_by("date")
+                                    .values("date", "measurement"))
+                    moderate = list(model.objects
+                                    .filter(name=name,
+                                            category="Moderate Activity",
+                                            interval="24hrs")
+                                    .order_by("date")
+                                    .values("date", "measurement"))
+                    vigorous = list(model.objects
+                                    .filter(name=name,
+                                            category="Vigorous Activity",
+                                            interval="24hrs")
+                                    .order_by("date")
+                                    .values("date", "measurement"))
+
+                    for time in range(len(sedentary)):
+                        print(sedentary[time]["date"])
+                        subject_data[None]["dates"].append(sedentary[time]["date"].isoformat())
+                        subject_data[None]["measurements"].append([sedentary[time]["measurement"], light[time]["measurement"], moderate[time]["measurement"], vigorous[time]["measurement"]])
+
+                    print(subject_data)
+                elif type == "Activity Level":
+                    raw_data = list(model.objects
+                                    .filter(name=name,
+                                            category=type,
+                                            interval="1min")
+                                    .order_by("date")
+                                    .values("date", "measurement"))
+
+                    for x in raw_data:
+                        subject_data[None]["dates"].append(x["date"].isoformat())
+                        value = x["measurement"]
+                        ans = value/val if value else None
+                        subject_data[None]["measurements"].append(ans)
+                else:
+                    raw_data = list(model.objects
+                                    .filter(name=name,
+                                            category=type,
+                                            interval="24hrs")
+                                    .order_by("date")
+                                    .values("date", "measurement"))
+                    for x in raw_data:
+                        subject_data[None]["dates"].append(x["date"].isoformat())
+                        value = x["measurement"]
+                        ans = value/val if value else None
+                        subject_data[None]["measurements"].append(ans)
+
                 return HttpResponse(json.dumps({"subject_data": subject_data}))
         else:
             aggregation = request.GET.get("aggregation")
@@ -361,8 +410,6 @@ def get_depression_scale_data(request):
                 ans = value if value else None
                 raw_data[participant].append(ans)
 
-            print('ALKSDHFLKASHDF')
-            print(raw_data)
 
             aggregate_data = {}
             group_sizes = {}
@@ -591,21 +638,85 @@ def get_daily_trends_data(request):
                         else:
                             subject_data[hand].append(None)
             else:
-                val = 60 if type in PHONES else 1
-                subject_data = {"both": []}
-                for hour in range(0, 24):
+                if (type != "Time in Activity Levels" and type != "Activity Level"):
+                    val = 60 if type in PHONES else 1
+                    subject_data = {"both": []}
+                    for hour in range(0, 24):
+                        hour_data = list(model.objects
+                                         .filter(name=name,
+                                                 category=type,
+                                                 interval="1hr",
+                                                 date__hour=hour,
+                                                 measurement__isnull=False)
+                                         .values_list("measurement", flat=True))
+                        if hour_data:
+                            subject_data["both"].append(statistics.mean([datapoint/val for datapoint in hour_data]))
+                        else:
+                            subject_data["both"].append(None)
+                elif type == "Activity Level":
+                    subject_data = {"both": []}
                     hour_data = list(model.objects
                                      .filter(name=name,
                                              category=type,
                                              interval="1hr",
-                                             date__hour=hour,
                                              measurement__isnull=False)
                                      .values_list("measurement", flat=True))
-                    if hour_data:
-                        subject_data["both"].append(statistics.mean([datapoint/val for datapoint in hour_data]))
-                    else:
-                        subject_data["both"].append(None)
-            return HttpResponse(json.dumps({"subject_data": subject_data}))
+                    for d in range(0,24):
+                        if hour_data[d]:
+                            subject_data["both"].append(hour_data[d])
+                        else:
+                            subject_data["both"].append(None)
+                else:
+                    subject_data = {"both": []}
+                    sedentary_hour_data = list(model.objects
+                                     .filter(name=name,
+                                             category="Sedentary Activity",
+                                             interval="1hr",
+                                             measurement__isnull=False)
+                                     .values_list("measurement", flat=True))
+                    light_hour_data = list(model.objects
+                                     .filter(name=name,
+                                             category="Light Activity",
+                                             interval="1hr",
+                                             measurement__isnull=False)
+                                     .values_list("measurement", flat=True))
+                    moderate_hour_data = list(model.objects
+                                     .filter(name=name,
+                                             category="Moderate Activity",
+                                             interval="1hr",
+                                             measurement__isnull=False)
+                                     .values_list("measurement", flat=True))
+                    vigorous_hour_data = list(model.objects
+                                     .filter(name=name,
+                                             category="Vigorous Activity",
+                                             interval="1hr",
+                                             measurement__isnull=False)
+                                     .values_list("measurement", flat=True))
+
+                    for i in range(0,24):
+                        hour_data = []
+                        if sedentary_hour_data[i]:
+                            hour_data.append(sedentary_hour_data[i])
+                        else:
+                            hour_data.append(None)
+                        if light_hour_data[i]:
+                            hour_data.append(light_hour_data[i])
+                        else:
+                            hour_data.append(None)
+                        if moderate_hour_data[i]:
+                            hour_data.append(moderate_hour_data[i])
+                        else:
+                            hour_data.append(None)
+                        if vigorous_hour_data[i]:
+                            hour_data.append(vigorous_hour_data[i])
+                        else:
+                            hour_data.append(None)
+
+                        subject_data["both"].append(hour_data)
+
+                    print(subject_data)
+
+                return HttpResponse(json.dumps({"subject_data": subject_data}))
 
         else:
             aggregation = request.GET.get("aggregation")

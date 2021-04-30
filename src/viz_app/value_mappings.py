@@ -10,7 +10,8 @@ PARTICIPANTS2 = ['SP1', 'SP2', 'SP3', 'SP5', 'SP6','SP7', 'SP8', 'SP9', 'SP10', 
 
 DATABASE_MAPPING = {
     DepData: {'Weekly (HDRS)', 'Daily (PHQ-9)'},
-    PhysData: {'Accelerometer', 'Motion', 'Heart Rate', 'Temperature', 'EDA Mean Difference', 'EDA Mean',
+    PhysData: {'Accelerometer', 'Motion', 'Time in Activity Levels', 'Activity Level', 'Light Activity','Moderate Activity','Sedentary Activity','Vigorous Activity','Heart Rate',
+                'Temperature', 'EDA Mean Difference', 'EDA Mean',
                'Skin Conductance Response', 'New Motion', 'New Accelerometer'},
     PhoneData: {'Incoming Call Count', 'Incoming Call Mean Duration', 'Incoming Call Median Duration',
                 'Incoming Call Std Duration', 'Incoming Call Sum Duration', 'Outgoing Call Count',
@@ -137,6 +138,7 @@ MEASUREMENT_THRESHOLDS = {"Accelerometer": (0, 1),
                           "Temperature": (20, 40),
                           "Daily (PHQ-9)": (0,29),
                           "Weekly (HDRS)": (0,29),
+                          "Minutes In Activity Level": (0, 1440),
                           }
 
 DEPRESSION_CATEGORY_MAPPING = {
@@ -145,8 +147,8 @@ DEPRESSION_CATEGORY_MAPPING = {
 }
 
 CATEGORY_MAPPING_DAILY = {
-    'Activity': ['Accelerometer',
-                 'Motion'],
+    'Activity': [
+                 'Time in Activity Levels'],
     'Physiology': ['Heart Rate',
                    'Temperature',
                    'EDA Mean Difference',
@@ -192,8 +194,8 @@ CATEGORY_MAPPING_DAILY = {
 }
 
 NEW_CATEGORY_MAPPING_DAILY = {
-    'Activity': ['Accelerometer',
-                 'Motion'],
+    'Activity': [
+                 'Time in Activity Levels'],
     'Phone_Usage': ['Incoming Call Count',
                     'Incoming Call Mean Duration',
                     'Incoming Call Sum Duration',
@@ -211,8 +213,8 @@ NEW_CATEGORY_MAPPING_DAILY = {
 }
 
 CATEGORY_MAPPING_HOURLY = {
-    'Activity': ['Accelerometer',
-                 'Motion'],
+    'Activity': [
+                 'Time in Activity Levels'],
     'Physiology': ['Heart Rate',
                    'Temperature',
                    'EDA Mean Difference',
